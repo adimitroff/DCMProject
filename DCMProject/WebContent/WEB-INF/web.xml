@@ -17,9 +17,17 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>DevFeeder</servlet-name>
+		<servlet-class>net.cb.dcm.dev_feed.DevFeeder</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>DCMServices</servlet-name>
 		<url-pattern>/DCMService.svc/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DevFeeder</servlet-name>
+		<url-pattern>/devfeed</url-pattern>
 	</servlet-mapping>
 	<resource-ref>
 		<res-ref-name>jdbc/DefaultDB</res-ref-name>
