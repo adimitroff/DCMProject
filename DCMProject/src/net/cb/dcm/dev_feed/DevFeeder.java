@@ -18,9 +18,9 @@ import com.google.gson.JsonObject;
 /**
  * Servlet implementing a simple JPA based persistence sample application for SAP Cloud Platform.
  */
-public class Dev_feeder extends HttpServlet {
+public class DevFeeder extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger moLogger = LoggerFactory.getLogger(Dev_feeder.class);
+    private static final Logger moLogger = LoggerFactory.getLogger(DevFeeder.class);
 
     /** {@inheritDoc} */
     @Override
