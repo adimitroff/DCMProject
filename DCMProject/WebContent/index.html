@@ -12,11 +12,11 @@
 		<!-- only load the mobile lib "sap.m" and the "sap_bluecrystal" theme -->
 
 		<script>
-				sap.ui.localResources("DCMWeb");
-				var app = new sap.m.App({initialPage:"idindex1"});
-				var page = sap.ui.view({id:"idindex1", viewName:"DCMWeb.index", type:sap.ui.core.mvc.ViewType.XML});
+				sap.ui.localResources("dcmweb");
+				var app = new sap.m.App({initialPage:"application"});
+				var page = sap.ui.view({id:"application", viewName:"dcmweb.index", type:sap.ui.core.mvc.ViewType.XML});
 				app.addPage(page);
-				var pageAdd = sap.ui.view({id:"addtag", viewName:"DCMWeb.AddTag", type:sap.ui.core.mvc.ViewType.XML});
+				var pageAdd = sap.ui.view({id:"addtag", viewName:"dcmweb.add_tag", type:sap.ui.core.mvc.ViewType.XML});
 				app.addPage(pageAdd);
 				app.placeAt("content");
 		</script>
