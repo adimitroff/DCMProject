@@ -1,4 +1,4 @@
-sap.ui.controller("DCMWeb.index", {
+sap.ui.controller("dcmweb.index", {
 	onInit : function(evt) {
 
 		this.getView().addDelegate(
