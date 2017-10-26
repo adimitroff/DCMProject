@@ -1,6 +1,6 @@
 sap.ui
 		.controller(
-				"DCMWeb.AddTag",
+				"dcmweb.add_tag",
 				{
 					handleNavButtonPress : function(evt) {
 						app.back();
@@ -13,15 +13,21 @@ sap.ui
 											onBeforeShow : function(evt) {
 												if (this.direction != "back") {
 													if (evt.data.oModel != null) {
-														evt.to.setModel(evt.data.oModel);
-														evt.to.setBindingContext(evt.data);
+														evt.to
+																.setModel(evt.data.oModel);
+														evt.to
+																.setBindingContext(evt.data);
 													} else {
-														var oModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
+														var oModel = new sap.ui.model.odata.ODataModel(
+																"DCMService.svc/");
 														evt.to.setModel(oModel);
-														evt.to.byId("name").setValue("");
-														evt.to.byId("description").setValue("");
-														evt.to.byId("id").setValue("");
-														evt.to.byId("system").setValue("");
+														evt.to.byId("id")
+																.setValue("");
+														evt.to.byId("name")
+																.setValue("");
+														evt.to.byId(
+																"description")
+																.setValue("");
 													}
 												}
 											}
@@ -34,8 +40,8 @@ sap.ui
 
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
-						var flightid = this.getView().byId("id").getValue();
-						oModel.remove("/Tags(" + flightid + "L)");
+						var lvId = this.getView().byId("id").getValue();
+						oModel.remove("/Tags(" + lvId + "L)");
 						oModel.refresh();
 						app.back();
 
@@ -50,8 +56,6 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
-						vProperties.System = this.getView().byId(
-								"system").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
 							oModel.createEntry("Tags", vProperties);
@@ -63,9 +67,9 @@ sap.ui
 									.getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
+							oEntry.Id = vProperties.Id;
 							oEntry.Name = vProperties.Name;
 							oEntry.Description = vProperties.Description;
-							oEntry.System = vProperties.System;
 							oModel.update("", oEntry, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
@@ -83,4 +87,5 @@ sap.ui
 						sap.m.MessageToast.show("Error");
 
 					}
+
 				});
