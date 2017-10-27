@@ -1,14 +1,10 @@
 package net.cb.dcm.jpa.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.cb.dcm.enums.DeviceType;
@@ -36,7 +32,7 @@ public class Device {
 	@Column(length = 50)
 	private String model;
 
-	@Column(length = 40)
+	@Column(length = 40, unique = true, nullable = false)
 	private String ip;
 
 //	@OneToMany(mappedBy = "device")
