@@ -1,4 +1,4 @@
-sap.ui.controller("dcmweb.index", {
+sap.ui.controller("net.cb.dcm.frontend.controller.list_tags", {
 	onInit : function(evt) {
 
 		this.getView().addDelegate(

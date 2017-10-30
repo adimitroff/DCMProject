@@ -1,0 +1,39 @@
+<mvc:View controllerName="net.cb.dcm.frontend.controller.main"
+	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml">
+	<GenericTile id="tileTag"
+		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileTagTitle}"
+		subheader="{i18n>main.tileTagSubheader}" press="press">
+		<tileContent>
+			<!-- TileContent unit="EUR" footer="Current Quarter"> <content> <ImageContent 
+				src="sap-icon://home-share"/> </content> </TileContent -->
+		</tileContent>
+	</GenericTile>
+
+	<GenericTile id="tileDevice"
+		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileDeviceTitle}"
+		subheader="{i18n>main.tileDeviceSubheader}" press="press">
+		<tileContent>
+			<TileContent footer="7 New Devices" footerColor="sap.m.ValueColor.Error">
+				<NumericContent value="3" />
+			</TileContent>
+		</tileContent>
+	</GenericTile>
+
+	<GenericTile id="tileMediaObjects"
+		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileMediaObjectsTitle}"
+		subheader="{i18n>main.tileMediaObjectsSubheader}" mode="HeaderMode"
+		press="press">
+		<tileContent>
+			<!--TileContent unit="EUR" footer="Current Quarter" / -->
+		</tileContent>
+	</GenericTile>
+
+	<GenericTile id="tileOptions"
+		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileOptionsTitle}"
+		press="press">
+		<tileContent>
+			<!-- TileContent> <content> <ImageContent src="test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/ProfileImage_LargeGenTile.png"/> 
+				</content> </TileContent -->
+		</tileContent>
+	</GenericTile>
+</mvc:View>

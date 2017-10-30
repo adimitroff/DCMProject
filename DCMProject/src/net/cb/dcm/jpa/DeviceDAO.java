@@ -1,20 +1,27 @@
 package net.cb.dcm.jpa;
 
-import java.sql.SQLException;
+import java.util.List;
 
-import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 import net.cb.dcm.jpa.entities.Device;
 
-public class DeviceDAO {
-	public static Device findDeviceByIp(String ip) throws NamingException, SQLException {
-//		EntityManagerFactory loEmf = JpaEntityManagerFactory.getEntityManagerFactory();
-//		EntityManager loEm = loEmf.createEntityManager();
-//		TypedQuery<Device> query = loEm.createQuery("SELECT d FROM Device d WHERE d.ip = :ip", Device.class);
-//		return query.setParameter("ip", ip).getSingleResult();
-		return null;
+public class DeviceDAO extends GenericDao<Device> {
+	
+	public Device findDeviceByIp(String ip) {
+		TypedQuery<Device> query = entityManager.createQuery("SELECT d FROM Device d WHERE d.ip = :ip", Device.class);
+		List<Device> foundDevices = query.setParameter("ip", ip).getResultList();
+		if(foundDevices.size() == 1) {
+			return foundDevices.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public Device registerNewDevice(String ip) {
+		Device device = new Device();
+		device.setIp(ip);
+		this.insert(device);
+		return device;
 	}
 }
