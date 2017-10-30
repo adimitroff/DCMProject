@@ -1,0 +1,79 @@
+{
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "dcmapp",
+		"type": "application",
+		"i18n": "i18n/i18n.properties"
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "net.cb.dcm.frontend.view.main",
+			"type": "XML"
+		},
+		"dependencies": {
+			"libs": {
+				"sap.ui.core": {
+					
+				},
+				"sap.m": {
+					
+				},
+				"sap.ui.layout": {
+					
+				}
+			}
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "net.cb.dcm.frontend.i18n.i18n"
+				}
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "net.cb.dcm.frontend.view",
+				"controlId": "dcmapp",
+				"controlAggregation": "pages"
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "Main",
+					"target": "Main"
+				},
+				{
+					"pattern": "Tags",
+					"name": "ListTags",
+					"target": "ListTags"
+				},
+				{
+					"pattern": "AddTag",
+					"name": "AddTag",
+					"target": "AddTag"
+				}
+			],
+			"targets": {
+				"Main": {
+					"viewName": "main"
+				},
+				"ListTags": {
+					"viewName": "list_tags"
+				},
+				"AddTag": {
+					"viewName": "add_tag"
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		}
+	}
+}

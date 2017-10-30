@@ -1,6 +1,6 @@
 sap.ui
 		.controller(
-				"dcmweb.add_tag",
+				"net.cb.dcm.frontend.controller.add_tag",
 				{
 					handleNavButtonPress : function(evt) {
 						app.back();

@@ -1,6 +1,7 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="dcmweb.add_tag" xmlns:html="http://www.w3.org/1999/xhtml"
-	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_tag"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
 	<Page title="Add Tag" id="page" showNavButton="true"
 		navButtonPress="handleNavButtonPress">
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
