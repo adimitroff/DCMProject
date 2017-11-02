@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import net.cb.dcm.enums.DeviceType;
 
 @Entity
-@Table(name = "Devices")
+@Table(name = "devices")
 @NamedQuery(name = "AllDevices", query = "select d from Device d")
 public class Device {
 	@Id
@@ -23,7 +23,7 @@ public class Device {
 	@Column(length = 250)
 	private String description;
 
-	@Column(name = "DEV_TYPE")
+	@Column(name = "dev_type")
 	private DeviceType devType; // (integer) � device type (1 � monitor, 2 � mobile
 							// device, 3�)
 

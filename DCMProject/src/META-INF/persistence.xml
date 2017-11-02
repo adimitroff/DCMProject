@@ -7,6 +7,8 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>net.cb.dcm.jpa.entities.Device</class>
 		<class>net.cb.dcm.jpa.entities.Tag</class>
+		<class>net.cb.dcm.jpa.entities.DeviceStatus</class>
+		<class>net.cb.dcm.jpa.entities.DeviceStatusRelation</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 		</properties>
