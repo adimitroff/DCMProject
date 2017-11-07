@@ -1,14 +1,23 @@
 package net.cb.dcm.jpa.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@Entity
+@Table(name = "playlists")
 public class Playlist {
+	
 	@Id
 	@GeneratedValue
 	private long id;
@@ -19,19 +28,28 @@ public class Playlist {
 	@Column(length=250)
 	private String description;
 	
+	@Column
 	private int priority;
 	
+	@Column
 	private boolean active;
 	
+	@Column(name = "IS_DEFAULT")
 	private boolean _default;
 	
-	@Column(name="valid_from")
+	@Column(name="VALID_FROM")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date validFrom;
 	
-	@Column(name="valid_to")
+	@Column(name="VALID_TO")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date validTo;
+	
+	@OneToMany
+	@JoinTable(name = "playlist_media_contents", 
+	joinColumns = @JoinColumn(name = "PLAYLIST_ID", referencedColumnName = "ID"), 
+	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"))
+	private List<MediaContent> mediaContents;
 
 	public long getId() {
 		return id;
@@ -95,5 +113,13 @@ public class Playlist {
 
 	public void setValidTo(Date validTo) {
 		this.validTo = validTo;
+	}
+
+	public List<MediaContent> getMediaContents() {
+		return mediaContents;
+	}
+
+	public void setMediaContents(List<MediaContent> mediaContents) {
+		this.mediaContents = mediaContents;
 	} 
 }
