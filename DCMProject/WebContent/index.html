@@ -1,28 +1,42 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
 
-		<script src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"
-				id="sap-ui-bootstrap"
-				data-sap-ui-libs="sap.m"
-				data-sap-ui-theme="sap_bluecrystal">
-		</script>
-		<!-- only load the mobile lib "sap.m" and the "sap_bluecrystal" theme -->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
 
-		<script>
-				sap.ui.localResources("dcmweb");
-				var app = new sap.m.App({initialPage:"application"});
-				var page = sap.ui.view({id:"application", viewName:"dcmweb.index", type:sap.ui.core.mvc.ViewType.XML});
-				app.addPage(page);
-				var pageAdd = sap.ui.view({id:"addtag", viewName:"dcmweb.add_tag", type:sap.ui.core.mvc.ViewType.XML});
-				app.addPage(pageAdd);
-				app.placeAt("content");
+<title>Device Content Management</title>
+
+<script id="sap-ui-bootstrap"
+	src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+	data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_belize"
+	data-sap-ui-xx-bindingSyntax="complex" data-sap-ui-preload="async"
+	data-sap-ui-compatVersion="edge"
+	data-sap-ui-resourceroots='{"net.cb.dcm.frontend": "./dcmweb"}'>
 		</script>
 
-	</head>
-	<body class="sapUiBody" role="application">
-		<div id="content"></div>
-	</body>
+<!-- Application launch configuration -->
+<script>
+
+			sap.ui.getCore().attachInit(function() {
+				new sap.m.App ({
+					pages: [
+						new sap.m.Page({
+							title: "Device Content Management",
+							enableScrolling : true,
+							content: [ new sap.ui.core.ComponentContainer({
+								name : "net.cb.dcm.frontend"
+							})]
+						})
+					]
+				}).placeAt("content");
+			});
+
+		</script>
+</head>
+
+<!-- UI Content -->
+<body class="sapUiBody" id="content" role="application">
+</body>
+
 </html>

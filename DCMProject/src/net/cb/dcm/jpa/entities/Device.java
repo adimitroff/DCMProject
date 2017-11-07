@@ -35,7 +35,7 @@ public class Device {
 	@Column(length = 250)
 	private String description;
 
-	@Column(name = "DEV_TYPE")
+	@Column(name = "dev_type")
 	private DeviceType devType; // (integer) � device type (1 � monitor, 2 � mobile
 							// device, 3�)
 
