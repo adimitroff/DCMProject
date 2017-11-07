@@ -14,7 +14,7 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 public class JpaEntityManagerFactory {
 
-	public final static boolean USE__TEST_MYSQL_DB = true;
+	public final static boolean USE_TEST_MYSQL_DB = true;
 
 	public final static String persistenceUnitName = "dcm-persistence";
 	private static EntityManagerFactory loEmf = null;
@@ -22,7 +22,7 @@ public class JpaEntityManagerFactory {
 	public static synchronized EntityManagerFactory getEntityManagerFactory() throws NamingException, SQLException {
 		if (loEmf == null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
-			if (USE__TEST_MYSQL_DB) {
+			if (USE_TEST_MYSQL_DB) {
 				properties.put(PersistenceUnitProperties.JDBC_DRIVER, "com.mysql.jdbc.Driver");
 				properties.put(PersistenceUnitProperties.JDBC_URL, "jdbc:mysql://sql11.freemysqlhosting.net/sql11202950");
 				properties.put(PersistenceUnitProperties.JDBC_USER, "sql11202950");

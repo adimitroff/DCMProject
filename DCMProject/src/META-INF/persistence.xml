@@ -17,7 +17,9 @@
 		<class>net.cb.dcm.jpa.entities.MediaContentTagRelation</class>
 		<class>net.cb.dcm.jpa.entities.Playlist</class>
 		<class>net.cb.dcm.jpa.entities.PlaylistMediaContentRelation</class>
-		<class>net.cb.dcm.jpa.entities.DeviceStatusRelation</class>
+		<class>net.cb.dcm.jpa.entities.Loop</class>
+		<class>net.cb.dcm.jpa.entities.DeviceSchedule</class>
+		<class>net.cb.dcm.jpa.entities.LoopMediaContentRelation</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 		</properties>

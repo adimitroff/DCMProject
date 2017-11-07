@@ -2,11 +2,8 @@ package net.cb.dcm.jpa.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,13 +25,6 @@ public class DeviceTagRelation {
 	@Column(name = "TAG_ID")
 	private long tagId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="DEVICE_ID", referencedColumnName = "ID")
-	private Device device;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TAG_ID", referencedColumnName = "ID")
-	private Tag tag;
 
 	public long getId() {
 		return id;
@@ -60,19 +50,4 @@ public class DeviceTagRelation {
 		this.tagId = tagId;
 	}
 
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
-	}
-
-	public Tag getTag() {
-		return tag;
-	}
-
-	public void setTag(Tag tag) {
-		this.tag = tag;
-	}
 }

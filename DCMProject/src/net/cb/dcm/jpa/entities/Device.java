@@ -54,7 +54,7 @@ public class Device {
 //	@OneToMany(mappedBy = "device")
 //	private List<DeviceTagRelation> tags;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
@@ -63,6 +63,10 @@ public class Device {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CURR_DEV_STATUS_ID", referencedColumnName = "ID")
 	private DeviceStatus currentDeviceStatus;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
+	private DeviceSchedule currentDeviceSchedule;
 
 	public long getId() {
 		return id;
@@ -179,5 +183,13 @@ public class Device {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public DeviceSchedule getCurrentDeviceSchedule() {
+		return currentDeviceSchedule;
+	}
+
+	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
+		this.currentDeviceSchedule = currentDeviceSchedule;
 	}
 }
