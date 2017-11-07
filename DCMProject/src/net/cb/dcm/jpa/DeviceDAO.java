@@ -21,6 +21,7 @@ public class DeviceDAO extends GenericDao<Device> {
 	public Device registerNewDevice(String ip) {
 		Device device = new Device();
 		device.setIp(ip);
+		device.setName("Samsung Tv " + ip);
 		this.insert(device);
 		return device;
 	}

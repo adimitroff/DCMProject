@@ -8,21 +8,21 @@ import javax.persistence.Table;
 
 import net.cb.dcm.enums.MediaObjectType;
 
-//@Entity
-//@Table(name="media_content")
+@Entity
+@Table(name="media_content")
 public class MediaContent {
 	
-//	@Id
-//	@GeneratedValue
+	@Id
+	@GeneratedValue
 	private long id;
 	
-//	@Column(length=100)
+	@Column(length=100, nullable = false)
 	private String name;
 	
-//	@Column(length=250)
+	@Column(length=250)
 	private String description;
 	
-//	@Column(name="media_type")
+	@Column(name="MEDIA_TYPE", nullable = false)
 	private MediaObjectType mediaType;
 	
 	private long duration;

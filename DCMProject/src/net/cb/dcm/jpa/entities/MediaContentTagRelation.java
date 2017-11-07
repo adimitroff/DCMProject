@@ -4,41 +4,30 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="medcont_tag_rel")
+@Entity
+@Table(name="media_cont_tag_rel")
 public class MediaContentTagRelation {
 	
-	
-//	@Id
-//	@GeneratedValue
+	@Id
+	@GeneratedValue
 	private long id;
 	
-//	@Column(name="media_content_id")
+	@Column(name="MEDIA_CONTENT_ID")
 	private long mediaContentId;
 	
-//	@Column(name="tag_id")
+	@Column(name="TAG_ID")
 	private long tagId;
 	
-//	@ManyToOne
-//	@PrimaryKeyJoinColumn(name="MEDIACONTENTID", referencedColumnName="ID")
-	/* if this JPA model doesn't create a table for the "PROJ_EMP" entity,
-	 * please comment out the @PrimaryKeyJoinColumn, and use the ff:
-	 *  @JoinColumn(name = "deviceId", updatable = false, insertable = false)
-	 * or @JoinColumn(name = "deviceId", updatable = false, insertable = false, referencedColumnName = "id")
-	*/
+	@ManyToOne
+	@JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID")
 	private MediaContent mediaContent;
 	
-//	@ManyToOne
-//	@PrimaryKeyJoinColumn(name="TAGID", referencedColumnName="ID")
-	/* if this JPA model doesn't create a table for the "PROJ_DeviceTagRelation" entity,
-	 * please comment out the @PrimaryKeyJoinColumn, and use the ff:
-	 *  @JoinColumn(name = "tagId", updatable = false, insertable = false)
-	 * or @JoinColumn(name = "tagId", updatable = false, insertable = false, referencedColumnName = "id")
-	*/
+	@ManyToOne
+	@JoinColumn(name = "TAG_ID", referencedColumnName = "ID")
 	private Tag tag;
 
 	public long getId() {
