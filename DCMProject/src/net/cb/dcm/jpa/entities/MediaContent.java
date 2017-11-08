@@ -2,10 +2,12 @@ package net.cb.dcm.jpa.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -19,7 +21,7 @@ import net.cb.dcm.enums.MediaObjectType;
 public class MediaContent {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(length=100, nullable = false)
@@ -33,7 +35,7 @@ public class MediaContent {
 	
 	private long duration;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
 	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
 	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))

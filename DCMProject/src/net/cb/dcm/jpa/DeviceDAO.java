@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 
 import net.cb.dcm.jpa.entities.Device;
+import net.cb.dcm.jpa.entities.MediaContent;
 
 public class DeviceDAO extends GenericDao<Device> {
 	
@@ -24,5 +25,11 @@ public class DeviceDAO extends GenericDao<Device> {
 		device.setName("Samsung Tv " + ip);
 		this.insert(device);
 		return device;
+	}
+	
+	public List<MediaContent> findMediaByDeviceTag(Device device) {
+		TypedQuery<MediaContent> query = entityManager.createQuery("SELECT m FROM MediaContent m "
+													+ " WHERE m.tags = :tags", MediaContent.class);
+		return query.setParameter("tags", device.getTags()).getResultList();
 	}
 }

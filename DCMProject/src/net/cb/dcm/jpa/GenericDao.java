@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class GenericDao<T> {
+public abstract class GenericDao<T> {
 
 	protected EntityManager entityManager;
 
@@ -54,7 +54,8 @@ class GenericDao<T> {
 
 
 	public List<T> findAll() {
-		TypedQuery<T> query = entityManager.createQuery("from " + getPersistentClass().getName(), getPersistentClass());
+		TypedQuery<T> query = entityManager.createQuery("SELECT e FROM " + getPersistentClass().getSimpleName() + " e"
+				, getPersistentClass());
 		List<T> objects = query.getResultList();
 		return objects;
 	}
@@ -77,6 +78,32 @@ class GenericDao<T> {
 	public void delete(T instance) {
 		beginTransaction();
 		entityManager.remove(instance);
+		commitTransaction();
+	}
+	
+	public void insertAll(List<T> instances) {
+		beginTransaction();
+		for (T instance : instances) {
+			entityManager.persist(instance);
+		}
+		commitTransaction();
+	}
+
+
+	public void updateAll(List<T> instances) {
+		beginTransaction();
+		for (T instance : instances) {
+			entityManager.merge(instance);
+		}
+		commitTransaction();
+	}
+
+
+	public void deleteAll(List<T> instances) {
+		beginTransaction();
+		for (T instance : instances) {
+			entityManager.remove(instance);
+		}
 		commitTransaction();
 	}
 
