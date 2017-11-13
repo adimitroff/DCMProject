@@ -55,7 +55,7 @@ public class Device {
 //	@OneToMany(mappedBy = "device")
 //	private List<DeviceTagRelation> tags;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))

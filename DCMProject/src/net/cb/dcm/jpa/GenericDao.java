@@ -15,14 +15,18 @@ public abstract class GenericDao<T> {
 
 	protected EntityManager entityManager;
 
-    protected static final Logger moLogger = LoggerFactory.getLogger(GenericDao.class);
+	protected static final Logger moLogger = LoggerFactory.getLogger(GenericDao.class);
 
 	public GenericDao() {
 		try {
-			entityManager = JpaEntityManagerFactory.getEntityManagerFactory().createEntityManager();
+			this.entityManager = JpaEntityManagerFactory.getEntityManagerFactory().createEntityManager();
 		} catch (NamingException | SQLException e) {
 			moLogger.error("Unable to create EntityManager", e);
 		}
+	}
+	
+	public GenericDao(GenericDao<?> genericDao) {
+		this.entityManager = genericDao.entityManager;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,19 +51,16 @@ public abstract class GenericDao<T> {
 		entityManager.close();
 	}
 
-
 	public T findById(Object id) {
 		return entityManager.find(getPersistentClass(), id);
 	}
 
-
 	public List<T> findAll() {
-		TypedQuery<T> query = entityManager.createQuery("SELECT e FROM " + getPersistentClass().getSimpleName() + " e"
-				, getPersistentClass());
+		TypedQuery<T> query = entityManager.createQuery("SELECT e FROM " + getPersistentClass().getSimpleName() + " e",
+				getPersistentClass());
 		List<T> objects = query.getResultList();
 		return objects;
 	}
-
 
 	public void insert(T instance) {
 		beginTransaction();
@@ -67,20 +68,18 @@ public abstract class GenericDao<T> {
 		commitTransaction();
 	}
 
-
 	public void update(T instance) {
 		beginTransaction();
 		entityManager.merge(instance);
 		commitTransaction();
 	}
 
-
 	public void delete(T instance) {
 		beginTransaction();
 		entityManager.remove(instance);
 		commitTransaction();
 	}
-	
+
 	public void insertAll(List<T> instances) {
 		beginTransaction();
 		for (T instance : instances) {
@@ -89,7 +88,6 @@ public abstract class GenericDao<T> {
 		commitTransaction();
 	}
 
-
 	public void updateAll(List<T> instances) {
 		beginTransaction();
 		for (T instance : instances) {
@@ -97,7 +95,6 @@ public abstract class GenericDao<T> {
 		}
 		commitTransaction();
 	}
-
 
 	public void deleteAll(List<T> instances) {
 		beginTransaction();

@@ -6,6 +6,7 @@ import javax.persistence.TypedQuery;
 
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.MediaContent;
+import net.cb.dcm.jpa.entities.Tag;
 
 public class DeviceDAO extends GenericDao<Device> {
 	
@@ -29,7 +30,12 @@ public class DeviceDAO extends GenericDao<Device> {
 	
 	public List<MediaContent> findMediaByDeviceTag(Device device) {
 		TypedQuery<MediaContent> query = entityManager.createQuery("SELECT m FROM MediaContent m "
-													+ " WHERE m.tags = :tags", MediaContent.class);
-		return query.setParameter("tags", device.getTags()).getResultList();
+													+ " WHERE m.tags IN :tags"
+													+ " GROUP BY m HAVING COUNT(m) = :count", MediaContent.class);
+		List<Tag> tags = device.getTags();
+		query.setParameter("tags", tags);
+		query.setParameter("count", tags.size());
+		return query.getResultList();
 	}
+	
 }
