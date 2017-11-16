@@ -22,6 +22,8 @@ import net.cb.dcm.jpa.entities.MediaContent;
 public class DevResponse {
 
 	private static final Logger moLogger = LoggerFactory.getLogger(DevResponse.class);
+	
+	private static final String TV_PROJECT_PATH = "/TvApp";
 
 	/**
 	 * Json response
@@ -110,7 +112,7 @@ public class DevResponse {
 	private List<String> jsFiles;
 
 	/**
-	 * List of commands for the device app
+	 * List of commands for the device appappendNewVersion
 	 */
 	private List<DeviceCommand> commands;
 
@@ -133,6 +135,8 @@ public class DevResponse {
 	 * Web server url including port number.
 	 */
 	private String serverUrl;
+	
+	private int dataId;
 
 	/**
 	 * After construction DevResponse object call
@@ -146,6 +150,7 @@ public class DevResponse {
 	public DevResponse(String serverUrl) {
 		super();
 		this.serverUrl = serverUrl;
+		this.dataId = 1000;
 		this.responseJson = new JsonObject();
 
 	}
@@ -157,9 +162,8 @@ public class DevResponse {
 	 * @see #getResponseJson()
 	 */
 	public void generateResponse() {
-		int liDataId = 1000; // TODO get from database for this device
 		this.responseJson.addProperty(PROP_REDIRECT_URL, ""); // TODO Currently not used
-		this.responseJson.addProperty(PROP_DATA_ID, liDataId);
+		this.responseJson.addProperty(PROP_DATA_ID, dataId);
 		switch (this.responseDataType) {
 		case NEW_VERSION:
 			this.responseJson.addProperty(PROP_DATA_TYPE, "new_version");
@@ -200,8 +204,9 @@ public class DevResponse {
 		// Add js file urls
 		if (this.jsFiles != null && this.jsFiles.size() > 0) {
 			JsonArray loJsonArray = new JsonArray();
-			for (String jsFileUrl : jsFiles) {
-				loJsonArray.add(jsFileUrl);
+			String jsFilesDirUrl = this.serverUrl + TV_PROJECT_PATH + "/";
+			for (String jsFileName : jsFiles) {
+				loJsonArray.add(jsFilesDirUrl + jsFileName);
 			}
 			this.responseJson.add(PROP_JS_FILES, loJsonArray);
 		}
@@ -414,5 +419,21 @@ public class DevResponse {
 	 */
 	public void setCommands(List<DeviceCommand> commands) {
 		this.commands = commands;
+	}
+
+	public int getDataId() {
+		return dataId;
+	}
+
+	public void setDataId(int dataId) {
+		this.dataId = dataId;
+	}
+
+	public String getServerUrl() {
+		return serverUrl;
+	}
+
+	public void setServerUrl(String serverUrl) {
+		this.serverUrl = serverUrl;
 	}
 }

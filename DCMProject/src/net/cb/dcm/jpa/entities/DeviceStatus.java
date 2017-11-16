@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class DeviceStatus implements Serializable {
 	@JoinColumn(name="DEVICE_ID")
 	private Device device;
 	
-	@OneToMany(mappedBy = "deviceStatus")
+	@OneToMany(mappedBy = "deviceStatus", cascade = {CascadeType.PERSIST})
 	private List<DeviceStatusValue> deviceStatusValues;
 	
 	@Column
