@@ -82,6 +82,11 @@ public class DeviceDAO extends GenericDao<Device> {
 	}
 
 	public List<MediaContent> findMediaByDeviceTag(Device device) {
+		
+		if( device.getTags() == null || device.getTags().size() == 0 ){
+			return new ArrayList<MediaContent>();
+		}
+		
 		TypedQuery<MediaContent> query = entityManager.createQuery(
 				"SELECT m FROM MediaContent m " + " WHERE m.tags IN :tags" + " GROUP BY m HAVING COUNT(m) = :count",
 				MediaContent.class);

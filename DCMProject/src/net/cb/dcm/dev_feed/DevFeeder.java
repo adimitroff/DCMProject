@@ -106,94 +106,103 @@ public class DevFeeder extends HttpServlet {
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
-		if (device == null) {
-			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
-			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
-				mediaContents = defaultPlaylist.getMediaContents();
-			}
-		} else {
+		if (device != null) {
 			// Get saved status data id
 			Map<String, DeviceStatusValue> propertyValueMap = device.getCurrentDeviceStatus().getDeviceStatusValues()
 					.stream()
 					.collect(Collectors.toMap(d -> d.getProperty().getKey(), d -> d));
 			
 			DeviceStatusValue sDataId = propertyValueMap.get(DeviceDAO.PROPERTY_UPDATE_DATA_COUNTER);
-			if(sDataId != null) {
+			if(sDataId != null && sDataId.getValue() != null){
 				// Set same data id for new response
-				loDevResponse.setDataId(Integer.valueOf(sDataId.getValue()));
+				int dataId = Integer.valueOf(sDataId.getValue());
+				if( dataId == 1)
+					dataId++;
+				
+				loDevResponse.setDataId( dataId );
 			}
 			
 			List<Playlist> playlists = playlistDao.findAll();
 			List<Playlist> filteredPlaylists = new ArrayList<Playlist>();
 			final List<MediaContent> deviceMediaContents = deviceDao.findMediaByDeviceTag(device);
-			// Check playst contents is included in device tags
-			for (Playlist playlist : playlists) {
-				List<MediaContent> deviceMedia = playlist.getMediaContents().stream()
-						.filter(media -> deviceMediaContents.contains(media)).collect(Collectors.toList());
-				if (!deviceMedia.isEmpty()) {
-					playlist.setMediaContents(deviceMedia);
-					filteredPlaylists.add(playlist);
-				}
-			}
-
-			// Order playlists by priority
-			filteredPlaylists = filteredPlaylists.stream()
-					.sorted((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()))
-					.collect(Collectors.toList());
 			
-			// Get actual media contents on device
-			DeviceSchedule deviceSchedule = device.getCurrentDeviceSchedule();
-			if(deviceSchedule != null  && deviceSchedule.getLoops() != null && deviceSchedule.getLoops().size() > 0
-					&& deviceSchedule.getLoops().get(0).getMediaContents() != null) {
-				mediaContents = deviceSchedule.getLoops().get(0).getMediaContents();
-			}
-
-			// Find playlist with highest priority for current time
-			for (int i = 0; i < filteredPlaylists.size(); i++) {
-				List<MediaContent> playlistMediaContent = filteredPlaylists.get(i).getMediaContents();
-				if(playlistMediaContent.isEmpty()) {
-					continue;
+			if( !deviceMediaContents.isEmpty() ){			
+				// Check playst contents is included in device tags
+				for (Playlist playlist : playlists) {
+					List<MediaContent> deviceMedia = playlist.getMediaContents().stream()
+							.filter(media -> deviceMediaContents.contains(media)).collect(Collectors.toList());
+					if (!deviceMedia.isEmpty()) {
+						playlist.setMediaContents(deviceMedia);
+						filteredPlaylists.add(playlist);
+					}
 				}
-				Date validFrom = filteredPlaylists.get(i).getValidFrom();
-				Date validTo = filteredPlaylists.get(i).getValidTo();
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(validFrom);
-				Calendar currCal = Calendar.getInstance();
-				currCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-				Date currentTime = currCal.getTime();
+	
+				// Order playlists by priority
+				filteredPlaylists = filteredPlaylists.stream()
+						.sorted((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()))
+						.collect(Collectors.toList());
 				
-				// Check for current time playlist
-				if(currentTime.compareTo(validFrom) >= 0 && currentTime.compareTo(validTo) <= 0 ) {
-					// Check current playlist media for difference from actual device playlist media
-					int mediaIndex = -1;
-					if(playlistMediaContent.size() == mediaContents.size()) {
-						for(mediaIndex = 0; mediaIndex < playlistMediaContent.size(); mediaIndex++) {
-							if(!playlistMediaContent.get(mediaIndex).equals(mediaContents.get(mediaIndex))) {
-								mediaIndex = -1;
-								break;
+				// Get actual media contents on device
+				DeviceSchedule deviceSchedule = device.getCurrentDeviceSchedule();
+				if(deviceSchedule != null  && deviceSchedule.getLoops() != null && deviceSchedule.getLoops().size() > 0
+						&& deviceSchedule.getLoops().get(0).getMediaContents() != null) {
+					mediaContents = deviceSchedule.getLoops().get(0).getMediaContents();
+				}
+	
+				// Find playlist with highest priority for current time
+				for (int i = 0; i < filteredPlaylists.size(); i++) {
+					List<MediaContent> playlistMediaContent = filteredPlaylists.get(i).getMediaContents();
+					if(playlistMediaContent.isEmpty()) {
+						continue;
+					}
+					Date validFrom = filteredPlaylists.get(i).getValidFrom();
+					Date validTo = filteredPlaylists.get(i).getValidTo();
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(validFrom);
+					Calendar currCal = Calendar.getInstance();
+					currCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+					Date currentTime = currCal.getTime();
+					
+					// Check for current time playlist
+					if(currentTime.compareTo(validFrom) >= 0 && currentTime.compareTo(validTo) <= 0 ) {
+						// Check current playlist media for difference from actual device playlist media
+						int mediaIndex = -1;
+						if(playlistMediaContent.size() == mediaContents.size()) {
+							for(mediaIndex = 0; mediaIndex < playlistMediaContent.size(); mediaIndex++) {
+								if(!playlistMediaContent.get(mediaIndex).equals(mediaContents.get(mediaIndex))) {
+									mediaIndex = -1;
+									break;
+								}
 							}
 						}
+						// If media content differs, create new loop with the new media content
+						if(mediaIndex == -1) {
+							loDevResponse.setDataId(loDevResponse.getDataId() + 1);
+							// New playlist
+							mediaContents = playlistMediaContent;
+							Loop deviceLoop = new Loop();
+							deviceLoop.setMediaContents(playlistMediaContent);
+							List<Loop> deviceLoops = new ArrayList<Loop>();
+							deviceLoops.add(deviceLoop);
+							deviceSchedule = new DeviceSchedule();
+							deviceSchedule.setDevice(device);
+							deviceSchedule.setLoops(deviceLoops);
+							deviceSchedule.setTime(currentTime);
+							deviceLoop.setDeviceSchedule(deviceSchedule);
+							device.setCurrentDeviceSchedule(deviceSchedule);
+							deviceDao.update(device);
+						}
+	
+						break;
 					}
-					// If media content differs, create new loop with the new media content
-					if(mediaIndex == -1) {
-						loDevResponse.setDataId(loDevResponse.getDataId() + 1);
-						// New playlist
-						mediaContents = playlistMediaContent;
-						Loop deviceLoop = new Loop();
-						deviceLoop.setMediaContents(playlistMediaContent);
-						List<Loop> deviceLoops = new ArrayList<Loop>();
-						deviceLoops.add(deviceLoop);
-						deviceSchedule = new DeviceSchedule();
-						deviceSchedule.setDevice(device);
-						deviceSchedule.setLoops(deviceLoops);
-						deviceSchedule.setTime(currentTime);
-						deviceLoop.setDeviceSchedule(deviceSchedule);
-						device.setCurrentDeviceSchedule(deviceSchedule);
-						deviceDao.update(device);
-					}
-
-					break;
 				}
+			}
+		}
+
+		if( mediaContents == null || mediaContents.isEmpty() ){
+			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
+			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
+				mediaContents = defaultPlaylist.getMediaContents();
 			}
 		}
 		loDevResponse.setMediaContents(mediaContents);
