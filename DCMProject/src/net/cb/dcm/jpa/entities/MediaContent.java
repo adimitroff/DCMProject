@@ -1,31 +1,45 @@
 package net.cb.dcm.jpa.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.cb.dcm.enums.MediaObjectType;
 
-//@Entity
-//@Table(name="media_content")
+@Entity
+@Table(name="media_content")
 public class MediaContent {
 	
-//	@Id
-//	@GeneratedValue
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-//	@Column(length=100)
+	@Column(length=100, nullable = false)
 	private String name;
 	
-//	@Column(length=250)
+	@Column(length=250)
 	private String description;
 	
-//	@Column(name="media_type")
+	@Column(name="MEDIA_TYPE", nullable = false)
 	private MediaObjectType mediaType;
 	
 	private long duration;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinTable(name = "media_cont_tag_rel", 
+	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
+	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+	private List<Tag> tags;
 
 	public long getId() {
 		return id;
@@ -66,5 +80,37 @@ public class MediaContent {
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MediaContent other = (MediaContent) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	
+	
 	
 }
