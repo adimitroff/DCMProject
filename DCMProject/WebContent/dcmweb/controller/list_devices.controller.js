@@ -7,7 +7,7 @@ sap.ui
 
 					var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.list_tags",
+									"net.cb.dcm.frontend.controller.list_devices",
 									{	
 										onNavigateBack : function(event) {
 											var oHistory = History.getInstance();
@@ -22,17 +22,12 @@ sap.ui
 										},
 										onInit : function(evt) {
 										},
-										onAdd : function(evt) {
-											var oRouter = sap.ui.core.UIComponent
-													.getRouterFor(this);
-											oRouter.navTo("AddTag");
-										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
 											var loBindingContext = event.getSource().getBindingContext();
 											var lvId = loBindingContext.getProperty("Id");
-											oRouter.navTo("EditTag", {id:lvId});
+											oRouter.navTo("EditDevice", {id:lvId});
 										}
 									});
 

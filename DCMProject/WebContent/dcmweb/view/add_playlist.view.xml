@@ -1,22 +1,27 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_tag"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_playlist"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
-	<Page title="Add Tag" id="page" showNavButton="true"
+	<Page title="Add Playlist" id="page" showNavButton="true"
 		navButtonPress="onNavigateBack">
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
 			<l:content>
-				<f:SimpleForm id="TagAdd" minWidth="1024"
+				<f:SimpleForm id="PlaylistAdd" minWidth="1024"
 					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
-					title="Tag Add" labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					labelSpanL="3" labelSpanM="3" emptySpanL="4"
 					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
 					<f:content>
 						<Input id="id" value="{Id}" visible="false" />
 						<Label text="Name" />
 						<Input id="name" value="{Name}" />
 						<Label text="Description" />
-						<Input id="description" value="{Description}">
-						</Input>
+						<Input id="description" value="{Description}"/>
+						<Label text="Default" />
+						<checkbox id="default" text="Default" name="default" checked="{Default)"/>
+						<Label text="Active" />
+						<checkbox id="active" checked="{Active}" text="Active" name="active"/>
+						<Label text="Priority" />
+						<Input id="priority" value="{Priority}"/>
 					</f:content>
 				</f:SimpleForm>
 			</l:content>

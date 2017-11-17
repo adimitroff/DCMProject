@@ -1,16 +1,13 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_tags"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_devices"
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Device Content Management" showNavButton="true"
     	navButtonTap="onNavigateBack">
-		<headerContent>
-			<Button icon="sap-icon://add" press="onAdd" />
-		</headerContent>
-		<Table id="idProductsTable" inset="false" items="{/Tags}"
+		<Table id="idProductsTable" inset="false" items="{/Devices}"
 			itemPress="rowSelected">
 			<headerToolbar>
 				<Toolbar>
-					<Label text="Tags"></Label>
+					<Label text="Devices"></Label>
 				</Toolbar>
 			</headerToolbar>
 			<columns>
@@ -23,6 +20,15 @@
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Description" />
 				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Device Type" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="IP Address" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Model" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem type="Detail" detailPress="onDetailPress">
@@ -30,6 +36,9 @@
 						<ObjectIdentifier title="{Id}" />
 						<Text text="{Name}" />
 						<Text text="{Description}" />
+						<Text text="{Dev_type}" />
+						<Text text="{Ip}" />
+						<Text text="{Model}" />
 					</cells>
 				</ColumnListItem>
 			</items>

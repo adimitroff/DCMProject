@@ -1,20 +1,18 @@
 sap.ui
 		.define(
 				[ 'sap/ui/core/mvc/Controller',
-				'sap/ui/core/routing/History',
-				'sap/m/MessageToast',
-				'sap/m/MessageBox'],
+				'sap/ui/core/routing/History' ],
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.add_tag", {
+									"net.cb.dcm.frontend.controller.edit_device", {
 		            onNavigateBack : function(evt) {
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
-						var loRoute = loRouter.getRoute("EditTag");
+						var loRoute = loRouter.getRoute("EditDevice");
 						if (loRoute !== undefined) {
 							loRoute.attachMatched(this._onRouteMatched, this);
 						}
@@ -26,7 +24,7 @@ sap.ui
 						loView = this.getView();
 
 						loView.bindElement({
-							path : "/Tags(" + lvId + ")",
+							path : "/Devices(" + lvId + ")",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -63,21 +61,11 @@ sap.ui
 						vProperties.Id = this.getView().byId("id").getValue();
 						vProperties.Name = this.getView()
 								.byId("name").getValue();
-						if (vProperties.Name == undefined || vProperties.Name == ""){
-							sap.m.MessageBox.show(
-						      "Field Name cannot be empty.", {
-						          icon: sap.m.MessageBox.Icon.ERROR,
-						          title: "Error",
-						          actions: [sap.m.MessageBox.Action.CANCEL]
-						      }
-						    );
-							return;
-						}
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Tags", vProperties);
+							oModel.createEntry("/Devices", vProperties);
 
 						} else {
 							var oEntry = {};
@@ -97,12 +85,12 @@ sap.ui
 
 					},
 					_fnSuccess : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Success",{
-						    closeOnBrowserNavigation: false });
+							    closeOnBrowserNavigation: false });
 					},
 					_fnError : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });
 					},

@@ -1,22 +1,27 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_tag"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.edit_device"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
-	<Page title="Add Tag" id="page" showNavButton="true"
+	<Page title="Edit Device" id="page" showNavButton="true"
 		navButtonPress="onNavigateBack">
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
 			<l:content>
-				<f:SimpleForm id="TagAdd" minWidth="1024"
+				<f:SimpleForm id="EditDevice" minWidth="1024"
 					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
-					title="Tag Add" labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					labelSpanL="3" labelSpanM="3" emptySpanL="4"
 					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
 					<f:content>
 						<Input id="id" value="{Id}" visible="false" />
 						<Label text="Name" />
 						<Input id="name" value="{Name}" />
 						<Label text="Description" />
-						<Input id="description" value="{Description}">
-						</Input>
+						<Input id="description" value="{Description}" />
+						<Label text="Device Type" />
+						<Input id="dev_type" value="{Dev_type}" />
+						<Label text="IP Address" />
+						<Input id="ip" value="{Ip}" editable="false" />
+						<Label text="Model" />
+						<Input id="model" value="{Model}" />
 					</f:content>
 				</f:SimpleForm>
 			</l:content>
@@ -25,7 +30,6 @@
 			<Bar>
 				<contentRight>
 					<Button id="save" text="Save" type="Emphasized" press="handleSavePress" />
-					<Button id="delete" text="Delete" press="handleDeletePress" />
 					<Button id="cancel" text="Cancel" press="handleCancelPress" />
 				</contentRight>
 			</Bar>
