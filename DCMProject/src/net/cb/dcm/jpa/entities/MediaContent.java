@@ -2,10 +2,12 @@ package net.cb.dcm.jpa.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -20,7 +22,7 @@ import net.cb.dcm.enums.MediaObjectType;
 public class MediaContent {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(length=100, nullable = false)
@@ -34,13 +36,14 @@ public class MediaContent {
 	
 	private long duration;
 	
+
 	@Column(length=260)
 	private String filePath;
 	
 	@Column(length=260)
 	private String thumbnail;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
 	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
 	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
@@ -93,7 +96,7 @@ public class MediaContent {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
-
+	
 	public String getFilePath() {
 		return filePath;
 	}
@@ -108,6 +111,28 @@ public class MediaContent {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MediaContent other = (MediaContent) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 	
 }

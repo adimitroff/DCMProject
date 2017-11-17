@@ -2,13 +2,16 @@ package net.cb.dcm.jpa.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,7 +28,7 @@ import net.cb.dcm.enums.DeviceType;
 public class Device {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(length = 30)
@@ -46,24 +49,23 @@ public class Device {
 	@Column(length = 40, unique = true, nullable = false)
 	private String ip;
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "DEV_PROP_TYPE_ID")
-//	private DevicePropertyType devicePropertyType;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID")
+	private DevicePropertyType devicePropertyType;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
 	private List<Tag> tags;
-	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "CURR_DEV_STATUS_ID")
-//	private DeviceStatus currentDeviceStatus;
-	
-//Anton	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
-//	private DeviceSchedule currentDeviceSchedule;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "CURR_DEV_STATUS_ID", referencedColumnName = "ID")
+	private DeviceStatus currentDeviceStatus;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
+	private DeviceSchedule currentDeviceSchedule;
 
 	public long getId() {
 		return id;
@@ -136,13 +138,13 @@ public class Device {
 		this.ip = ip;
 	}
 
-//	public DevicePropertyType getDevicePropertyType() {
-//		return devicePropertyType;
-//	}
-//
-//	public void setDevicePropertyType(DevicePropertyType devicePropertyType) {
-//		this.devicePropertyType = devicePropertyType;
-//	}
+	public DevicePropertyType getDevicePropertyType() {
+		return devicePropertyType;
+	}
+
+	public void setDevicePropertyType(DevicePropertyType devicePropertyType) {
+		this.devicePropertyType = devicePropertyType;
+	}
 
 	public List<Tag> getTags() {
 		return tags;
@@ -152,13 +154,13 @@ public class Device {
 		this.tags = tags;
 	}
 
-//	public DeviceStatus getCurrentDeviceStatus() {
-//		return currentDeviceStatus;
-//	}
-//
-//	public void setCurrentDeviceStatus(DeviceStatus currentDeviceStatus) {
-//		this.currentDeviceStatus = currentDeviceStatus;
-//	}
+	public DeviceStatus getCurrentDeviceStatus() {
+		return currentDeviceStatus;
+	}
+
+	public void setCurrentDeviceStatus(DeviceStatus currentDeviceStatus) {
+		this.currentDeviceStatus = currentDeviceStatus;
+	}
 
 	@Override
 	public int hashCode() {
@@ -182,11 +184,11 @@ public class Device {
 		return true;
 	}
 
-//	public DeviceSchedule getCurrentDeviceSchedule() {
-//		return currentDeviceSchedule;
-//	}
-//
-//	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
-//		this.currentDeviceSchedule = currentDeviceSchedule;
-//	}
+	public DeviceSchedule getCurrentDeviceSchedule() {
+		return currentDeviceSchedule;
+	}
+
+	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
+		this.currentDeviceSchedule = currentDeviceSchedule;
+	}
 }
