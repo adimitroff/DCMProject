@@ -1,0 +1,35 @@
+{
+	"redirectUrl": "",
+	"dataId": 1012,
+	"dataType": "command",
+	"_comment_dataTypes": "new_version, command, playlist",
+	
+	"_comment_new_version_start": "New version properties start.", 
+	"jsFiles": ["app/javascript/App.js", "app/javascript/SSSP.js", "app/javascript/LfdSystem.js", "app/javascript/LfdPlayer.js",
+             "app/javascript/FileSystemCustom.js", "app/javascript/AudioSystem.js", "app/javascript/BasicPlayer.js",
+             "app/javascript/FileUploader.js", "app/javascript/NetworkSystem.js", "app/javascript/globals.js", "app/javascript/RssFeed.js"],
+ 	"htmlContent": "body.html",
+ 	"_comment_new_version_end": "New version properties end.",
+ 	 
+ 	"_comment_commands_start": "Commands start.",
+ 	"commands": ["reboot!", "startHtmlVideo!", "stopHtmlVideo!", "audio1!", "audio2!",
+              "showPicture!", "hidePicture!",
+              "basicPlayer!", "stopBasicPlayer!",
+              "captureScreen!", "lfdPlayer!", "getIp!", "getHost!",
+              "downloadTest!", "downloadTestImage!", "deleteDownloadTest!",
+              "startPlayList!", "stopPlayList!", "lfdDisplayOn!", "lfdDisplayOff!",
+              "loadRssFeed", "stopRssFeed!" ],
+    "_comment_commands_end": "Commands end.",
+     
+    "_comment_playlist_start": "Playlist start.",          
+    "imageGlobalSettings": { "x" : 0, "y" : 0, "width" : 1280, "height" : 720  },
+	"videoGlobalSettings": { "x" : 0, "y" : 0, "width" : 1280, "height" : 720 },
+	"playListFiles": [ { "src": "http://192.168.1.102/TestingEnvironment/images/test_image_2.jpg", "name": "test_image_2.jpg", "type": "image", "location":"local"},
+ 					{ "src" :"http://192.168.1.102/TestingEnvironment/images/test_image_4.jpg", "name": "test_image_4.jpg", "type": "image", "location":"remote" },
+					{ "src" :"http://clips.vorwaerts-gmbh.de/VfE_html5.mp4", "name": "VfE_html5.mp4", "type": "video", "location":"remote" } 
+				  ] ,				  
+	"_comment_playlist_end": "Playlist end.", 	
+	
+	"_comment_rssfeed_start": "Rss feed start.",  
+	"rssFeed": {"url": "rss.xml", "xmlContent": ""}			   
+}
