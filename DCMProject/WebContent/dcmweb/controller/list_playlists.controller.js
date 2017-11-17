@@ -7,7 +7,7 @@ sap.ui
 
 					var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.list_tags",
+									"net.cb.dcm.frontend.controller.list_playlists",
 									{	
 										onNavigateBack : function(event) {
 											var oHistory = History.getInstance();
@@ -25,14 +25,14 @@ sap.ui
 										onAdd : function(evt) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
-											oRouter.navTo("AddTag");
+											oRouter.navTo("AddPlaylist");
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
 											var loBindingContext = event.getSource().getBindingContext();
 											var lvId = loBindingContext.getProperty("Id");
-											oRouter.navTo("EditTag", {id:lvId});
+											oRouter.navTo("EditPlaylist", {id:lvId});
 										}
 									});
 

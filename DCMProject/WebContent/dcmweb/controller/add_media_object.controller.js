@@ -7,14 +7,14 @@ sap.ui
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.add_tag", {
+									"net.cb.dcm.frontend.controller.add_media_object", {
 		            onNavigateBack : function(evt) {
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
-						var loRoute = loRouter.getRoute("EditTag");
+						var loRoute = loRouter.getRoute("EditMediaObject");
 						if (loRoute !== undefined) {
 							loRoute.attachMatched(this._onRouteMatched, this);
 						}
@@ -26,7 +26,7 @@ sap.ui
 						loView = this.getView();
 
 						loView.bindElement({
-							path : "/Tags(" + lvId + ")",
+							path : "/MediaContents(" + lvId + ")",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -51,7 +51,7 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Tags(" + lvId + "L)");
+						oModel.remove("/MediaContents(" + lvId + "L)");
 						oModel.refresh();
 						this.navigateBack();
 					},
@@ -63,6 +63,25 @@ sap.ui
 						vProperties.Id = this.getView().byId("id").getValue();
 						vProperties.Name = this.getView()
 								.byId("name").getValue();
+						vProperties.Description = this.getView().byId(
+								"description").getValue();
+						vProperties.MediaType = this.getView().byId(
+								"media_type").getValue();
+						vProperties.Duration = this.getView().byId(
+								"duration").getValue();
+						vProperties.FilePath = this.getView().byId(
+							"file").getValue();
+						if (vProperties.FilePath == undefined ||
+								  vProperties.FilePath == "") {
+							sap.m.MessageBox.show(
+								      "File must be selected", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
 						if (vProperties.Name == undefined || vProperties.Name == ""){
 							sap.m.MessageBox.show(
 						      "Field Name cannot be empty.", {
@@ -73,36 +92,32 @@ sap.ui
 						    );
 							return;
 						}
-						vProperties.Description = this.getView().byId(
-								"description").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Tags", vProperties);
+							oModel.createEntry("/MediaContents", vProperties);
 
 						} else {
-							var oEntry = {};
 							var mParameters = {};
 							mParameters.context = this.getView()
 									.getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
-							oEntry.Id = vProperties.Id;
-							oEntry.Name = vProperties.Name;
-							oEntry.Description = vProperties.Description;
-							oModel.update("", oEntry, mParameters);
+							oModel.update("", vProperties, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
 						oModel.refresh();
+						var oFileUploader = this.getView().byId("fileUploader");
+						oFileUploader.upload();
 						this.navigateBack();
 
 					},
 					_fnSuccess : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Success",{
-						    closeOnBrowserNavigation: false });
+							    closeOnBrowserNavigation: false });
 					},
 					_fnError : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });
 					},
@@ -115,6 +130,35 @@ sap.ui
 						} else {
 							var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 							oRouter.navTo("Main", true);
+						}
+					},
+					handleUploadComplete: function(oEvent) {
+						var sResponse = oEvent.getParameter("response");
+						if (sResponse) {
+							var sMsg = "";
+							var m = /^\[(\d\d\d)\]:(.*)$/.exec(sResponse);
+							if (m[1] == "200") {
+								sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Success)";
+								oEvent.getSource().setValue("");
+							} else {
+								sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Error)";
+							}
+
+							MessageToast.show(sMsg);
+						}
+					},
+					handleTypeMissmatch: function(oEvent) {
+						var aFileTypes = oEvent.getSource().getFileType();
+						jQuery.each(aFileTypes, function(key, value) {aFileTypes[key] = "*." +  value;});
+						var sSupportedFileTypes = aFileTypes.join(", ");
+						MessageToast.show("The file type *." + oEvent.getParameter("fileType") +
+												" is not supported. Choose one of the following types: " +
+												sSupportedFileTypes);
+					},
+					handleValueChange: function(oEvent) {
+						if (oEvent.mParameters.newValue){
+						this.getView().byId(
+							"file").setValue(oEvent.mParameters.newValue);
 						}
 					}
 			});

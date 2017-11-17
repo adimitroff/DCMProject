@@ -7,7 +7,7 @@ sap.ui
 
 					var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.list_tags",
+									"net.cb.dcm.frontend.controller.list_media_objects",
 									{	
 										onNavigateBack : function(event) {
 											var oHistory = History.getInstance();
@@ -21,18 +21,20 @@ sap.ui
 											}
 										},
 										onInit : function(evt) {
+//											var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
+//											this.getView().setModel(loModel);
 										},
 										onAdd : function(evt) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
-											oRouter.navTo("AddTag");
+											oRouter.navTo("AddMediaObject");
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
 											var loBindingContext = event.getSource().getBindingContext();
 											var lvId = loBindingContext.getProperty("Id");
-											oRouter.navTo("EditTag", {id:lvId});
+											oRouter.navTo("EditMediaObject", {id:lvId});
 										}
 									});
 

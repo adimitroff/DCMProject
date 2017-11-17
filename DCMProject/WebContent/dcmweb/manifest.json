@@ -1,7 +1,8 @@
 {
+	"id": "dcm_component",
 	"sap.app": {
 		"_version": "1.1.0",
-		"id": "dcmapp",
+		"id": "dcm_component",
 		"type": "application",
 		"i18n": "i18n/i18n.properties"
 	},
@@ -54,6 +55,51 @@
 					"pattern": "AddTag",
 					"name": "AddTag",
 					"target": "AddTag"
+				},
+				{
+					"pattern": "EditTag/{id}",
+					"name": "EditTag",
+					"target": "AddTag"
+				},
+				{
+					"pattern": "MediaObjects",
+					"name": "ListMediaObjects",
+					"target": "ListMediaObjects"
+				},
+				{
+					"pattern": "AddMediaObject",
+					"name": "AddMediaObject",
+					"target": "AddMediaObject"
+				},
+				{
+					"pattern": "EditMediaObject/{id}",
+					"name": "EditMediaObject",
+					"target": "AddMediaObject"
+				},
+				{
+					"pattern": "Devices",
+					"name": "ListDevices",
+					"target": "ListDevices"
+				},
+				{
+					"pattern": "EditDevice/{id}",
+					"name": "EditDevice",
+					"target": "EditDevice"
+				},
+				{
+					"pattern": "Playlists",
+					"name": "ListPlaylists",
+					"target": "ListPlaylists"
+				},
+				{
+					"pattern": "AddPlaylist",
+					"name": "AddPlaylist",
+					"target": "AddPlaylist"
+				},
+				{
+					"pattern": "EditPlaylist/{id}",
+					"name": "EditPlaylist",
+					"target": "AddPlaylist"
 				}
 			],
 			"targets": {
@@ -65,6 +111,24 @@
 				},
 				"AddTag": {
 					"viewName": "add_tag"
+				},
+				"ListMediaObjects": {
+					"viewName": "list_media_objects"
+				},
+				"AddMediaObject": {
+					"viewName": "add_media_object"
+				},
+				"ListDevices": {
+					"viewName": "list_devices"
+				},
+				"EditDevice": {
+					"viewName": "edit_device"
+				},
+				"ListPlaylists": {
+					"viewName": "list_playlists"
+				},
+				"AddPlaylist": {
+					"viewName": "add_playlist"
 				}
 			}
 		},

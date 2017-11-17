@@ -1,20 +1,20 @@
 <mvc:View controllerName="net.cb.dcm.frontend.controller.main"
 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml">
-	<GenericTile id="tileTag"
+	<GenericTile id="tileTags"
 		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileTagTitle}"
-		subheader="{i18n>main.tileTagSubheader}" press="press">
+		subheader="{i18n>main.tileTagSubheader}" press="onTileClick">
 		<tileContent>
 			<!-- TileContent unit="EUR" footer="Current Quarter"> <content> <ImageContent 
 				src="sap-icon://home-share"/> </content> </TileContent -->
 		</tileContent>
 	</GenericTile>
 
-	<GenericTile id="tileDevice"
+	<GenericTile id="tileDevices"
 		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileDeviceTitle}"
-		subheader="{i18n>main.tileDeviceSubheader}" press="press">
+		subheader="{i18n>main.tileDeviceSubheader}" press="onTileClick">
 		<tileContent>
-			<TileContent footer="7 New Devices" footerColor="sap.m.ValueColor.Error">
-				<NumericContent value="3" />
+			<TileContent footer="{/NewDevCount}" footerColor="sap.m.ValueColor.Error">
+				<NumericContent value="{/DevCount}" />
 			</TileContent>
 		</tileContent>
 	</GenericTile>
@@ -22,15 +22,22 @@
 	<GenericTile id="tileMediaObjects"
 		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileMediaObjectsTitle}"
 		subheader="{i18n>main.tileMediaObjectsSubheader}" mode="HeaderMode"
-		press="press">
+		press="onTileClick">
 		<tileContent>
 			<!--TileContent unit="EUR" footer="Current Quarter" / -->
+		</tileContent>
+	</GenericTile>
+	
+	<GenericTile id="tilePlaylists"
+		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Playlists"
+		subheader="Create new playlists" press="onTileClick">
+		<tileContent>
 		</tileContent>
 	</GenericTile>
 
 	<GenericTile id="tileOptions"
 		class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{i18n>main.tileOptionsTitle}"
-		press="press">
+		press="onTileClick">
 		<tileContent>
 			<!-- TileContent> <content> <ImageContent src="test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/ProfileImage_LargeGenTile.png"/> 
 				</content> </TileContent -->

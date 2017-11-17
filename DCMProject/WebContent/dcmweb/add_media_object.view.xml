@@ -1,0 +1,45 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_media_object"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Page title="Add Media Object" id="page" showNavButton="true"
+		navButtonPress="onNavigateBack">
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="AddMediaObject" minWidth="1024"
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					title="Add/Edit Media Object" labelSpanL="3" labelSpanM="3"
+					emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+						<Input id="id" value="{Id}" visible="false" />
+						<Label text="Name" />
+						<Input id="name" value="{Name}" />
+						<Label text="Description" />
+						<Input id="description" value="{Description}" />
+						<Label text="Media Type" />
+						<Input id="media_type" value="{MediaType}" />
+						<Label text="Duration" />
+						<Input id="duration" value="{Duration}" />
+						<Label text="File" />
+						<Input id="file" value="{FilePath}" editable="false"/>
+						<u:FileUploader id="fileUploader" name="fileUploader"
+							uploadUrl="http://localhost:8080/DCMProject/upload" tooltip="Upload your file to the server"
+							uploadComplete="handleUploadComplete" change="handleValueChange"
+							typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="jpg,mpeg,avi"
+							placeholder="Choose a file for Upload...">
+						</u:FileUploader>
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button id="save" text="Save" type="Emphasized" press="handleSavePress" />
+					<Button id="delete" text="Delete" press="handleDeletePress" />
+					<Button id="cancel" text="Cancel" press="handleCancelPress" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>
