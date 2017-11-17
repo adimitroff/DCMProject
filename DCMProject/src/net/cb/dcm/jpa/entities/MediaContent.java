@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import net.cb.dcm.enums.MediaObjectType;
 
+
 @Entity
 @Table(name="media_content")
 public class MediaContent {
@@ -32,6 +33,12 @@ public class MediaContent {
 	private MediaObjectType mediaType;
 	
 	private long duration;
+	
+	@Column(length=260)
+	private String filePath;
+	
+	@Column(length=260)
+	private String thumbnail;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "media_cont_tag_rel", 
@@ -85,6 +92,22 @@ public class MediaContent {
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	
 }

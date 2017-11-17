@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
  * Entity implementation class for Entity: DeviceSchedule
  *
  */
+
 @Entity
 @Table(name = "device_schedule")
 public class DeviceSchedule implements Serializable {
@@ -31,7 +32,7 @@ public class DeviceSchedule implements Serializable {
 	private long id;
 	
 	@ManyToOne
-	@JoinColumn(name="DEVICE_ID", referencedColumnName = "ID")
+	@JoinColumn(name="DEVICE_ID")
 	private Device device;
 	
 	@OneToMany(mappedBy = "deviceSchedule")

@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -36,8 +35,8 @@ public class Device {
 	private String description;
 
 	@Column(name = "dev_type")
-	private DeviceType devType; // (integer) � device type (1 � monitor, 2 � mobile
-							// device, 3�)
+	private DeviceType devType; // (integer) device type (1 - monitor, 2 - mobile
+							// device, 3 -)
 
 	private int size; // Size in inches
 
@@ -47,12 +46,9 @@ public class Device {
 	@Column(length = 40, unique = true, nullable = false)
 	private String ip;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID")
-	private DevicePropertyType devicePropertyType;
-
-//	@OneToMany(mappedBy = "device")
-//	private List<DeviceTagRelation> tags;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "DEV_PROP_TYPE_ID")
+//	private DevicePropertyType devicePropertyType;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "dev_tag_rel", 
@@ -60,13 +56,14 @@ public class Device {
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
 	private List<Tag> tags;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CURR_DEV_STATUS_ID", referencedColumnName = "ID")
-	private DeviceStatus currentDeviceStatus;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "CURR_DEV_STATUS_ID")
+//	private DeviceStatus currentDeviceStatus;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
-	private DeviceSchedule currentDeviceSchedule;
+//Anton	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
+//	private DeviceSchedule currentDeviceSchedule;
 
 	public long getId() {
 		return id;
@@ -139,13 +136,13 @@ public class Device {
 		this.ip = ip;
 	}
 
-	public DevicePropertyType getDevicePropertyType() {
-		return devicePropertyType;
-	}
-
-	public void setDevicePropertyType(DevicePropertyType devicePropertyType) {
-		this.devicePropertyType = devicePropertyType;
-	}
+//	public DevicePropertyType getDevicePropertyType() {
+//		return devicePropertyType;
+//	}
+//
+//	public void setDevicePropertyType(DevicePropertyType devicePropertyType) {
+//		this.devicePropertyType = devicePropertyType;
+//	}
 
 	public List<Tag> getTags() {
 		return tags;
@@ -155,13 +152,13 @@ public class Device {
 		this.tags = tags;
 	}
 
-	public DeviceStatus getCurrentDeviceStatus() {
-		return currentDeviceStatus;
-	}
-
-	public void setCurrentDeviceStatus(DeviceStatus currentDeviceStatus) {
-		this.currentDeviceStatus = currentDeviceStatus;
-	}
+//	public DeviceStatus getCurrentDeviceStatus() {
+//		return currentDeviceStatus;
+//	}
+//
+//	public void setCurrentDeviceStatus(DeviceStatus currentDeviceStatus) {
+//		this.currentDeviceStatus = currentDeviceStatus;
+//	}
 
 	@Override
 	public int hashCode() {
@@ -185,11 +182,11 @@ public class Device {
 		return true;
 	}
 
-	public DeviceSchedule getCurrentDeviceSchedule() {
-		return currentDeviceSchedule;
-	}
-
-	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
-		this.currentDeviceSchedule = currentDeviceSchedule;
-	}
+//	public DeviceSchedule getCurrentDeviceSchedule() {
+//		return currentDeviceSchedule;
+//	}
+//
+//	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
+//		this.currentDeviceSchedule = currentDeviceSchedule;
+//	}
 }

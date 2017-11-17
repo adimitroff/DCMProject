@@ -20,10 +20,10 @@ public class DevicePropTypePropRelation implements Serializable {
 	private long id;
 	
 	@Column(name = "DEV_PROP_TYPE_ID")
-	private int devicePropertyTypeId; 
+	private long devicePropertyTypeId; 
 	
 	@Column(name = "PROPERTY_ID")
-	private int propertyId; 
+	private long propertyId; 
 	
 
 	public DevicePropTypePropRelation() {
@@ -41,22 +41,22 @@ public class DevicePropTypePropRelation implements Serializable {
 	}
 
 
-	public int getDevicePropertyTypeId() {
+	public long getDevicePropertyTypeId() {
 		return devicePropertyTypeId;
 	}
 
 
-	public void setDevicePropertyTypeId(int devicePropertyTypeId) {
+	public void setDevicePropertyTypeId(long devicePropertyTypeId) {
 		this.devicePropertyTypeId = devicePropertyTypeId;
 	}
 
 
-	public int getPropertyId() {
+	public long getPropertyId() {
 		return propertyId;
 	}
 
 
-	public void setPropertyId(int propertyId) {
+	public void setPropertyId(long propertyId) {
 		this.propertyId = propertyId;
 	}
    

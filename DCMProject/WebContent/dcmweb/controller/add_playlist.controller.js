@@ -1,20 +1,20 @@
 sap.ui
 		.define(
 				[ 'sap/ui/core/mvc/Controller',
-				'sap/ui/core/routing/History',
-				'sap/m/MessageToast',
-				'sap/m/MessageBox'],
+				'sap/ui/core/routing/History' ],
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.add_tag", {
+									"net.cb.dcm.frontend.controller.add_playlist", {
 		            onNavigateBack : function(evt) {
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
+//						var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
+//						this.getView().setModel(loModel);
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
-						var loRoute = loRouter.getRoute("EditTag");
+						var loRoute = loRouter.getRoute("EditPlaylist");
 						if (loRoute !== undefined) {
 							loRoute.attachMatched(this._onRouteMatched, this);
 						}
@@ -22,11 +22,11 @@ sap.ui
 					_onRouteMatched : function (ioEvent) {
 						var loArgs, loView;
 						loArgs = ioEvent.getParameter("arguments");
-						var lvId = loArgs.id;
+						var lvTagId = loArgs.tagId;
 						loView = this.getView();
 
 						loView.bindElement({
-							path : "/Tags(" + lvId + ")",
+							path : "/Tags(" + lvTagId + ")",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -63,16 +63,6 @@ sap.ui
 						vProperties.Id = this.getView().byId("id").getValue();
 						vProperties.Name = this.getView()
 								.byId("name").getValue();
-						if (vProperties.Name == undefined || vProperties.Name == ""){
-							sap.m.MessageBox.show(
-						      "Field Name cannot be empty.", {
-						          icon: sap.m.MessageBox.Icon.ERROR,
-						          title: "Error",
-						          actions: [sap.m.MessageBox.Action.CANCEL]
-						      }
-						    );
-							return;
-						}
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
 						if (vProperties.Id == "") {
@@ -97,12 +87,12 @@ sap.ui
 
 					},
 					_fnSuccess : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Success",{
-						    closeOnBrowserNavigation: false });
+							    closeOnBrowserNavigation: false });
 					},
 					_fnError : function() {
-						//jQuery.sap.require("sap.m.MessageToast");
+						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });
 					},

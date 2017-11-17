@@ -25,7 +25,7 @@ public class DevicePropertyType implements Serializable {
 	   
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 	
 	@Column(nullable = false, length = 50)
 	private String name;
@@ -42,11 +42,11 @@ public class DevicePropertyType implements Serializable {
 	public DevicePropertyType() {
 		super();
 	}   
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}   
 	public String getName() {
@@ -63,11 +63,11 @@ public class DevicePropertyType implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public List<Property> getProperties() {
-		return properties;
-	}
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
-	}
+//	public List<Property> getProperties() {
+//		return properties;
+//	}
+//	public void setProperties(List<Property> properties) {
+//		this.properties = properties;
+//	}
    
 }
