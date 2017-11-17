@@ -39,7 +39,7 @@ public class DeviceDAO extends GenericDao<Device> {
 		Device device = new Device();
 		device.setIp(ip);
 		device.setName("Samsung Tv " + ip);
-		DevicePropertyType devicePropertyType = entityManager.find(DevicePropertyType.class, 1);
+		DevicePropertyType devicePropertyType = entityManager.find(DevicePropertyType.class, 1l);
 		device.setDevicePropertyType(devicePropertyType);
 		this.insert(device);
 		return device;

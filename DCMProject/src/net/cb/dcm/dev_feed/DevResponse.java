@@ -274,7 +274,7 @@ public class DevResponse {
 		loVideoGlobalSettings.addProperty(PROP_HEIGHT, 720);
 		this.responseJson.add(PROP_VIDEO_GLOBAL_SETTINGS, loVideoGlobalSettings);
 
-		String lsMediaUrl = this.serverUrl + TV_PROJECT_PATH + MEDIA_PATH;
+		String lsMediaUrl = this.serverUrl + "/get?filename=";//TV_PROJECT_PATH + MEDIA_PATH;
 		JsonArray loPlayListFiles = new JsonArray();
 		for (MediaContent mediaContent : mediaContents) {
 			JsonObject loFile = new JsonObject();
