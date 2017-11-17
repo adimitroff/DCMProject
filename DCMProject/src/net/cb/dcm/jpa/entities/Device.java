@@ -38,8 +38,8 @@ public class Device {
 	private String description;
 
 	@Column(name = "dev_type")
-	private DeviceType devType; // (integer) � device type (1 � monitor, 2 � mobile
-							// device, 3�)
+	private DeviceType devType; // (integer) device type (1 - monitor, 2 - mobile
+							// device, 3 -)
 
 	private int size; // Size in inches
 
@@ -52,20 +52,17 @@ public class Device {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID")
 	private DevicePropertyType devicePropertyType;
-
-//	@OneToMany(mappedBy = "device")
-//	private List<DeviceTagRelation> tags;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
 	private List<Tag> tags;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinColumn(name = "CURR_DEV_STATUS_ID", referencedColumnName = "ID")
 	private DeviceStatus currentDeviceStatus;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
 	private DeviceSchedule currentDeviceSchedule;

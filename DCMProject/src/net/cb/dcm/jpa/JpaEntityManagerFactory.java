@@ -27,6 +27,11 @@ public class JpaEntityManagerFactory {
 				properties.put(PersistenceUnitProperties.JDBC_URL, "jdbc:mysql://10.190.29.39/sql11202950");
 				properties.put(PersistenceUnitProperties.JDBC_USER, "sql11202950");
 				properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "lQvKn9PbDQ");
+
+//				properties.put(PersistenceUnitProperties.JDBC_URL, "jdbc:mysql://localhost:3306/dcm?useSSL=false");
+//				properties.put(PersistenceUnitProperties.JDBC_USER, "test_user");
+//				properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "abcd1234");
+
 			} else {
 				InitialContext ctx = new InitialContext();
 				DataSource loDs = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");

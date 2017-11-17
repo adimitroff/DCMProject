@@ -16,7 +16,7 @@ public class Property implements Serializable {
 	   
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	@Column(nullable = false, length = 256)
 	private String name;
@@ -28,11 +28,11 @@ public class Property implements Serializable {
 		super();
 	}   
 	
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}   
 	public String getName() {
@@ -54,7 +54,7 @@ public class Property implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + (int) id;
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		return result;
 	}
