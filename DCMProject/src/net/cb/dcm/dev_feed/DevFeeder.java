@@ -38,12 +38,13 @@ public class DevFeeder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger moLogger = LoggerFactory.getLogger(DevFeeder.class);
 
-	private DeviceDAO deviceDao = new DeviceDAO();
+	private DeviceDAO deviceDao;
 
 	/** {@inheritDoc} */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		deviceDao = new DeviceDAO();
 		String loIp = request.getParameter("ip");
 		String lsServerUrl =  new StringBuilder()
 				.append("http://")

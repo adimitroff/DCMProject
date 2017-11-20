@@ -102,6 +102,8 @@ sap.ui
 									.getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
+							
+							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
 							oModel.update("", vProperties, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
@@ -160,6 +162,21 @@ sap.ui
 						this.getView().byId(
 							"file").setValue(oEvent.mParameters.newValue);
 						}
+					},
+					onAddTags: function(){
+						var lvId = this.getView().byId("id").getValue();
+						if (!lvId){
+							sap.m.MessageBox.show(
+								      "Media Object must be created, before adding the Tags", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+						oRouter.navTo("ListTags", true);
 					}
 			});
 
