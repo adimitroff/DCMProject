@@ -100,6 +100,16 @@
 					"pattern": "EditPlaylist/{id}",
 					"name": "EditPlaylist",
 					"target": "AddPlaylist"
+				},
+				{
+					"pattern": "ListMediaContentRelatedTags/{id}",
+					"name": "ListMediaContentRelatedTags",
+					"target": "ListRelatedTags"
+				},
+				{
+					"pattern": "ListDeviceRelatedTags/{id}",
+					"name": "ListDeviceRelatedTags",
+					"target": "ListRelatedTags"
 				}
 			],
 			"targets": {
@@ -129,6 +139,9 @@
 				},
 				"AddPlaylist": {
 					"viewName": "add_playlist"
+				},
+				"ListRelatedTags": {
+					"viewName": "list_related_tags"
 				}
 			}
 		},
