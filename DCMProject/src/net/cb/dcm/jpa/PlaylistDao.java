@@ -13,7 +13,7 @@ public class PlaylistDao extends GenericDao<Playlist> {
 	}
 
 	public Playlist findDefaultPlaylist() {
-		TypedQuery<Playlist> query = entityManager.createQuery("SELECT p FROM Playlist p WHERE p._default = true", Playlist.class);
+		TypedQuery<Playlist> query = entityManager.createQuery("SELECT p FROM Playlist p WHERE p.def = true", Playlist.class);
 		List<Playlist> playlists =  query.getResultList();
 		if(playlists.size() > 0) {
 			return playlists.get(0);
