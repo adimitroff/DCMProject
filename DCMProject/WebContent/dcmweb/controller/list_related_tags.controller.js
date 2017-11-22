@@ -35,6 +35,7 @@ sap.ui
 													loRoute.attachMatched(this._onRouteMatched, this);
 												}
 											}
+											this.updateTableBinding();
 										},
 										_onRouteMatched : function (ioEvent) {
 											var loArgs, loView;
@@ -43,20 +44,6 @@ sap.ui
 											//loView = this.getView();
 											var loTable = this.getView().byId("idTagsTable");
 											this.relPath = this.relPath.replace("&1",lvId);
-											//loTable.bindItems(this.path);
-											//loTable.bindItems("/Tags");
-//											loView.bindElement({
-//												path : this.path,
-//												events : {
-//													change: this._onBindingChange.bind(this),
-//													dataRequested: function (oEvent) {
-//														loView.setBusy(true);
-//													},
-//													dataReceived: function (oEvent) {
-//														loView.setBusy(false);
-//													}
-//												}
-//											});
 										},
 										onAdd : function(evt) {
 											if (!this._oDialog) {
@@ -111,8 +98,7 @@ sap.ui
 												}
 												var lvUrl = "http://localhost:8080/DCMProject/DCMService.svc" + 
 													this.relPath + "/$links/TagDetails";
-												var lvNewTagUri = "http://localhost:8080/DCMProject/DCMService.svc" +
-													"/Tags(" + lvId + "L)";
+												var lvNewTagUri = "/Tags(" + lvId + "L)";
 												var aData = jQuery.ajax({
 													type : "POST",
 													contentType : "application/json",
@@ -149,6 +135,18 @@ sap.ui
 											//jQuery.sap.require("sap.m.MessageToast");
 											sap.m.MessageToast.show("Error",{
 												closeOnBrowserNavigation: false });
+										},
+										updateTableBinding: function(){
+											var oTable = this.getView().byId("idTagsTable"); 
+											var oTemplate = new sap.m.ColumnListItem({
+											    cells:[
+											        new sap.m.ObjectIdentifier({title:"{Id}"}),
+											        new sap.m.Text({text:"{Name}"}),
+											        new sap.m.Text({text:"{Description}"})
+											        ]
+											});
+											var path = this.relPath + "/$links/TagDetails";
+											oTable.bindItems(path,oTemplate);
 										}
 									});
 

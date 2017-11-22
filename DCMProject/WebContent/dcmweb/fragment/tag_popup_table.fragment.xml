@@ -13,7 +13,7 @@
 		<ColumnListItem>
 			<cells>
 				<ObjectIdentifier
-					text="{id}" />
+					title="{Id}" />
 				<Text text="{Name}" />
 				<Text text="{Description}" />
 			</cells>

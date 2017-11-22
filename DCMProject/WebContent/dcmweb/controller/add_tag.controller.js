@@ -9,6 +9,7 @@ sap.ui
 							.extend(
 									"net.cb.dcm.frontend.controller.add_tag", {
 		            onNavigateBack : function(evt) {
+		            	//this.clearScreenFields();
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
@@ -24,6 +25,11 @@ sap.ui
 						loArgs = ioEvent.getParameter("arguments");
 						var lvId = loArgs.id;
 						loView = this.getView();
+						
+						if (lvId == 0){
+							this.clearScreenFields();
+							return;
+						}
 
 						loView.bindElement({
 							path : "/Tags(" + lvId + ")",
@@ -116,6 +122,11 @@ sap.ui
 							var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 							oRouter.navTo("Main", true);
 						}
+					},
+					clearScreenFields : function(){
+						this.getView().byId("id").setValue("");
+						this.getView().byId("name").setValue("");
+						this.getView().byId("description").setValue("");
 					}
 			});
 
