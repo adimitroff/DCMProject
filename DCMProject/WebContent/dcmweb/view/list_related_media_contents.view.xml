@@ -1,16 +1,16 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_playlists"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_related_media_contents"
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Device Content Management" showNavButton="true"
     	navButtonTap="onNavigateBack">
 		<headerContent>
-			<Button icon="sap-icon://add" press="onAdd" />
+			<Button icon="sap-icon://add" text="Add Relation" press="onAdd" />
 		</headerContent>
-		<Table id="idProductsTable" inset="false" items="{/Playlists}"
-			itemPress="rowSelected">
+		<Table id="idMediaContentsTable" inset="false" items="{/Playlists(2L)/MediaContentDetails}"
+			itemPress="rowSelected" mode="Delete" delete="onDelete">
 			<headerToolbar>
 				<Toolbar>
-					<Label text="Playlists"></Label>
+					<Label text="Related Tags"></Label>
 				</Toolbar>
 			</headerToolbar>
 			<columns>
@@ -23,25 +23,13 @@
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Description" />
 				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Default" />
-				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Active" />
-				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Priority" />
-				</Column>
 			</columns>
 			<items>
-				<ColumnListItem type="Detail" detailPress="onDetailPress">
+				<ColumnListItem>
 					<cells>
 						<ObjectIdentifier title="{Id}" />
 						<Text text="{Name}" />
 						<Text text="{Description}" />
-						<Text text="{Def}" />
-						<Text text="{Active}" />
-						<Text text="{Priority}" />
 					</cells>
 				</ColumnListItem>
 			</items>

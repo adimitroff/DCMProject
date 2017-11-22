@@ -1,0 +1,44 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<TableSelectDialog
+		noDataText="No Media Contens Found"
+		title="Select Media Contens"
+		search="handlePopupSearch"
+		confirm="handlePopupClose"
+		cancel="handlePopupClose"
+		items="{
+			path : '/MediaContents'
+		}">
+		<ColumnListItem>
+			<cells>
+				<ObjectIdentifier
+					title="{Id}" />
+				<Text text="{Name}" />
+				<Text text="{Description}" />
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Id" />
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true" >
+				<header>
+					<Text text="Name" />
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true"
+				hAlign="End">
+				<header>
+					<Text text="Description" />
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

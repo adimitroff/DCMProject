@@ -25,7 +25,6 @@ sap.ui
 										onAdd : function(evt) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
-											//oRouter.navTo("AddTag");
 											oRouter.navTo("EditTag", {id:"0"});
 										},
 										onDetailPress : function(event) {

@@ -110,7 +110,13 @@
 					"pattern": "ListDeviceRelatedTags/{id}",
 					"name": "ListDeviceRelatedTags",
 					"target": "ListRelatedTags"
+				},
+				{
+					"pattern": "ListPlaylistRelatedMediaContents/{id}",
+					"name": "ListPlaylistRelatedMediaContents",
+					"target": "ListRelatedMediaContents"
 				}
+				
 			],
 			"targets": {
 				"Main": {
@@ -142,6 +148,9 @@
 				},
 				"ListRelatedTags": {
 					"viewName": "list_related_tags"
+				},
+				"ListRelatedMediaContents": {
+					"viewName": "list_related_media_contents"
 				}
 			}
 		},
