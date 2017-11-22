@@ -26,24 +26,29 @@ sap.ui
 											var loRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											var loRoute = loRouter.getRoute("ListMediaContentRelatedTags");
 											if (loRoute !== undefined) {
-												this.relPath = "/MediaContents(&1L)";
 												loRoute.attachMatched(this._onRouteMatched, this);
-											} else {
-												var loRoute = loRouter.getRoute("ListDeviceRelatedTags");
-												if (loRoute !== undefined) {
-													this.relPath = "/Devices(&1L)";
-													loRoute.attachMatched(this._onRouteMatched, this);
-												}
+											} 
+											loRoute = loRouter.getRoute("ListDeviceRelatedTags");
+											if (loRoute !== undefined) {												
+												loRoute.attachMatched(this._onRouteMatched, this);
 											}
-											this.updateTableBinding();
+											
 										},
 										_onRouteMatched : function (ioEvent) {
 											var loArgs, loView;
 											loArgs = ioEvent.getParameter("arguments");
 											var lvId = loArgs.id;
-											//loView = this.getView();
-											var loTable = this.getView().byId("idTagsTable");
+											this.relPath = "/MediaContents(&1L)";
 											this.relPath = this.relPath.replace("&1",lvId);
+											this.updateTableBinding();
+										},
+										_onRouteMatched2 : function (ioEvent) {
+											var loArgs, loView;
+											loArgs = ioEvent.getParameter("arguments");
+											var lvId = loArgs.id;
+											this.relPath = "/Devices(&1L)";
+											this.relPath = this.relPath.replace("&1",lvId);
+											this.updateTableBinding();
 										},
 										onAdd : function(evt) {
 											if (!this._oDialog) {
@@ -96,7 +101,7 @@ sap.ui
 														}							
 													}
 												}
-												var lvUrl = "http://localhost:8080/DCMProject/DCMService.svc" + 
+												var lvUrl = "/DCMProject/DCMService.svc" + 
 													this.relPath + "/$links/TagDetails";
 												var lvNewTagUri = "/Tags(" + lvId + "L)";
 												var aData = jQuery.ajax({
@@ -117,7 +122,7 @@ sap.ui
 												});
 												/*
 												var vProperties;
-												vProperties = { "uri": "http://localhost:8080/DCMProject/DCMService.svc/Tags(101L)" };
+												vProperties = { "uri": "/DCMProject/DCMService.svc/Tags(101L)" };
 												oModel.createEntry("/MediaContents(2L)/$links/TagDetails", vProperties);
 												oModel.submitChanges(this._fnSuccess, this._fnError);
 												*/
@@ -127,12 +132,10 @@ sap.ui
 											oEvent.getSource().getBinding("items").filter([]);
 										},
 										_fnSuccess : function() {
-											//jQuery.sap.require("sap.m.MessageToast");
 											sap.m.MessageToast.show("Success",{
 												closeOnBrowserNavigation: false });
 										},
 										_fnError : function(response) {
-											//jQuery.sap.require("sap.m.MessageToast");
 											sap.m.MessageToast.show("Error",{
 												closeOnBrowserNavigation: false });
 										},
@@ -145,7 +148,7 @@ sap.ui
 											        new sap.m.Text({text:"{Description}"})
 											        ]
 											});
-											var path = this.relPath + "/$links/TagDetails";
+											var path = this.relPath + "/TagDetails";
 											oTable.bindItems(path,oTemplate);
 										}
 									});

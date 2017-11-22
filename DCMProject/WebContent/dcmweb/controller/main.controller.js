@@ -34,7 +34,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 			var aData = jQuery.ajax({
 				type : "GET",
 				contentType : "application/json",
-				url : "http://localhost:8080/DCMProject/DCMService.svc/Devices/$count",
+				url : "/DCMProject/DCMService.svc/Devices/$count",
 				dataType : "json",
 				async: false, 
 				success : function(data,textStatus, jqXHR) {
@@ -47,7 +47,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 			var aData = jQuery.ajax({
 				type : "GET",
 				contentType : "application/json",
-				url : "http://localhost:8080/DCMProject/DCMService.svc/Devices/$count?$filter=(Name%20eq%20null)",
+				url : "/DCMProject/DCMService.svc/Devices/$count?$filter=(Name%20eq%20null)",
 				dataType : "json",
 				async: false, 
 				success : function(data,textStatus, jqXHR) {

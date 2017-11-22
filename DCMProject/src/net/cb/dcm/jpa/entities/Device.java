@@ -2,6 +2,7 @@ package net.cb.dcm.jpa.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,8 +48,8 @@ public class Device {
 	@Column(length = 40, unique = true, nullable = false)
 	private String ip;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DEV_PROP_TYPE_ID")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "DEV_PROP_TYPE_ID", nullable = true)
 	private DevicePropertyType devicePropertyType;
 	
 	@OneToMany(fetch = FetchType.LAZY)
@@ -57,12 +58,12 @@ public class Device {
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
 	private List<Tag> tags;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CURR_DEV_STATUS_ID")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CURR_DEV_STATUS_ID", nullable = true)
 	private DeviceStatus currentDeviceStatus;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", nullable = true)
 	private DeviceSchedule currentDeviceSchedule;
 
 	public long getId() {
