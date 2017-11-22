@@ -18,7 +18,7 @@ public class FileDownload extends HttpServlet {
 	private static final long serialVersionUID = 4838640584214645172L;
 	@Override
 	protected void doGet(HttpServletRequest ioRequest, HttpServletResponse ioResponse) throws ServletException, IOException {
-        String lsFileName = ioRequest.getParameter("filename").toLowerCase();
+        String lsFileName = ioRequest.getParameter("filename");//.toLowerCase();
         if (lsFileName == null || lsFileName.equals("")){
         	return;
         }
@@ -35,6 +35,12 @@ public class FileDownload extends HttpServlet {
         case "png":
         	lsFileType = "image/png";
         	break;
+        case "m4v":
+        	lsFileType = "video/mp4";
+        	break;
+        case "mp4":
+        	lsFileType = "video/mp4";
+        	break;
         }
         ioResponse.setContentType(lsFileType);
 
@@ -49,9 +55,9 @@ public class FileDownload extends HttpServlet {
         int liLength;
         while ((liLength = loInputStream.read(laBuffer)) > 0){
            loOutputStream.write(laBuffer, 0, liLength);
+           loOutputStream.flush();
         }
         loInputStream.close();
-        loOutputStream.flush();
 	}
 	
 	private String getFileExtension(String isFileName) {

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Test</title>
+
+		<!-- TODO : Common API -->
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Plugin.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/CImageViewer.js"></script>
+
+		<!-- TODO : Javascript code -->
+
+		<script language="javascript" type="text/javascript" src="app/javascript/globals.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/Main.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/App.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/SSSP.js"></script>
+
+
+		<script language="javascript" type="text/javascript" src="app/javascript/LfdSystem.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/LfdPlayer.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/FileSystemCustom.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/AudioSystem.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/BasicPlayer.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/FileUploader.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/NetworkSystem.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/PlayListHandler.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/RssFeed.js"></script>
+
+		<!-- TODO : Style sheets code -->
+		<link rel="stylesheet" href="app/stylesheets/Main.css" type="text/css">
+
+		<!-- TODO: Plugins -->
+		<object id="pluginObjSEF" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden" ></object>
+		<object id="pluginDownload" classid="clsid:SAMSUNG-INFOLINK-DOWNLOAD" class="hidden" ></object>
+		<object id=pluginTVMW classid="clsid:SAMSUNG-INFOLINK-TVMW" class="hidden" ></object>
+
+		<!-- TODO: Plugins -->
+		<object id="id_file_system" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden"></object>
+		<object id="id_download_system" classid="clsid:SAMSUNG-INFOLINK-DOWNLOAD" class="hidden" ></object>
+		<object id="id_lfd_player" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden" ></object>
+		<object id="id_AudioSys" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden" ></object>
+		<object id="id_Basic_Player" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden"></object>
+		<object id="id_ScreenCapture" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden">    </object>
+		<object id="id_uploader" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden" ></object>
+		<object id="id_LfdSystem" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden">    </object>
+		<object id="id_Network" classid="clsid:SAMSUNG-INFOLINK-SEF" class="hidden">    </object>
+
+	</head>
+
+	<body onload="Main.onLoad();" onunload="Main.onUnload();" onkeydown="App.keyDown();" >
+		<div id="content">
+			<video id="fullScreenVideo" src="" class="hidden" onended="PlayListHandler.videoHandler()">
+    			Your browser does not support the video tag.
+			</video>
+			
+			<div class="fill">
+				<img id="fullScreenImg" src="" class="hidden"></img>
+			</div>
+			
+			<div id="rssFeed" class="hidden">
+				<img title="rssImage" class="inline" src ="" ></img>
+				<div class="inline width_80" >
+					<div title="rssTitle" >
+					</div>
+					<div title="rssDesc">
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- 
+		<div id="content">
+			<video id="fullScreenVideo" src="" class="hidden" >
+    			Your browser does not support the video tag.
+			</video>
+			<div class="fill">
+				<img id="fullScreenImg" src="" class="hidden"></img>
+			</div>
+			<div id="rssFeed" class="hidden">
+				<img title="rssImage" class="inline" src ="" ></img>
+				<div class="inline width_80" >
+					<div title="rssTitle" >
+					</div>
+					<div title="rssDesc">
+					</div>
+				</div>
+			</div>
+		</div>
+ -->		
+		<div id="id_debugLog">
+
+		</div>
+		<div id="appLogo">
+		</div>
+
+	</body>
+</html>

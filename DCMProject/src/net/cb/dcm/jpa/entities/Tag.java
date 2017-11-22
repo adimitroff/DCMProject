@@ -3,6 +3,7 @@ package net.cb.dcm.jpa.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 @NamedQuery(name = "AllTags", query = "select t from Tag t")
 public class Tag {
 	@Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 	
     @Column(unique=true, length=30)
