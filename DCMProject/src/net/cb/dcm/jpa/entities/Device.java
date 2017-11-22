@@ -67,6 +67,9 @@ public class Device {
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", nullable = true)
 	private DeviceSchedule currentDeviceSchedule;
+	
+	@OneToMany(mappedBy = "device", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	private List<DeviceProcedure> deviceProcedures;
 
 	public long getId() {
 		return id;
@@ -191,5 +194,13 @@ public class Device {
 
 	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
 		this.currentDeviceSchedule = currentDeviceSchedule;
+	}
+
+	public List<DeviceProcedure> getDeviceProcedures() {
+		return deviceProcedures;
+	}
+
+	public void setDeviceProcedures(List<DeviceProcedure> deviceProcedures) {
+		this.deviceProcedures = deviceProcedures;
 	}
 }

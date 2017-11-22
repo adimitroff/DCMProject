@@ -21,6 +21,7 @@
 		<class>net.cb.dcm.jpa.entities.LoopMediaContentRelation</class>
 		<class>net.cb.dcm.jpa.entities.MediaContentTagRelation</class>
 		<class>net.cb.dcm.jpa.entities.PlaylistMediaContentRelation</class>
+		<class>net.cb.dcm.jpa.entities.DeviceProcedure</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
