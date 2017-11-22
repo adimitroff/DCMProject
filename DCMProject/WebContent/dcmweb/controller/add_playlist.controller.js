@@ -22,11 +22,11 @@ sap.ui
 					_onRouteMatched : function (ioEvent) {
 						var loArgs, loView;
 						loArgs = ioEvent.getParameter("arguments");
-						var lvTagId = loArgs.tagId;
+						var lvId = loArgs.id;
 						loView = this.getView();
 
 						loView.bindElement({
-							path : "/Tags(" + lvTagId + ")",
+							path : "/Playlists(" + lvId + ")",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -51,7 +51,7 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Tags(" + lvId + "L)");
+						oModel.remove("/Playlists(" + lvId + "L)");
 						oModel.refresh();
 						this.navigateBack();
 					},
@@ -65,9 +65,15 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
+						vProperties.Def = this.getView().byId(
+							"default").getSelected();
+						vProperties.Active = this.getView().byId(
+							"active").getSelected();
+						vProperties.Priority = this.getView().byId(
+							"priority").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Tags", vProperties);
+							oModel.createEntry("/Playlists", vProperties);
 
 						} else {
 							var oEntry = {};
@@ -76,10 +82,7 @@ sap.ui
 									.getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
-							oEntry.Id = vProperties.Id;
-							oEntry.Name = vProperties.Name;
-							oEntry.Description = vProperties.Description;
-							oModel.update("", oEntry, mParameters);
+							oModel.update("", vProperties, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
 						oModel.refresh();
@@ -106,6 +109,22 @@ sap.ui
 							var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 							oRouter.navTo("Main", true);
 						}
+					},
+					onAddMediaObjects: function(){
+						var lvId = this.getView().byId("id").getValue();
+						
+						if (!lvId){
+							sap.m.MessageBox.show(
+								      "Playlist must be saved, before adding the Tags", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+						oRouter.navTo("ListPlaylistRelatedMediaContents", {id:lvId});
 					}
 			});
 

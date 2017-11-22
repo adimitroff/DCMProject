@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class MediaContentTagRelation {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(name="MEDIA_CONTENT_ID")

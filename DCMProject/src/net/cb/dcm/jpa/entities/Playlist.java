@@ -35,8 +35,8 @@ public class Playlist {
 	@Column
 	private boolean active;
 	
-	@Column(name = "IS_DEFAULT")
-	private boolean _default;
+	@Column
+	private boolean def;
 	
 	@Column(name="VALID_FROM")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -92,14 +92,6 @@ public class Playlist {
 		this.active = active;
 	}
 
-	public boolean isDefault() {
-		return _default;
-	}
-
-	public void setDefault(boolean _default) {
-		this._default = _default;
-	}
-
 	public Date getValidFrom() {
 		return validFrom;
 	}
@@ -122,5 +114,13 @@ public class Playlist {
 
 	public void setMediaContents(List<MediaContent> mediaContents) {
 		this.mediaContents = mediaContents;
+	}
+
+	public boolean isDef() {
+		return def;
+	}
+
+	public void setDef(boolean def) {
+		this.def = def;
 	} 
 }

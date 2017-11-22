@@ -9,6 +9,7 @@ sap.ui
 							.extend(
 									"net.cb.dcm.frontend.controller.add_media_object", {
 		            onNavigateBack : function(evt) {
+		            	this.clearScreenFields();
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
@@ -102,6 +103,8 @@ sap.ui
 									.getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
+							
+							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
 							oModel.update("", vProperties, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
@@ -160,6 +163,30 @@ sap.ui
 						this.getView().byId(
 							"file").setValue(oEvent.mParameters.newValue);
 						}
+					},
+					onAddTags: function(){
+						var lvId = this.getView().byId("id").getValue();
+						
+						if (!lvId){
+							sap.m.MessageBox.show(
+								      "Media Object must be saved, before adding the Tags", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+						oRouter.navTo("ListMediaContentRelatedTags", {id:lvId});
+					},
+					clearScreenFields : function(){
+						this.getView().byId("id").setValue("");
+						this.getView().byId("name").setValue("");
+						this.getView().byId("description").setValue("");
+						this.getView().byId("media_type").setValue("");
+						this.getView().byId("duration").setValue("");
+						this.getView().byId("file").setValue("");
 					}
 			});
 
