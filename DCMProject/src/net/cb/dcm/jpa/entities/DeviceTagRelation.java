@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class DeviceTagRelation {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(name = "DEVICE_ID")

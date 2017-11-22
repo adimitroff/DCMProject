@@ -100,7 +100,23 @@
 					"pattern": "EditPlaylist/{id}",
 					"name": "EditPlaylist",
 					"target": "AddPlaylist"
+				},
+				{
+					"pattern": "ListMediaContentRelatedTags/{id}",
+					"name": "ListMediaContentRelatedTags",
+					"target": "ListRelatedTags"
+				},
+				{
+					"pattern": "ListDeviceRelatedTags/{id}",
+					"name": "ListDeviceRelatedTags",
+					"target": "ListRelatedTags"
+				},
+				{
+					"pattern": "ListPlaylistRelatedMediaContents/{id}",
+					"name": "ListPlaylistRelatedMediaContents",
+					"target": "ListRelatedMediaContents"
 				}
+				
 			],
 			"targets": {
 				"Main": {
@@ -129,6 +145,12 @@
 				},
 				"AddPlaylist": {
 					"viewName": "add_playlist"
+				},
+				"ListRelatedTags": {
+					"viewName": "list_related_tags"
+				},
+				"ListRelatedMediaContents": {
+					"viewName": "list_related_media_contents"
 				}
 			}
 		},

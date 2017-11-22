@@ -45,15 +45,6 @@ sap.ui
 					handleCancelPress : function() {
 						this.navigateBack();
 					},
-
-					handleDeletePress : function() {
-						var oModel = this.getView().getModel();
-						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Tags(" + lvId + "L)");
-						oModel.refresh();
-						this.navigateBack();
-					},
-
 					handleSavePress : function(evt) {
 						var oModel = this.getView().getModel();
 
@@ -63,6 +54,10 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
+						vProperties.Dev_type = this.getView().byId(
+							"dev_type").getValue();
+						vProperties.Model = this.getView().byId(
+							"model").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
 							oModel.createEntry("/Devices", vProperties);
@@ -104,6 +99,22 @@ sap.ui
 							var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 							oRouter.navTo("Main", true);
 						}
+					},
+					onAddTags: function(){
+						var lvId = this.getView().byId("id").getValue();
+						
+						if (!lvId){
+							sap.m.MessageBox.show(
+								      "Internal server error", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+						oRouter.navTo("ListDeviceRelatedTags", {id:lvId});
 					}
 			});
 

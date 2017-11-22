@@ -4,6 +4,9 @@
 	xmlns:f="sap.ui.layout.form">
 	<Page title="Edit Device" id="page" showNavButton="true"
 		navButtonPress="onNavigateBack">
+		<headerContent>
+			<Button text="Add Tags" icon="sap-icon://add" press="onAddTags" />
+		</headerContent>
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
 			<l:content>
 				<f:SimpleForm id="EditDevice" minWidth="1024"
@@ -11,7 +14,7 @@
 					labelSpanL="3" labelSpanM="3" emptySpanL="4"
 					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
 					<f:content>
-						<Input id="id" value="{Id}" visible="false" />
+						<Input id="id" value="{Id}" editable="false" />
 						<Label text="Name" />
 						<Input id="name" value="{Name}" />
 						<Label text="Description" />

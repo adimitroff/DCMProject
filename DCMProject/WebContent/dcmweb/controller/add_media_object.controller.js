@@ -9,6 +9,7 @@ sap.ui
 							.extend(
 									"net.cb.dcm.frontend.controller.add_media_object", {
 		            onNavigateBack : function(evt) {
+		            	this.clearScreenFields();
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
@@ -165,9 +166,10 @@ sap.ui
 					},
 					onAddTags: function(){
 						var lvId = this.getView().byId("id").getValue();
+						
 						if (!lvId){
 							sap.m.MessageBox.show(
-								      "Media Object must be created, before adding the Tags", {
+								      "Media Object must be saved, before adding the Tags", {
 								          icon: sap.m.MessageBox.Icon.ERROR,
 								          title: "Error",
 								          actions: [sap.m.MessageBox.Action.CANCEL]
@@ -176,7 +178,15 @@ sap.ui
 							return;
 						}
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-						oRouter.navTo("ListTags", true);
+						oRouter.navTo("ListMediaContentRelatedTags", {id:lvId});
+					},
+					clearScreenFields : function(){
+						this.getView().byId("id").setValue("");
+						this.getView().byId("name").setValue("");
+						this.getView().byId("description").setValue("");
+						this.getView().byId("media_type").setValue("");
+						this.getView().byId("duration").setValue("");
+						this.getView().byId("file").setValue("");
 					}
 			});
 

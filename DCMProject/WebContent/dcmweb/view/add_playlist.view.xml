@@ -4,6 +4,9 @@
 	xmlns:f="sap.ui.layout.form">
 	<Page title="Add Playlist" id="page" showNavButton="true"
 		navButtonPress="onNavigateBack">
+		<headerContent>
+			<Button text="Add Media Objects" icon="sap-icon://add" press="onAddMediaObjects" />
+		</headerContent>
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
 			<l:content>
 				<f:SimpleForm id="PlaylistAdd" minWidth="1024"
@@ -17,9 +20,9 @@
 						<Label text="Description" />
 						<Input id="description" value="{Description}"/>
 						<Label text="Default" />
-						<checkbox id="default" text="Default" name="default" checked="{Default)"/>
+						<CheckBox id="default" text="Default" name="default" checked="{Def)"/>
 						<Label text="Active" />
-						<checkbox id="active" checked="{Active}" text="Active" name="active"/>
+						<CheckBox id="active" checked="{Active}" text="Active" name="active"/>
 						<Label text="Priority" />
 						<Input id="priority" value="{Priority}"/>
 					</f:content>
