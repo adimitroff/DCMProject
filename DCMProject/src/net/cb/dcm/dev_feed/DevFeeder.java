@@ -188,7 +188,6 @@ public class DevFeeder extends HttpServlet {
 							deviceSchedule = new DeviceSchedule();
 							deviceSchedule.setDevice(device);
 							deviceSchedule.setLoops(deviceLoops);
-							deviceSchedule.setTime(currentTime);
 							deviceLoop.setDeviceSchedule(deviceSchedule);
 							device.setCurrentDeviceSchedule(deviceSchedule);
 							deviceDao.update(device);

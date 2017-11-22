@@ -48,7 +48,6 @@ public class DeviceDAO extends GenericDao<Device> {
 	public void updateStatus(Device device, Map<String, String> propertyValueMap) {
 		DeviceStatus deviceStatus = new DeviceStatus();
 		deviceStatus.setDevice(device);
-		deviceStatus.setTime(new Date());
 		deviceStatus.setDeviceStatusValues(new ArrayList<DeviceStatusValue>());
 		Map<String, Property> propertiesMap = device.getDevicePropertyType().getProperties().stream()
 				.collect(Collectors.toMap(Property::getKey, p -> p));
