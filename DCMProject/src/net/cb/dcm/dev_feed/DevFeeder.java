@@ -21,11 +21,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.cb.dcm.enums.DevResponseDataType;
+import net.cb.dcm.enums.DeviceCommand;
 import net.cb.dcm.jpa.DeviceDAO;
 import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
+import net.cb.dcm.jpa.entities.DeviceProcedure;
 import net.cb.dcm.jpa.entities.DeviceSchedule;
-import net.cb.dcm.jpa.entities.DeviceStatusValue;
 import net.cb.dcm.jpa.entities.Loop;
 import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Playlist;
@@ -53,10 +54,12 @@ public class DevFeeder extends HttpServlet {
 				.append(request.getServerPort())
 				.append(request.getContextPath())
 				.toString();
+		Gson loGson = new GsonBuilder().setPrettyPrinting().create();
+		DevResponse loDevResponse = new DevResponse(lsServerUrl);
 		
 		if (loIp == null || loIp.isEmpty()) {
 			moLogger.debug("No device IP. Generating default response.");
-			this.getPlayList(null, lsServerUrl, response);
+			this.getPlayList(null, loDevResponse);
 		} else {
 			Device loDevice = deviceDao.findDeviceByIp(loIp);
 			if (loDevice == null || loDevice.getId() <= 0) {
@@ -77,10 +80,30 @@ public class DevFeeder extends HttpServlet {
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_NAME, request.getParameter("mediaName"));
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_TIME, request.getParameter("mediaTime"));
 			deviceDao.updateStatus(loDevice, propertyValueMap);
-
-			// Load device default playlist
-			this.getPlayList(loDevice, lsServerUrl, response);
+			
+			// Get saved status data id			
+			String sDataId = propertyValueMap.get(DeviceDAO.PROPERTY_UPDATE_DATA_COUNTER);
+			if(sDataId != null){
+				// Set same data id for new response
+				int dataId = Integer.valueOf(sDataId);
+				if( dataId == 1)
+					dataId++;
+				
+				loDevResponse.setDataId(dataId);
+			}
+			
+			// Check and generate response with commands
+			boolean responseGenerated = this.getProcedure(loDevice, loDevResponse);
+			if(!responseGenerated) {
+				// Load device playlist or default playlist
+				this.getPlayList(loDevice, loDevResponse);
+			}
 		}
+		
+		loDevResponse.generateResponse();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(loGson.toJson(loDevResponse.getResponseJson()));
 	}
 
 	/** {@inheritDoc} */
@@ -89,6 +112,49 @@ public class DevFeeder extends HttpServlet {
 			throws ServletException, IOException {
 		// Should not be called
 		doGet(request, response);
+	}
+	
+	private boolean getProcedure(Device device, DevResponse devResponse)
+	{
+		// TODO check device status wake up/sleep
+		Calendar currCalendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
+		List<DeviceProcedure> deviceProcedures = device.getDeviceProcedures();
+		for (DeviceProcedure deviceProcedure : deviceProcedures) {
+			if(deviceProcedure.getLastExecutedTime() != null) {
+				calendar.setTime(deviceProcedure.getLastExecutedTime());
+				if (calendar.get(Calendar.YEAR) == currCalendar.get(Calendar.YEAR)
+						&& calendar.get(Calendar.DAY_OF_YEAR) == currCalendar.get(Calendar.DAY_OF_YEAR)) {
+					// already executed
+					continue;
+				}
+			}
+			calendar.setTime(deviceProcedure.getExecutionTime());
+			calendar.set(currCalendar.get(Calendar.YEAR), currCalendar.get(Calendar.MONTH)
+					, currCalendar.get(Calendar.DAY_OF_MONTH));
+			long timeDiff = currCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			if(timeDiff >= 0 && timeDiff < (30 * 60 * 1000)) {
+				// Execute procedure
+				devResponse.setResponseDataType(DevResponseDataType.COMMAND);
+				devResponse.setDataId(devResponse.getDataId() + 1);
+				ArrayList<DeviceCommand> deviceCommands = new ArrayList<>();
+				switch (deviceProcedure.getProcedureType()) {
+				case WAKE:
+					deviceCommands.add(DeviceCommand.TURN_ON);
+					break;
+				case SLEEP:
+					deviceCommands.add(DeviceCommand.TURN_OFF);
+					break;
+				}
+				devResponse.setCommands(deviceCommands);
+				deviceProcedure.setLastExecutedTime(currCalendar.getTime());
+				deviceDao.update(device);
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -100,29 +166,13 @@ public class DevFeeder extends HttpServlet {
 	 *            - Response to write json data
 	 * @throws IOException
 	 */
-	private void getPlayList(Device device, String serverUrl, HttpServletResponse response) throws IOException {
-		Gson loGson = new GsonBuilder().setPrettyPrinting().create();
-		DevResponse loDevResponse = new DevResponse(serverUrl);
-		loDevResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
+	private void getPlayList(Device device, DevResponse devResponse) throws IOException {
+
+		devResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
-		if (device != null) {
-			// Get saved status data id
-			Map<String, DeviceStatusValue> propertyValueMap = device.getCurrentDeviceStatus().getDeviceStatusValues()
-					.stream()
-					.collect(Collectors.toMap(d -> d.getProperty().getKey(), d -> d));
-			
-			DeviceStatusValue sDataId = propertyValueMap.get(DeviceDAO.PROPERTY_UPDATE_DATA_COUNTER);
-			if(sDataId != null && sDataId.getValue() != null){
-				// Set same data id for new response
-				int dataId = Integer.valueOf(sDataId.getValue());
-				if( dataId == 1)
-					dataId++;
-				
-				loDevResponse.setDataId( dataId );
-			}
-			
+		if (device != null) {			
 			List<Playlist> playlists = playlistDao.findAll();
 			List<Playlist> filteredPlaylists = new ArrayList<Playlist>();
 			final List<MediaContent> deviceMediaContents = deviceDao.findMediaByDeviceTag(device);
@@ -178,7 +228,7 @@ public class DevFeeder extends HttpServlet {
 						}
 						// If media content differs, create new loop with the new media content
 						if(mediaIndex == -1) {
-							loDevResponse.setDataId(loDevResponse.getDataId() + 1);
+							devResponse.setDataId(devResponse.getDataId() + 1);
 							// New playlist
 							mediaContents = playlistMediaContent;
 							Loop deviceLoop = new Loop();
@@ -188,7 +238,6 @@ public class DevFeeder extends HttpServlet {
 							deviceSchedule = new DeviceSchedule();
 							deviceSchedule.setDevice(device);
 							deviceSchedule.setLoops(deviceLoops);
-							deviceSchedule.setTime(currentTime);
 							deviceLoop.setDeviceSchedule(deviceSchedule);
 							device.setCurrentDeviceSchedule(deviceSchedule);
 							deviceDao.update(device);
@@ -206,11 +255,8 @@ public class DevFeeder extends HttpServlet {
 				mediaContents = defaultPlaylist.getMediaContents();
 			}
 		}
-		loDevResponse.setMediaContents(mediaContents);
+		devResponse.setMediaContents(mediaContents);
 
-		loDevResponse.generateResponse();
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(loGson.toJson(loDevResponse.getResponseJson()));
+		
 	}
 }

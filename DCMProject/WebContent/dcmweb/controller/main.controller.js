@@ -29,29 +29,43 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 			}
 		},
 		onInit : function(oEvent) {
-//			var loODataModel = sap.ui.getCore().getModel();
-//			var laDevices = loODataModel.getProperty("/Devices");
-			var laDevices;
-			var lvNewDevices = "No New Devices";
+			var lvAllDevicesCount = 0;
 			var lvNewDevicesCount = 0;
-			var lvDeviceCount = 0;
-			if (laDevices != undefined){
-				lvDeviceCount = laDevices.length;
-				for (var i = 0; i < laDevices.length; i++){
-					var laDevice = laDevices[i];
-					if (laDevice.Ip != undefined && laDevice.Ip != "" &&
-							laDevice.Ip == ""){
-						lvNewDevices++;
-					}
-				}
-			}
+			var aData = jQuery.ajax({
+				type : "GET",
+				contentType : "application/json",
+				url : "/DCMProject/DCMService.svc/Devices/$count",
+				dataType : "json",
+				async: false, 
+				success : function(data,textStatus, jqXHR) {
+					lvAllDevicesCount = data;
+				},
+				error : function(response) {
+					//alert("Error");
+				},
+			});
+			var aData = jQuery.ajax({
+				type : "GET",
+				contentType : "application/json",
+				url : "/DCMProject/DCMService.svc/Devices/$count?$filter=(Name%20eq%20null)",
+				dataType : "json",
+				async: false, 
+				success : function(data,textStatus, jqXHR) {
+					lvNewDevicesCount = data;
+				},
+				error : function(response) {
+					//alert("Error");
+				},
+			});
+
+			var lvNewDevices = "No New Devices";
 			var loModel = new sap.ui.model.json.JSONModel();
 			if(lvNewDevicesCount > 0){
 				lvNewDevices = lvNewDevicesCount + " New Devices";
 			}
 			loModel.setData({
 			    NewDevCount: lvNewDevices,
-			    DevCount: lvDeviceCount
+			    DevCount: lvAllDevicesCount
 			});
 			this.getView().setModel(loModel);
 		}

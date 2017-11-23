@@ -49,23 +49,27 @@ public class Device {
 	@Column(length = 40, unique = true, nullable = false)
 	private String ip;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-	@JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "DEV_PROP_TYPE_ID", nullable = true)
 	private DevicePropertyType devicePropertyType;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
 	private List<Tag> tags;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-	@JoinColumn(name = "CURR_DEV_STATUS_ID", referencedColumnName = "ID")
+	
+	@ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "CURR_DEV_STATUS_ID", nullable = true)
 	private DeviceStatus currentDeviceStatus;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", referencedColumnName = "ID")
+	
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", nullable = true)
 	private DeviceSchedule currentDeviceSchedule;
+	
+	@OneToMany(mappedBy = "device", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	private List<DeviceProcedure> deviceProcedures;
 
 	public long getId() {
 		return id;
@@ -190,5 +194,13 @@ public class Device {
 
 	public void setCurrentDeviceSchedule(DeviceSchedule currentDeviceSchedule) {
 		this.currentDeviceSchedule = currentDeviceSchedule;
+	}
+
+	public List<DeviceProcedure> getDeviceProcedures() {
+		return deviceProcedures;
+	}
+
+	public void setDeviceProcedures(List<DeviceProcedure> deviceProcedures) {
+		this.deviceProcedures = deviceProcedures;
 	}
 }

@@ -44,6 +44,7 @@ public class DeviceStatus implements Serializable {
 
 	public DeviceStatus() {
 		super();
+		this.time = new Date();
 	}   
 	public int getId() {
 		return this.id;

@@ -46,6 +46,7 @@ public class DeviceSchedule implements Serializable {
 
 	public DeviceSchedule() {
 		super();
+		this.time = new Date();
 	}
 
 	public long getId() {

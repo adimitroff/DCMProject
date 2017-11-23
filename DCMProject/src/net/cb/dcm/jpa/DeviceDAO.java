@@ -1,14 +1,16 @@
 package net.cb.dcm.jpa;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 
+import net.cb.dcm.enums.DevProcedureType;
 import net.cb.dcm.jpa.entities.Device;
+import net.cb.dcm.jpa.entities.DeviceProcedure;
 import net.cb.dcm.jpa.entities.DevicePropertyType;
 import net.cb.dcm.jpa.entities.DeviceStatus;
 import net.cb.dcm.jpa.entities.DeviceStatusValue;
@@ -41,6 +43,27 @@ public class DeviceDAO extends GenericDao<Device> {
 		device.setName("Samsung Tv " + ip);
 		DevicePropertyType devicePropertyType = entityManager.find(DevicePropertyType.class, 1l);
 		device.setDevicePropertyType(devicePropertyType);
+		
+		// Add  procedures
+		ArrayList<DeviceProcedure> deviceProcedures = new ArrayList<DeviceProcedure>();
+		// Add Wake procedure
+		DeviceProcedure procedure = new DeviceProcedure();
+		procedure.setDevice(device);
+		procedure.setProcedureType(DevProcedureType.WAKE);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2000, 1, 1, 7, 0, 0);
+		procedure.setExecutionTime(cal.getTime());
+		deviceProcedures.add(procedure);
+		// Add Sleep procedure
+		procedure = new DeviceProcedure();
+		procedure.setDevice(device);
+		procedure.setProcedureType(DevProcedureType.SLEEP);
+		cal.set(2000, 1, 1, 20, 0, 0);
+		procedure.setExecutionTime(cal.getTime());
+		deviceProcedures.add(procedure);
+		
+		device.setDeviceProcedures(deviceProcedures);
+		
 		this.insert(device);
 		return device;
 	}
@@ -48,7 +71,6 @@ public class DeviceDAO extends GenericDao<Device> {
 	public void updateStatus(Device device, Map<String, String> propertyValueMap) {
 		DeviceStatus deviceStatus = new DeviceStatus();
 		deviceStatus.setDevice(device);
-		deviceStatus.setTime(new Date());
 		deviceStatus.setDeviceStatusValues(new ArrayList<DeviceStatusValue>());
 		Map<String, Property> propertiesMap = device.getDevicePropertyType().getProperties().stream()
 				.collect(Collectors.toMap(Property::getKey, p -> p));
