@@ -39,11 +39,11 @@ public class Playlist {
 	private boolean def;
 	
 	@Column(name="VALID_FROM")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date validFrom;
 	
 	@Column(name="VALID_TO")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date validTo;
 	
 	@OneToMany
