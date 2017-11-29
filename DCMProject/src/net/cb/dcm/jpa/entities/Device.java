@@ -11,11 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import net.cb.dcm.enums.DevOrientation;
 import net.cb.dcm.enums.DeviceType;
 
 /**
@@ -27,6 +29,12 @@ import net.cb.dcm.enums.DeviceType;
 @NamedQuery(name = "AllDevices", query = "select d from Device d")
 public class Device {
 	
+	public Device() {
+		super();
+		this.devType = DeviceType.MONITOR;
+		this.orientation = DevOrientation.LANDSCAPE;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -70,6 +78,12 @@ public class Device {
 	
 	@OneToMany(mappedBy = "device", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	private List<DeviceProcedure> deviceProcedures;
+	
+	@Column
+	private DevOrientation orientation;
+	
+	@ManyToMany(mappedBy = "devices", fetch = FetchType.LAZY)
+	private List<DeviceGroup> groups;
 
 	public long getId() {
 		return id;
@@ -202,5 +216,21 @@ public class Device {
 
 	public void setDeviceProcedures(List<DeviceProcedure> deviceProcedures) {
 		this.deviceProcedures = deviceProcedures;
+	}
+
+	public DevOrientation getOrientation() {
+		return orientation;
+	}
+
+	public void setOrientation(DevOrientation orientation) {
+		this.orientation = orientation;
+	}
+
+	public List<DeviceGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<DeviceGroup> groups) {
+		this.groups = groups;
 	}
 }

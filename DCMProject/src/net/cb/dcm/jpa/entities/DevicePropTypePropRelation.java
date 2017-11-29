@@ -1,7 +1,14 @@
 package net.cb.dcm.jpa.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Entity implementation class for Entity: DevicePropTypePropRelation
@@ -10,7 +17,8 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name = "dev_prop_type_properties")
+@Table(name = "dev_prop_type_properties",
+uniqueConstraints = { @UniqueConstraint(columnNames = {"DEV_PROP_TYPE_ID", "PROPERTY_ID"})} )
 public class DevicePropTypePropRelation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
