@@ -25,6 +25,7 @@ App.onLoad = function()
 	
 	App.logInfo("Used size(kB): " + smartDevice.getUsedSize());
 	App.logInfo("Free size(kB): " + smartDevice.getFreeSize());
+	
 };
 
 App.initContent = function()
@@ -144,6 +145,7 @@ App.update = function(url)
 	// Check for new update if the app isn't waiting for update or it is waiting > 3 min.
 	if(!isAppUpdating || new Date().getTime() > (lastUpdateTime + (3 * 60 * 1000)) ) {
 		isAppUpdating = true;
+		LfdSystem.lfdDisplayTemp();
 		lastUpdateTime = new Date().getTime();
 		App.updateUrl = url;
 //		App.logInfo("update() url: " + url );
@@ -154,7 +156,9 @@ App.update = function(url)
 				+ "&usedSize=" + smartDevice.getUsedSize()
 				+ "&freeSize=" + smartDevice.getFreeSize()
 				+ "&mediaName=" + mediaName
-				+ "&mediaTime=" + mediaTime,
+				+ "&mediaTime=" + mediaTime
+				+ "&temperature=" + LfdSystem.currentTemp
+				+ "&serialN=" + LfdSystem.deviceSerialNumber,
 				App.onNewData_ReadyStateChange);
 	}
 };

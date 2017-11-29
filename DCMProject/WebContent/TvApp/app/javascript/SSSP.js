@@ -25,10 +25,11 @@ SSSP.init = function()
 	pluginObjSEF = document.getElementById("pluginObjSEF");
 
 	LfdSystem.initObj("id_LfdSystem");
+	LfdSystem.lfdDisplaySerialNumber();
 	AudioSystem.initObj("id_AudioSys");
 	NetworkSystem.initObj("id_Network");
 	BasicPlayer.initObj("id_Basic_Player");
-	LfdPlayer.initObj("id_lfd_player");
+//	LfdPlayer.initObj("id_lfd_player");
 	FileSystemCustom.initObj("id_file_system");
 	FileUploader.initObj("id_uploader");
 
