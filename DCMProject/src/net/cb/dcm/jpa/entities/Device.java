@@ -84,6 +84,17 @@ public class Device {
 	
 	@ManyToMany(mappedBy = "devices", fetch = FetchType.LAZY)
 	private List<DeviceGroup> groups;
+	
+	@Column(name = "serial_number")
+	private String serialNumber;
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
 
 	public long getId() {
 		return id;
