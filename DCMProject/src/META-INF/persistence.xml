@@ -22,6 +22,10 @@
 		<class>net.cb.dcm.jpa.entities.MediaContentTagRelation</class>
 		<class>net.cb.dcm.jpa.entities.PlaylistMediaContentRelation</class>
 		<class>net.cb.dcm.jpa.entities.DeviceProcedure</class>
+		<class>net.cb.dcm.jpa.entities.DeviceGroup</class>
+		<class>net.cb.dcm.jpa.entities.DeviceGroupTagRelation</class>
+		<class>net.cb.dcm.jpa.entities.DeviceGroupDeviceRelation</class>
+		<class>net.cb.dcm.jpa.entities.PlaylistSchedule</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>

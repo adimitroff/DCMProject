@@ -21,7 +21,7 @@ public class Property implements Serializable {
 	@Column(nullable = false, length = 256)
 	private String name;
 	
-	@Column(name="KEY_NAME", nullable = false, length = 24)
+	@Column(name="KEY_NAME", nullable = false, length = 24, unique = true)
 	private String key;
 
 	public Property() {

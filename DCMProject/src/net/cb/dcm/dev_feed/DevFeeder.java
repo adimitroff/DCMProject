@@ -68,7 +68,7 @@ public class DevFeeder extends HttpServlet {
 				//// Maybe registering only the IP, then the system
 				//// opearator should see it in the
 				//// list as a device without data, and maintain it.
-				loDevice = deviceDao.registerNewDevice(loIp);
+				loDevice = deviceDao.registerNewDevice(loIp, request.getParameter("serialN"));
 			}
 			
 			// Update device status
@@ -79,6 +79,8 @@ public class DevFeeder extends HttpServlet {
 			propertyValueMap.put(DeviceDAO.PROPERTY_FREE_DISK_SPACE, request.getParameter("freeSize"));
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_NAME, request.getParameter("mediaName"));
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_TIME, request.getParameter("mediaTime"));
+			propertyValueMap.put(DeviceDAO.PROPERTY_TEMPERATURE, request.getParameter("temperature"));
+			propertyValueMap.put(DeviceDAO.PROPERTY_ON_OFF_STATUS, request.getParameter("display"));
 			deviceDao.updateStatus(loDevice, propertyValueMap);
 			
 			// Get saved status data id			

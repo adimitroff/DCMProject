@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
@@ -26,6 +27,8 @@ public class DeviceDAO extends GenericDao<Device> {
 	public static final String PROPERTY_FREE_DISK_SPACE = "FREE_DISK_SPACE";
 	public static final String PROPERTY_PLAYING_MEDIA_NAME = "PLAYING_MEDIA_NAME";
 	public static final String PROPERTY_PLAYING_MEDIA_TIME = "PLAYING_MEDIA_TIME";
+	public static final String PROPERTY_TEMPERATURE = "TEMPERATURE";
+	public static final String PROPERTY_ON_OFF_STATUS = "ON_OFF_STATUS";
 
 	public Device findDeviceByIp(String ip) {
 		TypedQuery<Device> query = entityManager.createQuery("SELECT d FROM Device d WHERE d.ip = :ip", Device.class);
@@ -37,9 +40,10 @@ public class DeviceDAO extends GenericDao<Device> {
 		}
 	}
 
-	public Device registerNewDevice(String ip) {
+	public Device registerNewDevice(String ip, String serialNumber) {
 		Device device = new Device();
 		device.setIp(ip);
+		device.setSerialNumber(serialNumber);
 		device.setName("Samsung Tv " + ip);
 		DevicePropertyType devicePropertyType = entityManager.find(DevicePropertyType.class, 1l);
 		device.setDevicePropertyType(devicePropertyType);
@@ -74,19 +78,11 @@ public class DeviceDAO extends GenericDao<Device> {
 		deviceStatus.setDeviceStatusValues(new ArrayList<DeviceStatusValue>());
 		Map<String, Property> propertiesMap = device.getDevicePropertyType().getProperties().stream()
 				.collect(Collectors.toMap(Property::getKey, p -> p));
-
-		Property property = propertiesMap.get(PROPERTY_REQUEST_COUNTER);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
-		property = propertiesMap.get(PROPERTY_UPDATE_DATA_COUNTER);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
-		property = propertiesMap.get(PROPERTY_USED_DISK_SPACE);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
-		property = propertiesMap.get(PROPERTY_FREE_DISK_SPACE);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
-		property = propertiesMap.get(PROPERTY_PLAYING_MEDIA_NAME);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
-		property = propertiesMap.get(PROPERTY_PLAYING_MEDIA_TIME);
-		appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
+		Set<String> keys = propertiesMap.keySet();
+		for (String key : keys) {
+			Property property = propertiesMap.get(key);
+			appendDeviceStatusValue(deviceStatus, property, propertyValueMap);
+		}
 		
 		device.setCurrentDeviceStatus(deviceStatus);
 		this.update(device);
