@@ -45,7 +45,7 @@ public class Device {
 	@Column(length = 250)
 	private String description;
 
-	@Column(name = "dev_type")
+	@Column(name = "DEV_TYPE")
 	private DeviceType devType; // (integer) device type (1 - monitor, 2 - mobile
 							// device, 3 -)
 
@@ -85,16 +85,9 @@ public class Device {
 	@ManyToMany(mappedBy = "devices", fetch = FetchType.LAZY)
 	private List<DeviceGroup> groups;
 	
-	@Column(name = "serial_number")
+	@Column(name = "SERIAL_NUMBER")
 	private String serialNumber;
 
-	public String getSerialNumber() {
-		return serialNumber;
-	}
-
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
 
 	public long getId() {
 		return id;
@@ -243,5 +236,13 @@ public class Device {
 
 	public void setGroups(List<DeviceGroup> groups) {
 		this.groups = groups;
+	}
+	
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 }
