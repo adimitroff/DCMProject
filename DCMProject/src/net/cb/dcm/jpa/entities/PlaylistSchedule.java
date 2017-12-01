@@ -57,7 +57,7 @@ public class PlaylistSchedule implements Serializable {
 	@Column(name = "DAY_OF_WEEK")
 	private int dayOfWeek;
 	
-	@Column(name = "DAY_OF_MONTH", nullable = false)
+	@Column(name = "DAY_OF_MONTH")
 	private int dayOfMoth;
 	
 	@Column
