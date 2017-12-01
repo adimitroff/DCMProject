@@ -115,6 +115,26 @@
 					"pattern": "ListPlaylistRelatedMediaContents/{id}",
 					"name": "ListPlaylistRelatedMediaContents",
 					"target": "ListRelatedMediaContents"
+				},
+				{
+					"pattern": "Schemas",
+					"name": "ListSchemas",
+					"target": "ListSchemas"
+				},
+				{
+					"pattern": "AddSchema",
+					"name": "AddSchema",
+					"target": "AddSchema"
+				},
+				{
+					"pattern": "EditSchema/{id}",
+					"name": "EditSchema",
+					"target": "AddSchema"
+				},
+				{
+					"pattern": "ListSchemaProperties/{id}",
+					"name": "ListSchemaProperties",
+					"target": "ListSchemaRelatedProperties"
 				}
 				
 			],
@@ -151,6 +171,15 @@
 				},
 				"ListRelatedMediaContents": {
 					"viewName": "list_related_media_contents"
+				},
+				"ListSchemas": {
+					"viewName": "list_device_schemas"
+				},
+				"AddSchema": {
+					"viewName": "add_device_schema"
+				},
+				"ListSchemaRelatedProperties": {
+					"viewName": "list_schema_related_properties"
 				}
 			}
 		},

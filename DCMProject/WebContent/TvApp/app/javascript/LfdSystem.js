@@ -14,6 +14,7 @@ var LfdSystem =
 
 LfdSystem.currentTemp = 0;
 LfdSystem.deviceSerialNumber = "";
+LfdSystem.displayStatus = "On";
 
 //First parameter is the id of the html object
 LfdSystem.initObj = function( Str_Id_Html_Obj )
@@ -45,12 +46,20 @@ LfdSystem.getSystemUpTime = function( str )
 
 LfdSystem.lfdDisplayOn = function()
 {
-	return LfdSystem.sendLFDMsg( "F9000100" );
+	var success = LfdSystem.sendLFDMsg( "F9000100" );
+	if( success == 1 ){
+		LfdSystem.displayStatus = "On";
+	}
+	return success;
 };
 
 LfdSystem.lfdDisplayOff = function()
 {
-	return LfdSystem.sendLFDMsg( "F9000101" );
+	var success = LfdSystem.sendLFDMsg( "F9000101" );
+	if( success == 1 ){
+		LfdSystem.displayStatus = "Off";
+	}
+	return success;
 };
 
 LfdSystem.lfdDisplayTemp = function()

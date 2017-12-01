@@ -1,13 +1,15 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_devices"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_device_schemas"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="Device Content Management" showNavButton="true"
-    	navButtonTap="onNavigateBack">
-		<Table id="idProductsTable" inset="false" items="{/Devices}"
-			itemPress="rowSelected">
+	<Page title="Device Schemas" showNavButton="true" navButtonTap="onNavigateBack">
+		<headerContent>
+			<Button text="Create New Schema" icon="sap-icon://add" press="onAddSchema" />
+			<Button text="Create New Property" icon="sap-icon://add" press="onCreateProperty" />
+		</headerContent>
+		<Table id="idProductsTable" inset="false" items="{/DevicePropertyTypes}" itemPress="rowSelected">
 			<headerToolbar>
 				<Toolbar>
-					<Label text="Devices"></Label>
+					<Label text="Schemas"></Label>
 				</Toolbar>
 			</headerToolbar>
 			<columns>
@@ -21,13 +23,7 @@
 					<Text text="Description" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Device Type" />
-				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="IP Address" />
-				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Model" />
+					<Text text="Number Of Properties / Properties List" />
 				</Column>
 			</columns>
 			<items>
@@ -36,9 +32,7 @@
 						<ObjectIdentifier title="{Id}" />
 						<Text text="{Name}" />
 						<Text text="{Description}" />
-						<Text text="{DevType}" />
-						<Text text="{Ip}" />
-						<Text text="{Model}" />
+						<Text text="{PropertyDetails(1L)/Name}" />
 					</cells>
 				</ColumnListItem>
 			</items>
