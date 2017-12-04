@@ -30,6 +30,7 @@ import net.cb.dcm.jpa.entities.DeviceSchedule;
 import net.cb.dcm.jpa.entities.Loop;
 import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Playlist;
+import net.cb.dcm.jpa.entities.PlaylistSchedule;
 
 /**
  * Servlet for processing http request for new content from the samsung tv app
@@ -235,6 +236,7 @@ public class DevFeeder extends HttpServlet {
 							mediaContents = playlistMediaContent;
 							Loop deviceLoop = new Loop();
 							deviceLoop.setMediaContents(playlistMediaContent);
+							deviceLoop.setSourcePlaylist(filteredPlaylists.get(i));
 							List<Loop> deviceLoops = new ArrayList<Loop>();
 							deviceLoops.add(deviceLoop);
 							deviceSchedule = new DeviceSchedule();
@@ -251,7 +253,7 @@ public class DevFeeder extends HttpServlet {
 			}
 		}
 
-		if( mediaContents == null || mediaContents.isEmpty() ){
+		if( mediaContents == null || mediaContents.isEmpty() ) {
 			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
 			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
 				mediaContents = defaultPlaylist.getMediaContents();
@@ -260,5 +262,46 @@ public class DevFeeder extends HttpServlet {
 		devResponse.setMediaContents(mediaContents);
 
 		
+	}
+	
+	
+	public List<Loop> getDailySchedule() {
+		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
+		List<Playlist> dailyPlaists = playlistDao.findDailyPlayists();
+		List<Loop> loops = new ArrayList<Loop>();
+		// Start from playlist with lowest priority(max priority value) and increment to highest priority
+		for(int pIdx = dailyPlaists.size() - 1; pIdx >= 0; pIdx--) {
+			List<PlaylistSchedule> shcedules = dailyPlaists.get(pIdx).getSchedules();
+			for (PlaylistSchedule schedule : shcedules) {
+				// First remove previous loops added from playlists with lower priority
+				// Or change loops start and end time
+				List<Loop> loopsForRemove = new ArrayList<>();
+				for (Loop loop : loops) {
+					boolean loopStartsInSchedule = (loop.getValidFrom().compareTo(schedule.getStartTime()) >= 0 
+							&& loop.getValidFrom().compareTo(schedule.getEndTime()) <= 0) ;
+					boolean loopEndsInSchedule = (loop.getValidTo().compareTo(schedule.getStartTime()) >= 0
+							&& loop.getValidTo().compareTo(schedule.getEndTime()) <= 0);
+					// Check loop timeplan is inside schedule timeplan to remove it 
+					// because it's from playlist with lower (maybe equal) priority
+					if(loopStartsInSchedule && loopEndsInSchedule) {
+						loopsForRemove.add(loop);
+					} else if (loopStartsInSchedule && !loopEndsInSchedule) {
+						loop.setValidFrom(schedule.getEndTime());
+					} else if (!loopStartsInSchedule && loopEndsInSchedule) {
+						loop.setValidTo(schedule.getStartTime());
+					}
+				}
+				loops.removeAll(loopsForRemove);
+				// Create and add new loop with current schedule times and playlist contents 
+				Loop loop = new Loop();
+				loop.setMediaContents(dailyPlaists.get(pIdx).getMediaContents());
+				loop.setSourcePlaylist(dailyPlaists.get(pIdx));
+				loop.setValidFrom(schedule.getStartTime());
+				loop.setValidTo(schedule.getEndTime());
+				loops.add(loop);
+			}
+		}
+		
+		return loops;
 	}
 }
