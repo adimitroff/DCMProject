@@ -3,11 +3,9 @@ package net.cb.dcm.dev_feed;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,11 +24,8 @@ import net.cb.dcm.jpa.DeviceDAO;
 import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.DeviceProcedure;
-import net.cb.dcm.jpa.entities.DeviceSchedule;
-import net.cb.dcm.jpa.entities.Loop;
 import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Playlist;
-import net.cb.dcm.jpa.entities.PlaylistSchedule;
 
 /**
  * Servlet for processing http request for new content from the samsung tv app
@@ -176,81 +171,7 @@ public class DevFeeder extends HttpServlet {
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
 		if (device != null) {			
-			List<Playlist> playlists = playlistDao.findAll();
-			List<Playlist> filteredPlaylists = new ArrayList<Playlist>();
-			final List<MediaContent> deviceMediaContents = deviceDao.findMediaByDeviceTag(device);
-			
-			if( !deviceMediaContents.isEmpty() ){			
-				// Check playst contents is included in device tags
-				for (Playlist playlist : playlists) {
-					List<MediaContent> deviceMedia = playlist.getMediaContents().stream()
-							.filter(media -> deviceMediaContents.contains(media)).collect(Collectors.toList());
-					if (!deviceMedia.isEmpty()) {
-						playlist.setMediaContents(deviceMedia);
-						filteredPlaylists.add(playlist);
-					}
-				}
-	
-				// Order playlists by priority
-				filteredPlaylists = filteredPlaylists.stream()
-						.sorted((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()))
-						.collect(Collectors.toList());
-				
-				// Get actual media contents on device
-				DeviceSchedule deviceSchedule = device.getCurrentDeviceSchedule();
-				if(deviceSchedule != null  && deviceSchedule.getLoops() != null && deviceSchedule.getLoops().size() > 0
-						&& deviceSchedule.getLoops().get(0).getMediaContents() != null) {
-					mediaContents = deviceSchedule.getLoops().get(0).getMediaContents();
-				}
-	
-				// Find playlist with highest priority for current time
-				for (int i = 0; i < filteredPlaylists.size(); i++) {
-					List<MediaContent> playlistMediaContent = filteredPlaylists.get(i).getMediaContents();
-					if(playlistMediaContent.isEmpty()) {
-						continue;
-					}
-					Date validFrom = filteredPlaylists.get(i).getValidFrom();
-					Date validTo = filteredPlaylists.get(i).getValidTo();
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(validFrom);
-					Calendar currCal = Calendar.getInstance();
-					currCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-					Date currentTime = currCal.getTime();
-					
-					// Check for current time playlist
-					if(currentTime.compareTo(validFrom) >= 0 && currentTime.compareTo(validTo) <= 0 ) {
-						// Check current playlist media for difference from actual device playlist media
-						int mediaIndex = -1;
-						if(playlistMediaContent.size() == mediaContents.size()) {
-							for(mediaIndex = 0; mediaIndex < playlistMediaContent.size(); mediaIndex++) {
-								if(!playlistMediaContent.get(mediaIndex).equals(mediaContents.get(mediaIndex))) {
-									mediaIndex = -1;
-									break;
-								}
-							}
-						}
-						// If media content differs, create new loop with the new media content
-						if(mediaIndex == -1) {
-							devResponse.setDataId(devResponse.getDataId() + 1);
-							// New playlist
-							mediaContents = playlistMediaContent;
-							Loop deviceLoop = new Loop();
-							deviceLoop.setMediaContents(playlistMediaContent);
-							deviceLoop.setSourcePlaylist(filteredPlaylists.get(i));
-							List<Loop> deviceLoops = new ArrayList<Loop>();
-							deviceLoops.add(deviceLoop);
-							deviceSchedule = new DeviceSchedule();
-							deviceSchedule.setDevice(device);
-							deviceSchedule.setLoops(deviceLoops);
-							deviceLoop.setDeviceSchedule(deviceSchedule);
-							device.setCurrentDeviceSchedule(deviceSchedule);
-							deviceDao.update(device);
-						}
-	
-						break;
-					}
-				}
-			}
+			// TODO get device schedule
 		}
 
 		if( mediaContents == null || mediaContents.isEmpty() ) {
@@ -265,43 +186,5 @@ public class DevFeeder extends HttpServlet {
 	}
 	
 	
-	public List<Loop> getDailySchedule() {
-		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
-		List<Playlist> dailyPlaists = playlistDao.findDailyPlayists();
-		List<Loop> loops = new ArrayList<Loop>();
-		// Start from playlist with lowest priority(max priority value) and increment to highest priority
-		for(int pIdx = dailyPlaists.size() - 1; pIdx >= 0; pIdx--) {
-			List<PlaylistSchedule> shcedules = dailyPlaists.get(pIdx).getSchedules();
-			for (PlaylistSchedule schedule : shcedules) {
-				// First remove previous loops added from playlists with lower priority
-				// Or change loops start and end time
-				List<Loop> loopsForRemove = new ArrayList<>();
-				for (Loop loop : loops) {
-					boolean loopStartsInSchedule = (loop.getValidFrom().compareTo(schedule.getStartTime()) >= 0 
-							&& loop.getValidFrom().compareTo(schedule.getEndTime()) <= 0) ;
-					boolean loopEndsInSchedule = (loop.getValidTo().compareTo(schedule.getStartTime()) >= 0
-							&& loop.getValidTo().compareTo(schedule.getEndTime()) <= 0);
-					// Check loop timeplan is inside schedule timeplan to remove it 
-					// because it's from playlist with lower (maybe equal) priority
-					if(loopStartsInSchedule && loopEndsInSchedule) {
-						loopsForRemove.add(loop);
-					} else if (loopStartsInSchedule && !loopEndsInSchedule) {
-						loop.setValidFrom(schedule.getEndTime());
-					} else if (!loopStartsInSchedule && loopEndsInSchedule) {
-						loop.setValidTo(schedule.getStartTime());
-					}
-				}
-				loops.removeAll(loopsForRemove);
-				// Create and add new loop with current schedule times and playlist contents 
-				Loop loop = new Loop();
-				loop.setMediaContents(dailyPlaists.get(pIdx).getMediaContents());
-				loop.setSourcePlaylist(dailyPlaists.get(pIdx));
-				loop.setValidFrom(schedule.getStartTime());
-				loop.setValidTo(schedule.getEndTime());
-				loops.add(loop);
-			}
-		}
-		
-		return loops;
-	}
+
 }

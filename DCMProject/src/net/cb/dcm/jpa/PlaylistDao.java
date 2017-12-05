@@ -35,8 +35,8 @@ public class PlaylistDao extends GenericDao<Playlist> {
 	 * ordered by priority and scheduled start time
 	 * @return Lists with all founded playlists including default playlist
 	 */
-	public List<Playlist> findDailyPlayists() {
-		return findDailyPlayists(Calendar.getInstance());
+	public List<Playlist> findDailyPlaylists() {
+		return findDailyPlaylists(Calendar.getInstance());
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class PlaylistDao extends GenericDao<Playlist> {
 	 * ordered by priority and scheduled start time
 	 * @return Lists with all founded playlists including default playlist
 	 */
-	public List<Playlist> findDailyPlayists(Calendar calendarDay) {
+	public List<Playlist> findDailyPlaylists(Calendar calendarDay) {
 		TypedQuery<Playlist> query = entityManager.createQuery(
 				"SELECT p FROM Playlist p JOIN p.schedules ps "
 						+ " WHERE p.active AND (p.validFrom IS NULL OR p.validFrom <= :date) "
