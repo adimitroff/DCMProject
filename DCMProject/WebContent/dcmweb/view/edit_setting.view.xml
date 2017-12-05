@@ -1,0 +1,33 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.edit_setting"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Page title="Edit Setting" id="page" showNavButton="true" navButtonPress="onNavigateBack">
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="EditSetting" minWidth="1024"
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+						<Input id="id" value="{Id}" visible="false" />
+						<Label text="Name" />
+						<Input id="name" value="{Name}" editable="false" />
+						<Label text="Description" />
+						<Input id="description" value="{Description}" editable="false" />
+						<Label text="Value" />
+						<Input id="value" value="{Value}" />
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button id="save" text="Save" type="Emphasized" press="handleSavePress" />
+					<Button id="cancel" text="Cancel" press="handleCancelPress" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>

@@ -1,7 +1,9 @@
 sap.ui
 		.define(
 				[ 'sap/ui/core/mvc/Controller',
-				'sap/ui/core/routing/History' ],
+				'sap/ui/core/routing/History',
+				'sap/m/MessageToast',
+				'sap/m/MessageBox' ],
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(

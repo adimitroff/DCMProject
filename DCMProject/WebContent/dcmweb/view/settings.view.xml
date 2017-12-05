@@ -1,0 +1,56 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.settings"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Page title="Options" showNavButton="true" navButtonTap="onNavigateBack">
+	
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="EditSettings" minWidth="1024"
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+					
+						<Label text="Show full list of device schemas " />
+						<Button text="Show" icon="" press="onListSchemas" />
+						
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+		
+		<Table id="idSettingsTable" inset="false" items="{/Settings}" itemPress="rowSelected">
+			<headerToolbar>
+				<Toolbar>
+					<Label text="Settings"></Label>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="Id" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Name" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Value" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Description" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem type="Detail" detailPress="onDetailPress">
+					<cells>
+						<ObjectIdentifier title="{Id}" />
+						<Text text="{Name}" />
+						<Text text="{Value}" />
+						<Text text="{Description}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+		
+	</Page>
+</core:View>

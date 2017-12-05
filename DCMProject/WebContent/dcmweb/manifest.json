@@ -135,6 +135,16 @@
 					"pattern": "ListSchemaProperties/{id}",
 					"name": "ListSchemaProperties",
 					"target": "ListSchemaRelatedProperties"
+				},
+				{
+					"pattern": "Settings",
+					"name": "Settings",
+					"target": "Settings"
+				},
+				{
+					"pattern": "EditSetting/{id}",
+					"name": "EditSetting",
+					"target": "EditSetting"
 				}
 				
 			],
@@ -180,6 +190,12 @@
 				},
 				"ListSchemaRelatedProperties": {
 					"viewName": "list_schema_related_properties"
+				},
+				"Settings": {
+					"viewName": "settings"
+				},
+				"EditSetting": {
+					"viewName": "edit_setting"
 				}
 			}
 		},
