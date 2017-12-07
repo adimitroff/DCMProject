@@ -11,8 +11,12 @@ import net.cb.dcm.jpa.entities.Playlist;
 
 public class PlaylistDao extends GenericDao<Playlist> {
 
-	public PlaylistDao(DeviceDAO deviceDao) {
-		super(deviceDao);
+	public PlaylistDao() {
+		super();
+	}
+	
+	public PlaylistDao(GenericDao<?> genericDao) {
+		super(genericDao);
 	}
 
 	/**

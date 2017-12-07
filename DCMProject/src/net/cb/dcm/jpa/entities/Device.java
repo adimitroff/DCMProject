@@ -61,7 +61,7 @@ public class Device {
 	@JoinColumn(name = "DEV_PROP_TYPE_ID", nullable = true)
 	private DevicePropertyType devicePropertyType;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_tag_rel", 
 		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Entity implementation class for Entity: PlaylistMediaContentRelation
@@ -15,7 +16,8 @@ import javax.persistence.Table;
  * Instead use directly {@link Playlist#getMediaContents()}
  */
 @Entity
-@Table(name = "playlist_media_contents")
+@Table(name = "playlist_media_contents", 
+uniqueConstraints = { @UniqueConstraint(columnNames = {"PLAYLIST_ID", "MEDIA_CONTENT_ID"})})
 public class PlaylistMediaContentRelation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
