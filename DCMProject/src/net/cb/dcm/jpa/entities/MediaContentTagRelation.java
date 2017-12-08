@@ -6,13 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * 
  *
  */
 @Entity
-@Table(name="media_cont_tag_rel")
+@Table(name="media_cont_tag_rel", 
+uniqueConstraints = { @UniqueConstraint(columnNames = {"MEDIA_CONTENT_ID", "TAG_ID"})})
 public class MediaContentTagRelation {
 	
 	@Id

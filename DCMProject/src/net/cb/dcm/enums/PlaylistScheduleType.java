@@ -6,7 +6,8 @@ public enum PlaylistScheduleType {
 	WEEKLY (2),
 	MONTHLY (3),
 	LAST_DAY_OF_MONTH (4),
-	YEARLY (5);
+	YEARLY (5),
+	DAILY (6);
 	
 	private int id;
 

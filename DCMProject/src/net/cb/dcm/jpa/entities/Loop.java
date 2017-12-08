@@ -22,11 +22,11 @@ public class Loop implements Serializable {
 	private long id;
 	
 	@Column(name="VALID_FROM")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	private Date validFrom;
 	
 	@Column(name="VALID_TO")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	private Date validTo;
 	
 	@OneToMany
@@ -38,6 +38,11 @@ public class Loop implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "DEVICE_SCHEDULE_ID")
 	private DeviceSchedule deviceSchedule;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "PLAYLIST_ID", nullable = true)
+	private Playlist sourcePlaylist;
+	
 
 	public Loop() {
 		super();
@@ -81,6 +86,14 @@ public class Loop implements Serializable {
 
 	public void setDeviceSchedule(DeviceSchedule deviceSchedule) {
 		this.deviceSchedule = deviceSchedule;
+	}
+	
+	public Playlist getSourcePlaylist() {
+		return sourcePlaylist;
+	}
+
+	public void setSourcePlaylist(Playlist sourcePlaylist) {
+		this.sourcePlaylist = sourcePlaylist;
 	}
    
 }

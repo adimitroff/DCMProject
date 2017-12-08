@@ -43,6 +43,9 @@ public class DeviceSchedule implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date time;
 	
+	@Column(name = "DEVICE_DATA_ID")
+	private int deviceDataId;
+	
 
 	public DeviceSchedule() {
 		super();
@@ -80,5 +83,14 @@ public class DeviceSchedule implements Serializable {
 	public void setTime(Date time) {
 		this.time = time;
 	}
+
+	public int getDeviceDataId() {
+		return deviceDataId;
+	}
+
+	public void setDeviceDataId(int deviceDataId) {
+		this.deviceDataId = deviceDataId;
+	}
+
    
 }

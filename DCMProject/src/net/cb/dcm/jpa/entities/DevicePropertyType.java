@@ -3,6 +3,7 @@ package net.cb.dcm.jpa.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +35,7 @@ public class DevicePropertyType implements Serializable {
 	@Column(length = 512)
 	private String description;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_prop_type_properties", 
 		joinColumns = @JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "PROPERTY_ID", referencedColumnName = "ID"))

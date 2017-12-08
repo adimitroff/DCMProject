@@ -25,7 +25,6 @@ App.onLoad = function()
 	
 	App.logInfo("Used size(kB): " + smartDevice.getUsedSize());
 	App.logInfo("Free size(kB): " + smartDevice.getFreeSize());
-	
 };
 
 App.initContent = function()
@@ -158,7 +157,8 @@ App.update = function(url)
 				+ "&mediaName=" + mediaName
 				+ "&mediaTime=" + mediaTime
 				+ "&temperature=" + LfdSystem.currentTemp
-				+ "&serialN=" + LfdSystem.deviceSerialNumber,
+				+ "&serialN=" + LfdSystem.deviceSerialNumber
+				+ "&display=" + LfdSystem.displayStatus,
 				App.onNewData_ReadyStateChange);
 	}
 };

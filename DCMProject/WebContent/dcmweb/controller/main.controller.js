@@ -22,6 +22,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 				oRouter.navTo("ListMediaObjects");
 				break;
 			case "tileOptions":
+				oRouter.navTo("ListSchemas");
 				break;
 			case "tilePlaylists":
 				oRouter.navTo("ListPlaylists");

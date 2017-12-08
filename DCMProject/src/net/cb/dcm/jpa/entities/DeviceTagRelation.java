@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Entity for relation between {@link Device} and {@link Tag}
@@ -13,7 +14,8 @@ import javax.persistence.Table;
  * Instead use directly {@link Device#getTags()}
  */
 @Entity
-@Table(name="dev_tag_rel")
+@Table(name="dev_tag_rel", 
+uniqueConstraints = { @UniqueConstraint(columnNames = {"DEVICE_ID", "TAG_ID"})})
 public class DeviceTagRelation {
 	
 	@Id
