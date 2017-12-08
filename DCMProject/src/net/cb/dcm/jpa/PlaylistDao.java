@@ -14,18 +14,19 @@ public class PlaylistDao extends GenericDao<Playlist> {
 	public PlaylistDao() {
 		super();
 	}
-	
+
 	public PlaylistDao(GenericDao<?> genericDao) {
 		super(genericDao);
 	}
 
 	/**
 	 * Finds default and active playlist
+	 * 
 	 * @return Default playlist or null
 	 */
 	public Playlist findDefaultPlaylist() {
-		TypedQuery<Playlist> query = entityManager.createQuery("SELECT p FROM Playlist p WHERE p.active AND p.def",
-				Playlist.class);
+		TypedQuery<Playlist> query = entityManager
+				.createQuery("SELECT p FROM Playlist p " + " WHERE p.active = TRUE AND p.def = TRUE", Playlist.class);
 		List<Playlist> playlists = query.getResultList();
 		if (playlists.size() > 0) {
 			return playlists.get(0);
@@ -33,10 +34,11 @@ public class PlaylistDao extends GenericDao<Playlist> {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Finds all active and scheduled for today playlists including default , 
+	 * Finds all active and scheduled for today playlists including default ,
 	 * ordered by priority and scheduled start time
+	 * 
 	 * @return Lists with all founded playlists including default playlist
 	 */
 	public List<Playlist> findDailyPlaylists() {
@@ -44,24 +46,21 @@ public class PlaylistDao extends GenericDao<Playlist> {
 	}
 
 	/**
-	 * Finds all active and scheduled for the given day playlists including default , 
-	 * ordered by priority and scheduled start time
+	 * Finds all active and scheduled for the given day playlists including
+	 * default , ordered by priority and scheduled start time
+	 * 
 	 * @return Lists with all founded playlists including default playlist
 	 */
 	public List<Playlist> findDailyPlaylists(Calendar calendarDay) {
-		TypedQuery<Playlist> query = entityManager.createQuery(
-				"SELECT p FROM Playlist p JOIN p.schedules ps "
-						+ " WHERE p.active AND (p.validFrom IS NULL OR p.validFrom <= :date) "
-						+ " AND ( p.validTo IS NULL OR p.validTo >= :date) "
-						+ " AND (ps.def "
-						+ "  OR (ps.type = :typeDaily) "
-						+ "  OR (ps.type = :typeDay AND psс.date = :date) "
-						+ "  OR (ps.type = :typeWeekly AND ps.dayOfWeek = :dayOfWeek ) "
-						+ "  OR (ps.type = :typeMonthly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) "
-						+ "  OR (ps.type = :typeLastDayOfMonth AND :isLastDayOfMonth) "
-						+ "  OR (ps.type = :typeYearly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) ) "
-						+ " ORDER BY p.priority, ps.startTime",
-				Playlist.class);
+		TypedQuery<Playlist> query = entityManager.createQuery("SELECT DISTINCT p FROM Playlist p JOIN p.schedules ps "
+				+ " WHERE p.active = TRUE AND (p.validFrom IS NULL OR p.validFrom <= :date) "
+				+ " AND ( p.validTo IS NULL OR p.validTo >= :date) " + " AND ((ps.type = :typeDaily) "
+				+ "  OR (ps.type = :typeDay AND ps.date = :date) "
+				+ "  OR (ps.type = :typeWeekly AND ps.dayOfWeek = :dayOfWeek ) "
+				+ "  OR (ps.type = :typeMonthly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) "
+				+ "  OR (ps.type = :typeLastDayOfMonth AND :isLastDayOfMonth = TRUE) "
+				+ "  OR (ps.type = :typeYearly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) ) "
+				+ " ORDER BY p.priority", Playlist.class);
 		int currentMonth = calendarDay.get(Calendar.MONTH);
 		Calendar cal2 = Calendar.getInstance();
 		cal2.setTime(calendarDay.getTime());

@@ -43,7 +43,7 @@ public class MediaContent {
 	@Column(length=260)
 	private String thumbnail;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
 	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
 	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))

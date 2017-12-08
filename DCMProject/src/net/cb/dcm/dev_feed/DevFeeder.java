@@ -3,6 +3,7 @@ package net.cb.dcm.dev_feed;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,12 @@ import com.google.gson.GsonBuilder;
 import net.cb.dcm.enums.DevResponseDataType;
 import net.cb.dcm.enums.DeviceCommand;
 import net.cb.dcm.jpa.DeviceDAO;
+import net.cb.dcm.jpa.GenericDao;
 import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.DeviceProcedure;
+import net.cb.dcm.jpa.entities.DeviceSchedule;
+import net.cb.dcm.jpa.entities.Loop;
 import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Playlist;
 
@@ -164,24 +168,51 @@ public class DevFeeder extends HttpServlet {
 	 *            - Response to write json data
 	 * @throws IOException
 	 */
-	private void getPlayList(Device device, DevResponse devResponse) throws IOException {
-
-		devResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
+	private boolean getPlayList(Device device, DevResponse devResponse) throws IOException {
+		if(device == null) {
+			return false;
+		}
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
 		if (device != null) {			
-			// TODO get device schedule
+			DeviceSchedule schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
+				// Find loop for current time
+				List<Loop> loops = schedule.getLoops();
+				Date currTime = new Date();
+				for (Loop loop : loops) {
+					if (loop.getValidFrom().compareTo(currTime) <= 0 && loop.getValidTo().compareTo(currTime) >= 0) {
+						if(loop.getMediaContents() != null) {
+							mediaContents = loop.getMediaContents();
+							GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {
+							};
+							schedule.setDeviceDataId(devResponse.getDataId() + 1);
+							scheduleDao.update(schedule);
+						}
+						break;
+					}
+				}
+			}
 		}
 
-		if( mediaContents == null || mediaContents.isEmpty() ) {
+		if (mediaContents.isEmpty()) {
+			// Get default playlist
 			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
 			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
 				mediaContents = defaultPlaylist.getMediaContents();
 			}
 		}
-		devResponse.setMediaContents(mediaContents);
+		// Generate playlist response
+		if (!mediaContents.isEmpty()) {
+			devResponse.setDataId(devResponse.getDataId() + 1);
+			devResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
+			devResponse.setMediaContents(mediaContents);
+			return true;
+		}
+		
 
+		return false;
 		
 	}
 	
