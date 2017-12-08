@@ -1,6 +1,8 @@
 package net.cb.dcm.dev_feed;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +35,9 @@ public class ScheduleGeneratorSingleton {
 		return instance;
 	}
 	
-	public List<Loop> getDailySchedule() {
+	public List<Loop> getDailySchedule(Calendar calDay) {
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
-		List<Playlist> dailyPlaists = playlistDao.findDailyPlaylists();
+		List<Playlist> dailyPlaists = playlistDao.findDailyPlaylists(calDay);
 		List<Loop> loops = new ArrayList<Loop>();
 		// Start from playlist with lowest priority(max priority value) and increment to highest priority
 		for(int pIdx = dailyPlaists.size() - 1; pIdx >= 0; pIdx--) {
@@ -62,12 +64,13 @@ public class ScheduleGeneratorSingleton {
 							&& loop.getValidTo().compareTo(schedule.getEndTime()) > 0) {
 						// Loop timeplan contains schedule timpelan
 						// Cut loop to 2 parts - before and after schedule timeplan
+						Date validTo = loop.getValidTo();
 						loop.setValidTo(schedule.getStartTime());
 						Loop secondLoop = new Loop();
 						secondLoop.setMediaContents(loop.getMediaContents());
 						secondLoop.setSourcePlaylist(loop.getSourcePlaylist());
 						secondLoop.setValidFrom(schedule.getEndTime());
-						secondLoop.setValidTo(loop.getValidTo());
+						secondLoop.setValidTo(validTo);
 						loopsToAdd.add(secondLoop);
 					}
 				}
@@ -87,7 +90,7 @@ public class ScheduleGeneratorSingleton {
 	}
 	
 	public DeviceSchedule getDeviceSchedule(Device device) {
-		List<Loop> deviceLoops = generateDeviceLoops(device);
+		List<Loop> deviceLoops = generateDeviceLoops(device, Calendar.getInstance());
 		DeviceSchedule currentDeviceSchedule = device.getCurrentDeviceSchedule();
 		if(currentDeviceSchedule != null  && currentDeviceSchedule.getLoops() != null 
 				&& currentDeviceSchedule.getLoops().size() > 0) {
@@ -120,7 +123,7 @@ public class ScheduleGeneratorSingleton {
 		return deviceSchedule;
 	}
 	
-	private List<Loop> generateDeviceLoops(Device device) {
+	public List<Loop> generateDeviceLoops(Device device, Calendar calDay) {
 		
 		// Collect device tags from device and device groups
 		Set<Tag> deviceTags = new HashSet<>();
@@ -135,7 +138,7 @@ public class ScheduleGeneratorSingleton {
 		
 
 		Set<MediaContent> allMediaContents = new HashSet<>();
-		List<Loop> loops = getDailySchedule();
+		List<Loop> loops = getDailySchedule(calDay);
 		for (Loop loop : loops) {
 			allMediaContents.addAll(loop.getMediaContents());
 		}

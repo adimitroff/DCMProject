@@ -64,7 +64,7 @@ public class DbTest {
 		assertTrue(properties.size() > 0);
 		assertTrue(properties.get(0).getId() > 0);
 
-		for (int i = 100; i <= 120; i++) {
+		for (int i = 100; i <= 105; i++) {
 			String ip = "127.0.0." + i;
 			String serialNumber = "SAMSUTV100" + i;
 			Device device = deviceDao.registerNewDevice(ip, serialNumber);
@@ -146,11 +146,17 @@ public class DbTest {
 		};
 		
 		List<Device> devices = deviceDao.findAll();
+		assertTrue(devices.size() > 0);
 		
 		Tag tagBg = tagDao.findById(tagIdBg);
 		Tag tagSo = tagDao.findById(tagIdSo);
 		Tag tagPl = tagDao.findById(tagIdPl);
 		Tag tagTv = tagDao.findById(tagIdTv);
+		
+		assertNotNull(tagBg);
+		assertNotNull(tagSo);
+		assertNotNull(tagPl);
+		assertNotNull(tagTv);
 		
 		List<Tag> tagsBg = new ArrayList<>();
 		tagsBg.add(tagBg);
@@ -195,41 +201,62 @@ public class DbTest {
 		assertEquals(0, mediaContentDao.findAll().size());
 		
 		List<MediaContent> mediaContents = new ArrayList<>();
-		List<Tag> tags = tagDao.findAll();
+		
+		Tag tagBg = tagDao.findById(tagIdBg);
+		Tag tagSo = tagDao.findById(tagIdSo);
+		Tag tagPl = tagDao.findById(tagIdPl);
+		Tag tagTv = tagDao.findById(tagIdTv);
+		
+		assertNotNull(tagBg);
+		assertNotNull(tagSo);
+		assertNotNull(tagPl);
+		assertNotNull(tagTv);
+		
+		List<Tag> tagsBg = new ArrayList<>();
+		tagsBg.add(tagBg);
+		tagsBg.add(tagTv);
+		
+		List<Tag> tagsSo = new ArrayList<>();
+		tagsSo.add(tagSo);
+		tagsSo.add(tagTv);
+		
+		List<Tag> tagsPl = new ArrayList<>();
+		tagsPl.add(tagPl);
+		tagsPl.add(tagTv);
 		
 		MediaContent mediaContent = new MediaContent();
 		mediaContent.setName("Test media 1");
 		mediaContent.setFilePath("/test/test_media_1.jpg");
 		mediaContent.setMediaType(MediaObjectType.JPEG);
-		mediaContent.setTags(tags);
+		mediaContent.setTags(tagsBg);
 		mediaContents.add(mediaContent);
 		
 		mediaContent = new MediaContent();
 		mediaContent.setName("Test media 2");
 		mediaContent.setFilePath("/test/test_media_2.mp4");
 		mediaContent.setMediaType(MediaObjectType.MPEG);
-		mediaContent.setTags(tags);
+		mediaContent.setTags(tagsSo);
 		mediaContents.add(mediaContent);
 		
 		mediaContent = new MediaContent();
 		mediaContent.setName("Test media 3");
 		mediaContent.setFilePath("/test/test_media_3.mp4");
 		mediaContent.setMediaType(MediaObjectType.MPEG);
-		mediaContent.setTags(tags);
+		mediaContent.setTags(tagsBg);
 		mediaContents.add(mediaContent);
 		
 		mediaContent = new MediaContent();
 		mediaContent.setName("Test media 4");
 		mediaContent.setFilePath("/test/test_media_4.mp4");
 		mediaContent.setMediaType(MediaObjectType.MPEG);
-		mediaContent.setTags(tags);
+		mediaContent.setTags(tagsPl);
 		mediaContents.add(mediaContent);
 		
 		mediaContent = new MediaContent();
 		mediaContent.setName("Test media 5");
 		mediaContent.setFilePath("/test/test_media_5.mp4");
 		mediaContent.setMediaType(MediaObjectType.MPEG);
-		mediaContent.setTags(tags);
+		mediaContent.setTags(tagsBg);
 		mediaContents.add(mediaContent);
 		
 		mediaContentDao.insertAll(mediaContents);
@@ -251,11 +278,11 @@ public class DbTest {
 		List<Playlist> playlists = new ArrayList<>();
 
 		Calendar calStartTime = Calendar.getInstance();
-		calStartTime.set(Calendar.HOUR, 0);
+		calStartTime.set(Calendar.HOUR_OF_DAY, 0);
 		calStartTime.set(Calendar.MINUTE, 0);
 		calStartTime.set(Calendar.SECOND, 0);
 		Calendar calEndTime = Calendar.getInstance();
-		calEndTime.set(Calendar.HOUR, 23);
+		calEndTime.set(Calendar.HOUR_OF_DAY, 23);
 		calEndTime.set(Calendar.MINUTE, 59);
 		calEndTime.set(Calendar.SECOND, 59);
 
@@ -297,8 +324,8 @@ public class DbTest {
 		playlist.setMediaContents(plMediaContents);
 
 		schedules = new ArrayList<>();
-		calStartTime.set(Calendar.HOUR, 13);
-		calEndTime.set(Calendar.HOUR, 17);
+		calStartTime.set(Calendar.HOUR_OF_DAY, 13);
+		calEndTime.set(Calendar.HOUR_OF_DAY, 17);
 		playlistSchedule = new PlaylistSchedule();
 		playlistSchedule.setType(PlaylistScheduleType.DAILY);
 		playlistSchedule.setStartTime(calStartTime.getTime());
@@ -324,8 +351,8 @@ public class DbTest {
 		playlist.setMediaContents(plMediaContents);
 
 		schedules = new ArrayList<>();
-		calStartTime.set(Calendar.HOUR, 10);
-		calEndTime.set(Calendar.HOUR, 12);
+		calStartTime.set(Calendar.HOUR_OF_DAY, 10);
+		calEndTime.set(Calendar.HOUR_OF_DAY, 12);
 		playlistSchedule = new PlaylistSchedule();
 		playlistSchedule.setType(PlaylistScheduleType.DAILY);
 		playlistSchedule.setStartTime(calStartTime.getTime());
@@ -333,8 +360,8 @@ public class DbTest {
 		playlistSchedule.setPlaylist(playlist);
 		schedules.add(playlistSchedule);
 
-		calStartTime.set(Calendar.HOUR, 13);
-		calEndTime.set(Calendar.HOUR, 14);
+		calStartTime.set(Calendar.HOUR_OF_DAY, 13);
+		calEndTime.set(Calendar.HOUR_OF_DAY, 14);
 		playlistSchedule = new PlaylistSchedule();
 		playlistSchedule.setType(PlaylistScheduleType.DAILY);
 		playlistSchedule.setStartTime(calStartTime.getTime());
@@ -342,8 +369,8 @@ public class DbTest {
 		playlistSchedule.setPlaylist(playlist);
 		schedules.add(playlistSchedule);
 
-		calStartTime.set(Calendar.HOUR, 9);
-		calEndTime.set(Calendar.HOUR, 19);
+		calStartTime.set(Calendar.HOUR_OF_DAY, 9);
+		calEndTime.set(Calendar.HOUR_OF_DAY, 19);
 		playlistSchedule = new PlaylistSchedule();
 		playlistSchedule.setType(PlaylistScheduleType.WEEKLY);
 		playlistSchedule.setDayOfWeek(Calendar.MONDAY);
