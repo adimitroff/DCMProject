@@ -180,9 +180,14 @@ public class DevFeeder extends HttpServlet {
 			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
 				// Find loop for current time
 				List<Loop> loops = schedule.getLoops();
-				Date currTime = new Date();
+				Calendar cal = Calendar.getInstance();
 				for (Loop loop : loops) {
-					if (loop.getValidFrom().compareTo(currTime) <= 0 && loop.getValidTo().compareTo(currTime) >= 0) {
+					Calendar cal2 = Calendar.getInstance();
+					cal2.setTime(loop.getValidFrom());
+					// Compare times of same year, month and day
+					cal.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH));
+					Date timeOfDay = cal.getTime();
+					if (loop.getValidFrom().compareTo(timeOfDay) <= 0 && loop.getValidTo().compareTo(timeOfDay) >= 0) {
 						if(loop.getMediaContents() != null) {
 							mediaContents = loop.getMediaContents();
 							GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import net.cb.dcm.jpa.DeviceDAO;
 import net.cb.dcm.jpa.PlaylistDao;
@@ -92,23 +94,48 @@ public class ScheduleGeneratorSingleton {
 	public DeviceSchedule getDeviceSchedule(Device device) {
 		List<Loop> deviceLoops = generateDeviceLoops(device, Calendar.getInstance());
 		DeviceSchedule currentDeviceSchedule = device.getCurrentDeviceSchedule();
-		if(currentDeviceSchedule != null  && currentDeviceSchedule.getLoops() != null 
-				&& currentDeviceSchedule.getLoops().size() > 0) {
-			if(currentDeviceSchedule.getLoops().size() != deviceLoops.size()) {
-				return currentDeviceSchedule;
-			}
+		// Check equality of current schedule loops and generated device loops
+		if(currentDeviceSchedule != null  && currentDeviceSchedule.getLoops().size() > 0 
+				&& currentDeviceSchedule.getLoops().size() == deviceLoops.size()) {
 
-			for(int i = 0; i < deviceLoops.size(); i++) {
-				List<MediaContent> mediaContents = deviceLoops.get(i).getMediaContents();
-				List<MediaContent> scheduledMediaContents = currentDeviceSchedule.getLoops().get(i).getMediaContents();
-				if(mediaContents.size() != scheduledMediaContents.size()) {
-					return currentDeviceSchedule;
-				} else for(int mediaIdx = 0; mediaIdx < mediaContents.size(); mediaIdx++) {
-					if(!mediaContents.get(mediaIdx).equals(scheduledMediaContents.get(mediaIdx))) {
-						return currentDeviceSchedule;
+			List<Loop> orderedDeviceLoops  = deviceLoops.stream()
+			.sorted((l1, l2) -> l1.getValidFrom().compareTo(l2.getValidFrom()))
+			.collect(Collectors.toList());
+			
+			List<Loop> orderedCurrentLoops = currentDeviceSchedule.getLoops().stream()
+					.sorted((l1, l2) -> l1.getValidFrom().compareTo(l2.getValidFrom()))
+					.collect(Collectors.toList());
+			
+			boolean isScheduleEqual = true;
+			loops:
+			for(int i = 0; i < orderedDeviceLoops.size(); i++) {
+				// Check time interval equality
+				if(!orderedDeviceLoops.get(i).getValidFrom().equals( orderedCurrentLoops.get(i).getValidFrom())
+						|| !orderedDeviceLoops.get(i).getValidTo().equals(orderedCurrentLoops.get(i).getValidTo())) {
+					isScheduleEqual = false;
+					break;
+				}
+				// Check media content equality
+				List<MediaContent> mediaContents = orderedDeviceLoops.get(i).getMediaContents().stream()
+						.sorted((m1, m2) -> (int) (m1.getId() - m2.getId()))
+						.collect(Collectors.toList());
+				List<MediaContent> scheduledMediaContents = orderedCurrentLoops.get(i).getMediaContents().stream()
+						.sorted((m1, m2) -> (int) (m1.getId() - m2.getId()))
+						.collect(Collectors.toList());
+				if (mediaContents.size() != scheduledMediaContents.size()) {
+					isScheduleEqual = false;
+					break;
+				}
+				for (int mediaIdx = 0; mediaIdx < mediaContents.size(); mediaIdx++) {
+					if (!mediaContents.get(mediaIdx).equals(scheduledMediaContents.get(mediaIdx))) {
+						isScheduleEqual = false;
+						break loops;
 					}
 				}
-			}		
+			}
+			if(isScheduleEqual) {
+				return currentDeviceSchedule;
+			}
 		}
 		
 		DeviceSchedule deviceSchedule = new DeviceSchedule();
@@ -142,19 +169,20 @@ public class ScheduleGeneratorSingleton {
 		for (Loop loop : loops) {
 			allMediaContents.addAll(loop.getMediaContents());
 		}
-		
+
 		List<MediaContent> mediaContentsToRemove = new ArrayList<>();
 		for (MediaContent mediaContent : allMediaContents) {
-			if(mediaContent.getTags() == null || mediaContent.getTags().isEmpty() 
+			if (mediaContent.getTags() == null || mediaContent.getTags().isEmpty()
 					|| !deviceTags.containsAll(mediaContent.getTags())) {
 				mediaContentsToRemove.add(mediaContent);
 			}
 		}
-		
+
 		List<Loop> filteredLoops = new ArrayList<>();
 		for (Loop loop : loops) {
 			Loop filtredLoop = new Loop();
-			filtredLoop.setMediaContents(loop.getMediaContents());
+			filtredLoop.setMediaContents(new ArrayList<>());
+			filtredLoop.getMediaContents().addAll(loop.getMediaContents());
 			filtredLoop.getMediaContents().removeAll(mediaContentsToRemove);
 			filtredLoop.setSourcePlaylist(loop.getSourcePlaylist());
 			filtredLoop.setValidFrom(loop.getValidFrom());
