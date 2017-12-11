@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import net.cb.dcm.enums.DevResponseDataType;
 import net.cb.dcm.enums.DeviceCommand;
 import net.cb.dcm.jpa.DeviceDAO;
+import net.cb.dcm.jpa.GenericDao;
 import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.DeviceProcedure;
@@ -68,7 +68,7 @@ public class DevFeeder extends HttpServlet {
 				//// Maybe registering only the IP, then the system
 				//// opearator should see it in the
 				//// list as a device without data, and maintain it.
-				loDevice = deviceDao.registerNewDevice(loIp);
+				loDevice = deviceDao.registerNewDevice(loIp, request.getParameter("serialN"));
 			}
 			
 			// Update device status
@@ -79,6 +79,8 @@ public class DevFeeder extends HttpServlet {
 			propertyValueMap.put(DeviceDAO.PROPERTY_FREE_DISK_SPACE, request.getParameter("freeSize"));
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_NAME, request.getParameter("mediaName"));
 			propertyValueMap.put(DeviceDAO.PROPERTY_PLAYING_MEDIA_TIME, request.getParameter("mediaTime"));
+			propertyValueMap.put(DeviceDAO.PROPERTY_TEMPERATURE, request.getParameter("temperature"));
+			propertyValueMap.put(DeviceDAO.PROPERTY_ON_OFF_STATUS, request.getParameter("display"));
 			deviceDao.updateStatus(loDevice, propertyValueMap);
 			
 			// Get saved status data id			
@@ -166,97 +168,54 @@ public class DevFeeder extends HttpServlet {
 	 *            - Response to write json data
 	 * @throws IOException
 	 */
-	private void getPlayList(Device device, DevResponse devResponse) throws IOException {
-
-		devResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
+	private boolean getPlayList(Device device, DevResponse devResponse) throws IOException {
+		if(device == null) {
+			return false;
+		}
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
 		if (device != null) {			
-			List<Playlist> playlists = playlistDao.findAll();
-			List<Playlist> filteredPlaylists = new ArrayList<Playlist>();
-			final List<MediaContent> deviceMediaContents = deviceDao.findMediaByDeviceTag(device);
-			
-			if( !deviceMediaContents.isEmpty() ){			
-				// Check playst contents is included in device tags
-				for (Playlist playlist : playlists) {
-					List<MediaContent> deviceMedia = playlist.getMediaContents().stream()
-							.filter(media -> deviceMediaContents.contains(media)).collect(Collectors.toList());
-					if (!deviceMedia.isEmpty()) {
-						playlist.setMediaContents(deviceMedia);
-						filteredPlaylists.add(playlist);
-					}
-				}
-	
-				// Order playlists by priority
-				filteredPlaylists = filteredPlaylists.stream()
-						.sorted((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()))
-						.collect(Collectors.toList());
-				
-				// Get actual media contents on device
-				DeviceSchedule deviceSchedule = device.getCurrentDeviceSchedule();
-				if(deviceSchedule != null  && deviceSchedule.getLoops() != null && deviceSchedule.getLoops().size() > 0
-						&& deviceSchedule.getLoops().get(0).getMediaContents() != null) {
-					mediaContents = deviceSchedule.getLoops().get(0).getMediaContents();
-				}
-	
-				// Find playlist with highest priority for current time
-				for (int i = 0; i < filteredPlaylists.size(); i++) {
-					List<MediaContent> playlistMediaContent = filteredPlaylists.get(i).getMediaContents();
-					if(playlistMediaContent.isEmpty()) {
-						continue;
-					}
-					Date validFrom = filteredPlaylists.get(i).getValidFrom();
-					Date validTo = filteredPlaylists.get(i).getValidTo();
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(validFrom);
-					Calendar currCal = Calendar.getInstance();
-					currCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-					Date currentTime = currCal.getTime();
-					
-					// Check for current time playlist
-					if(currentTime.compareTo(validFrom) >= 0 && currentTime.compareTo(validTo) <= 0 ) {
-						// Check current playlist media for difference from actual device playlist media
-						int mediaIndex = -1;
-						if(playlistMediaContent.size() == mediaContents.size()) {
-							for(mediaIndex = 0; mediaIndex < playlistMediaContent.size(); mediaIndex++) {
-								if(!playlistMediaContent.get(mediaIndex).equals(mediaContents.get(mediaIndex))) {
-									mediaIndex = -1;
-									break;
-								}
-							}
+			DeviceSchedule schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
+				// Find loop for current time
+				List<Loop> loops = schedule.getLoops();
+				Date currTime = new Date();
+				for (Loop loop : loops) {
+					if (loop.getValidFrom().compareTo(currTime) <= 0 && loop.getValidTo().compareTo(currTime) >= 0) {
+						if(loop.getMediaContents() != null) {
+							mediaContents = loop.getMediaContents();
+							GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {
+							};
+							schedule.setDeviceDataId(devResponse.getDataId() + 1);
+							scheduleDao.update(schedule);
 						}
-						// If media content differs, create new loop with the new media content
-						if(mediaIndex == -1) {
-							devResponse.setDataId(devResponse.getDataId() + 1);
-							// New playlist
-							mediaContents = playlistMediaContent;
-							Loop deviceLoop = new Loop();
-							deviceLoop.setMediaContents(playlistMediaContent);
-							List<Loop> deviceLoops = new ArrayList<Loop>();
-							deviceLoops.add(deviceLoop);
-							deviceSchedule = new DeviceSchedule();
-							deviceSchedule.setDevice(device);
-							deviceSchedule.setLoops(deviceLoops);
-							deviceLoop.setDeviceSchedule(deviceSchedule);
-							device.setCurrentDeviceSchedule(deviceSchedule);
-							deviceDao.update(device);
-						}
-	
 						break;
 					}
 				}
 			}
 		}
 
-		if( mediaContents == null || mediaContents.isEmpty() ){
+		if (mediaContents.isEmpty()) {
+			// Get default playlist
 			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
 			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
 				mediaContents = defaultPlaylist.getMediaContents();
 			}
 		}
-		devResponse.setMediaContents(mediaContents);
+		// Generate playlist response
+		if (!mediaContents.isEmpty()) {
+			devResponse.setDataId(devResponse.getDataId() + 1);
+			devResponse.setResponseDataType(DevResponseDataType.PLAY_LIST);
+			devResponse.setMediaContents(mediaContents);
+			return true;
+		}
+		
 
+		return false;
 		
 	}
+	
+	
+
 }

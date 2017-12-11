@@ -3,8 +3,10 @@ package net.cb.dcm.jpa.entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,18 +41,21 @@ public class Playlist {
 	private boolean def;
 	
 	@Column(name="VALID_FROM")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date validFrom;
 	
 	@Column(name="VALID_TO")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date validTo;
 	
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
 	@JoinTable(name = "playlist_media_contents", 
-	joinColumns = @JoinColumn(name = "PLAYLIST_ID", referencedColumnName = "ID"), 
-	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"))
+	joinColumns = @JoinColumn(name = "PLAYLIST_ID"), 
+	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID"))
 	private List<MediaContent> mediaContents;
+	
+	@OneToMany(mappedBy="playlist", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+	private List<PlaylistSchedule> schedules;
 
 	public long getId() {
 		return id;
@@ -122,5 +127,13 @@ public class Playlist {
 
 	public void setDef(boolean def) {
 		this.def = def;
+	}
+
+	public List<PlaylistSchedule> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<PlaylistSchedule> schedules) {
+		this.schedules = schedules;
 	} 
 }
