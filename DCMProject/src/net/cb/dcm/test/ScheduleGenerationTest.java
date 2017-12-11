@@ -104,4 +104,14 @@ public class ScheduleGenerationTest {
 		// Generate for first device
 		ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(dev);
 	}
+	
+	@Test
+	public void test7GenerateAndPersistNewDevice() {
+		Assert.assertTrue(deviceId > 0);
+		DeviceDAO deviceDao = new DeviceDAO();
+		Device dev = deviceDao.findById(deviceId);
+		Assert.assertNotNull(dev);
+		// Generate for first device
+		ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(dev);
+	}
 }
