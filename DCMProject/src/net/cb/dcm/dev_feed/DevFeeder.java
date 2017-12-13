@@ -94,10 +94,9 @@ public class DevFeeder extends HttpServlet {
 				loDevResponse.setDataId(dataId);
 			}
 			
-			// Check and generate response with commands
-			boolean responseGenerated = this.getProcedure(loDevice, loDevResponse);
-			if(!responseGenerated) {
-				// Load device playlist or default playlist
+			// First check and generate response with commands
+			if(!this.getProcedure(loDevice, loDevResponse)) {
+				// Check for new device schedule for playlist response
 				this.getPlayList(loDevice, loDevResponse);
 			}
 		}
@@ -172,11 +171,17 @@ public class DevFeeder extends HttpServlet {
 		if(device == null) {
 			return false;
 		}
+		// Check for new device schedule once every 30 seconds or more but not more often.
+		if(device.getCurrentDeviceSchedule() != null 
+				&& (new Date().getTime() - device.getCurrentDeviceSchedule().getDeviceCheckTime().getTime()) < 30000) {
+			return false;
+		}
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
-		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
+		
 		if (device != null) {			
 			DeviceSchedule schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+			schedule.setDeviceCheckTime(new Date());
 			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
 				// Find loop for current time
 				List<Loop> loops = schedule.getLoops();
@@ -190,24 +195,26 @@ public class DevFeeder extends HttpServlet {
 					if (loop.getValidFrom().compareTo(timeOfDay) <= 0 && loop.getValidTo().compareTo(timeOfDay) >= 0) {
 						if(loop.getMediaContents() != null) {
 							mediaContents = loop.getMediaContents();
-							GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {
-							};
 							schedule.setDeviceDataId(devResponse.getDataId() + 1);
-							scheduleDao.update(schedule);
+							
 						}
 						break;
 					}
 				}
 			}
+			GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {
+			};
+			scheduleDao.update(schedule);
 		}
 
-		if (mediaContents.isEmpty()) {
-			// Get default playlist
-			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
-			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
-				mediaContents = defaultPlaylist.getMediaContents();
-			}
-		}
+//		if (mediaContents.isEmpty()) {
+//			PlaylistDao playlistDao = new PlaylistDao(deviceDao);
+//			// Get default playlist
+//			Playlist defaultPlaylist = playlistDao.findDefaultPlaylist();
+//			if (defaultPlaylist != null && defaultPlaylist.getMediaContents() != null) {
+//				mediaContents = defaultPlaylist.getMediaContents();
+//			}
+//		}
 		// Generate playlist response
 		if (!mediaContents.isEmpty()) {
 			devResponse.setDataId(devResponse.getDataId() + 1);
@@ -215,10 +222,8 @@ public class DevFeeder extends HttpServlet {
 			devResponse.setMediaContents(mediaContents);
 			return true;
 		}
-		
 
 		return false;
-		
 	}
 	
 	
