@@ -171,15 +171,17 @@ public class DevFeeder extends HttpServlet {
 			return false;
 		}
 		// Check for new device schedule once every 30 seconds or more but not more often.
-		if(device.getCurrentDeviceSchedule() != null 
-				&& (new Date().getTime() - device.getCurrentDeviceSchedule().getDeviceCheckTime().getTime()) < 30000) {
+		DeviceSchedule schedule = device.getCurrentDeviceSchedule();
+		if(schedule != null && schedule.getDeviceDataId() <= devResponse.getDataId()
+				&& (new Date().getTime() - schedule.getDeviceCheckTime().getTime()) < 30000) {
 			return false;
 		}
 
 		List<MediaContent> mediaContents = new ArrayList<MediaContent>();
 		
-		if (device != null) {			
-			DeviceSchedule schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+		if (device != null) {	
+			// Generate new schedule or use current
+			schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
 			schedule.setDeviceCheckTime(new Date());
 			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
 				// Find loop for current time
