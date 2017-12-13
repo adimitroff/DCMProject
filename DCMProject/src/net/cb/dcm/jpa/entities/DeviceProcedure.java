@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.cb.dcm.enums.DevProcedureScheduleType;
 import net.cb.dcm.enums.DevProcedureType;
 
 /**
@@ -29,6 +30,7 @@ public class DeviceProcedure implements Serializable {
 
 	public DeviceProcedure() {
 		super();
+		scheduleType = DevProcedureScheduleType.DAILY;
 	}
 	
 	@Id
@@ -49,6 +51,9 @@ public class DeviceProcedure implements Serializable {
 	@Column(name = "LAST_EXECUTED_TIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastExecutedTime;
+	
+	@Column(name = "SCHEDULE_TYPE")
+	private DevProcedureScheduleType scheduleType;
 	
 	@Column
 	private String value;
@@ -99,6 +104,14 @@ public class DeviceProcedure implements Serializable {
 
 	public void setLastExecutedTime(Date lastExecutedTime) {
 		this.lastExecutedTime = lastExecutedTime;
+	}
+
+	public DevProcedureScheduleType getScheduleType() {
+		return scheduleType;
+	}
+
+	public void setScheduleType(DevProcedureScheduleType scheduleType) {
+		this.scheduleType = scheduleType;
 	}
 	
 	

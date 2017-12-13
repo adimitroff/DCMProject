@@ -172,8 +172,8 @@ public class ScheduleGeneratorSingleton {
 
 		List<MediaContent> mediaContentsToRemove = new ArrayList<>();
 		for (MediaContent mediaContent : allMediaContents) {
-			if (mediaContent.getTags() == null || mediaContent.getTags().isEmpty()
-					|| !deviceTags.containsAll(mediaContent.getTags())) {
+			if (mediaContent.getTags() != null && !mediaContent.getTags().isEmpty()
+					&& !deviceTags.containsAll(mediaContent.getTags())) {
 				mediaContentsToRemove.add(mediaContent);
 			}
 		}

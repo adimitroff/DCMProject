@@ -19,17 +19,16 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.cb.dcm.enums.DevProcedureScheduleType;
 import net.cb.dcm.enums.DevResponseDataType;
 import net.cb.dcm.enums.DeviceCommand;
 import net.cb.dcm.jpa.DeviceDAO;
 import net.cb.dcm.jpa.GenericDao;
-import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.DeviceProcedure;
 import net.cb.dcm.jpa.entities.DeviceSchedule;
 import net.cb.dcm.jpa.entities.Loop;
 import net.cb.dcm.jpa.entities.MediaContent;
-import net.cb.dcm.jpa.entities.Playlist;
 
 /**
  * Servlet for processing http request for new content from the samsung tv app
@@ -39,13 +38,11 @@ public class DevFeeder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger moLogger = LoggerFactory.getLogger(DevFeeder.class);
 
-	private DeviceDAO deviceDao;
-
 	/** {@inheritDoc} */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		deviceDao = new DeviceDAO();
+		DeviceDAO deviceDao = new DeviceDAO();
 		String loIp = request.getParameter("ip");
 		String lsServerUrl =  new StringBuilder()
 				.append("http://")
@@ -59,7 +56,7 @@ public class DevFeeder extends HttpServlet {
 		
 		if (loIp == null || loIp.isEmpty()) {
 			moLogger.debug("No device IP. Generating default response.");
-			this.getPlayList(null, loDevResponse);
+			this.getPlayList(null, loDevResponse, deviceDao);
 		} else {
 			Device loDevice = deviceDao.findDeviceByIp(loIp);
 			if (loDevice == null || loDevice.getId() <= 0) {
@@ -95,9 +92,9 @@ public class DevFeeder extends HttpServlet {
 			}
 			
 			// First check and generate response with commands
-			if(!this.getProcedure(loDevice, loDevResponse)) {
+			if(!this.getProcedure(loDevice, loDevResponse, deviceDao)) {
 				// Check for new device schedule for playlist response
-				this.getPlayList(loDevice, loDevResponse);
+				this.getPlayList(loDevice, loDevResponse, deviceDao);
 			}
 		}
 		
@@ -115,9 +112,8 @@ public class DevFeeder extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private boolean getProcedure(Device device, DevResponse devResponse)
+	private boolean getProcedure(Device device, DevResponse devResponse, DeviceDAO deviceDao)
 	{
-		// TODO check device status wake up/sleep
 		Calendar currCalendar = Calendar.getInstance();
 		Calendar calendar = Calendar.getInstance();
 		List<DeviceProcedure> deviceProcedures = device.getDeviceProcedures();
@@ -131,9 +127,12 @@ public class DevFeeder extends HttpServlet {
 				}
 			}
 			calendar.setTime(deviceProcedure.getExecutionTime());
-			calendar.set(currCalendar.get(Calendar.YEAR), currCalendar.get(Calendar.MONTH)
-					, currCalendar.get(Calendar.DAY_OF_MONTH));
+			if(deviceProcedure.getScheduleType() == DevProcedureScheduleType.DAILY) {
+				calendar.set(currCalendar.get(Calendar.YEAR), currCalendar.get(Calendar.MONTH),
+						currCalendar.get(Calendar.DAY_OF_MONTH));
+			}
 			long timeDiff = currCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			// Execute procedure up to 30 min after scheduled execution time
 			if(timeDiff >= 0 && timeDiff < (30 * 60 * 1000)) {
 				// Execute procedure
 				devResponse.setResponseDataType(DevResponseDataType.COMMAND);
@@ -167,7 +166,7 @@ public class DevFeeder extends HttpServlet {
 	 *            - Response to write json data
 	 * @throws IOException
 	 */
-	private boolean getPlayList(Device device, DevResponse devResponse) throws IOException {
+	private boolean getPlayList(Device device, DevResponse devResponse,DeviceDAO deviceDao) throws IOException {
 		if(device == null) {
 			return false;
 		}
