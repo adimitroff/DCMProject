@@ -72,7 +72,7 @@ public class Device {
 	@JoinColumn(name = "CURR_DEV_STATUS_ID", nullable = true)
 	private DeviceStatus currentDeviceStatus;
 	
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinColumn(name = "CURR_DEV_SCHEDULE_ID", nullable = true)
 	private DeviceSchedule currentDeviceSchedule;
 	
