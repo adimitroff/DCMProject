@@ -43,6 +43,12 @@ public class MediaContent {
 	@Column(length=260)
 	private String thumbnail;
 	
+	@Column(length=260, nullable = true)
+	private String thumbnaiLarge;
+	
+	@Column(length=260, nullable = true)
+	private String thumbnailMedium;
+	
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
 	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
@@ -133,6 +139,22 @@ public class MediaContent {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public String getThumbnaiLarge() {
+		return thumbnaiLarge;
+	}
+
+	public void setThumbnaiLarge(String thumbnaiLarge) {
+		this.thumbnaiLarge = thumbnaiLarge;
+	}
+
+	public String getThumbnailMedium() {
+		return thumbnailMedium;
+	}
+
+	public void setThumbnailMedium(String thumbnailMedium) {
+		this.thumbnailMedium = thumbnailMedium;
 	}
 	
 }
