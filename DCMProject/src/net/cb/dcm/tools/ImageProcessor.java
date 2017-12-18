@@ -5,8 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Java2DFrameConverter;
 
 /**
  * Class with static methods for operations with images(scaling ...)
@@ -103,4 +107,67 @@ public class ImageProcessor {
 
 	    return new Dimension(newWidth, newHeight);
 	}
+	
+	public static String[] saveThumbsForVideo(String srcFilePath, String destDirPath)
+	{
+		File srcFile = new File(srcFilePath);
+		if(!srcFile.exists()) {
+			return null;
+		}
+		BufferedImage image = ImageProcessor.genImageFromVideo(srcFilePath, 1);
+		if(image == null) {
+			return null;
+		}
+		BufferedImage[] thumbnails = ImageProcessor.generateThumbnails(image);
+		
+		String fileName = srcFile.getName();
+		int indexOf = fileName.lastIndexOf('.');
+		if(indexOf > 0) {
+			fileName = fileName.substring(0, indexOf);
+		}
+		try {
+			String[] fileNames = new String[] {
+					fileName + "_" + LARGE_THUMB_SIZE + ".jpg",
+					fileName + "_" + MEDIUM_THUMB_SIZE + ".jpg", 
+					fileName + "_" + DEFAULT_THUMB_SIZE + ".jpg"
+					};
+			ImageIO.write(thumbnails[0], "jpg", new File(destDirPath + fileNames[0]));
+			ImageIO.write(thumbnails[1], "jpg", new File(destDirPath + fileNames[1]));
+			ImageIO.write(thumbnails[2], "jpg", new File(destDirPath + fileNames[2]));
+			return fileNames;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static BufferedImage genImageFromVideo(String srcFilePath, int durationSeconds) {
+		FFmpegFrameGrabber frameGrabber = null;
+		try {
+			frameGrabber = new FFmpegFrameGrabber(srcFilePath);
+			frameGrabber.start();
+
+			// Not sure start frame 0 or 1, so going to use first as 1
+			int frameNumber = Math.max(1, (int) frameGrabber.getFrameRate() * durationSeconds);
+			frameNumber = Math.min(frameNumber, frameGrabber.getLengthInFrames());
+			frameGrabber.setFrameNumber(frameNumber);
+			Java2DFrameConverter converter = new Java2DFrameConverter();
+			BufferedImage image = converter.convert(frameGrabber.grab());
+			frameGrabber.stop();
+			return image;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if(frameGrabber!= null) {
+				try {
+					frameGrabber.close();
+				} catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
+	
 }
