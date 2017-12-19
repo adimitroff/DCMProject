@@ -4,7 +4,7 @@
 	<Page title="Device Content Management" showNavButton="true"
     	navButtonTap="onNavigateBack">
 		<Table id="idProductsTable" inset="false" items="{/Devices}"
-			itemPress="rowSelected">
+			itemPress="onRowSelected" templateShareable="true" >
 			<headerToolbar>
 				<Toolbar>
 					<Label text="Devices"></Label>
@@ -29,6 +29,12 @@
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Model" />
 				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Status" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Functions" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem type="Detail" detailPress="onDetailPress">
@@ -39,6 +45,21 @@
 						<Text text="{DevType}" />
 						<Text text="{Ip}" />
 						<Text text="{Model}" />
+						<List id="idList"
+							  items="{DeviceStatusDetails/DeviceStatusValueDetails}" 
+							  growing="true"
+							  growingThreshold="2"
+						 	  growingScrollToLoad="false">
+							<items>
+								<StandardListItem templateShareable="true"
+									title="{Id}"
+									description="{Value}"
+								/>
+							</items>
+							
+						</List>
+						
+						<Button id="ShowStatusBtn" icon="sap-icon://add" press="onButtonPress"/>
 					</cells>
 				</ColumnListItem>
 			</items>
