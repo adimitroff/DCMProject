@@ -47,8 +47,8 @@ Main.onLoad = function()
 	
 	// Load app
 	App.onLoad();
-	// Check for update every half second (500ms)
-	setInterval(Main.onUpdate, 500);
+	// Check for update every 5 second (5000ms)
+	setInterval(Main.onUpdate, 5000);
 };
 
 Main.onUnload = function()

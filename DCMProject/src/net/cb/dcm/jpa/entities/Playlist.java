@@ -48,13 +48,13 @@ public class Playlist {
 	@Temporal(TemporalType.DATE)
 	private Date validTo;
 	
-	@OneToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+	@OneToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.LAZY)
 	@JoinTable(name = "playlist_media_contents", 
 	joinColumns = @JoinColumn(name = "PLAYLIST_ID"), 
 	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID"))
 	private List<MediaContent> mediaContents;
 	
-	@OneToMany(mappedBy="playlist", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+	@OneToMany(mappedBy="playlist", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	private List<PlaylistSchedule> schedules;
 
 	public long getId() {
