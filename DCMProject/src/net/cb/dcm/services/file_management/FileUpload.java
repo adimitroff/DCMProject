@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import net.cb.dcm.jpa.SettingDao;
+import net.cb.dcm.jpa.entities.Setting;
+
 /**
  * Servlet for processing http request for new content from the samsung tv app
  * and other smart devices.
@@ -28,7 +31,6 @@ public class FileUpload extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger moLogger = Logger.getLogger(FileUpload.class.getCanonicalName());
 	
-	private static final String SERVER_PATH = "C:\\web_content";
 
 	/** {@inheritDoc} */
 	@Override
@@ -52,7 +54,12 @@ public class FileUpload extends HttpServlet {
 	    final PrintWriter writer = response.getWriter();
 
 	    try {
-	        out = new FileOutputStream(new File(SERVER_PATH + File.separator
+	    	SettingDao settingDao = new SettingDao();
+	    	Setting setingMediaPath = settingDao.findAllAsMap().get(SettingDao.SETTING_MEDIA_PATH);
+	    	if(setingMediaPath == null) {
+	    		throw new FileNotFoundException("Media path setting not specified.");
+	    	}
+	        out = new FileOutputStream(new File(setingMediaPath.getValue() + File.separator
 	                + fileName));
 	        filecontent = filePart.getInputStream();
 
@@ -63,7 +70,7 @@ public class FileUpload extends HttpServlet {
 	            out.write(bytes, 0, read);
 	        }
 	        moLogger.log(Level.INFO, "File{0}being uploaded to {1}", 
-	                new Object[]{fileName, SERVER_PATH});
+	                new Object[]{fileName, setingMediaPath.getValue()});
 	    } catch (FileNotFoundException fne) {
 	        writer.println("You either did not specify a file to upload or are "
 	                + "trying to upload a file to a protected or nonexistent "

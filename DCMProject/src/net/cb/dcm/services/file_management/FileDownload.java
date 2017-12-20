@@ -2,6 +2,7 @@ package net.cb.dcm.services.file_management;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -11,10 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.cb.dcm.jpa.SettingDao;
+import net.cb.dcm.jpa.entities.Setting;
+
 @WebServlet("/get")
 public class FileDownload extends HttpServlet {
 	
-	private static final String SERVER_PATH = "C:\\web_content";
 	private static final long serialVersionUID = 4838640584214645172L;
 	@Override
 	protected void doGet(HttpServletRequest ioRequest, HttpServletResponse ioResponse) throws ServletException, IOException {
@@ -46,7 +49,12 @@ public class FileDownload extends HttpServlet {
 
         ioResponse.setHeader("Content-disposition","attachment; filename=" + lsFileName);
 
-        File loFile = new File(SERVER_PATH + File.separator + lsFileName);
+    	SettingDao settingDao = new SettingDao();
+    	Setting setingMediaPath = settingDao.findAllAsMap().get(SettingDao.SETTING_MEDIA_PATH);
+    	if(setingMediaPath == null) {
+    		throw new FileNotFoundException("Media path setting not specified!");
+    	}
+        File loFile = new File(setingMediaPath.getValue() + File.separator + lsFileName);
 
         // This should send the file to browser
         OutputStream loOutputStream = ioResponse.getOutputStream();
