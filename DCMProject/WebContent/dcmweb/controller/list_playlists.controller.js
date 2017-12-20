@@ -25,7 +25,8 @@ sap.ui
 										onAdd : function(evt) {
 											var oRouter = sap.ui.core.UIComponent
 													.getRouterFor(this);
-											oRouter.navTo("AddPlaylist");
+											//oRouter.navTo("AddPlaylist");
+											oRouter.navTo("EditPlaylist", {id:"0"});
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
