@@ -145,6 +145,11 @@
 					"pattern": "EditSetting/{id}",
 					"name": "EditSetting",
 					"target": "EditSetting"
+				},
+				{
+					"pattern": "ListDeviceStatus/{id}",
+					"name": "ListDeviceStatus",
+					"target": "ListDeviceStatus"
 				}
 				
 			],
@@ -196,6 +201,9 @@
 				},
 				"EditSetting": {
 					"viewName": "edit_setting"
+				},
+				"ListDeviceStatus": {
+					"viewName": "list_device_status"
 				}
 			}
 		},

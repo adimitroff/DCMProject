@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.cb.dcm.jpa.SettingDao;
 import net.cb.dcm.jpa.entities.Setting;
+import net.cb.dcm.tools.ExpressionValidator;
+import net.cb.dcm.tools.ValidationPatterns;
 
 @WebServlet("/get")
 public class FileDownload extends HttpServlet {
@@ -22,7 +24,7 @@ public class FileDownload extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest ioRequest, HttpServletResponse ioResponse) throws ServletException, IOException {
         String lsFileName = ioRequest.getParameter("filename");//.toLowerCase();
-        if (lsFileName == null || lsFileName.equals("")){
+        if ( lsFileName == null || lsFileName.equals("") || !ExpressionValidator.isStringValid( lsFileName, ValidationPatterns.FILE_NAME_EXPRESSION ) ){
         	return;
         }
         String lsFileExtension = getFileExtension(lsFileName);
