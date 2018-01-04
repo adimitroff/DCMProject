@@ -1,9 +1,7 @@
 sap.ui
 		.define(
 				[ 'sap/ui/core/mvc/Controller',
-				'sap/ui/core/routing/History',
-				'sap/m/MessageToast',
-				'sap/m/MessageBox' ],
+				'sap/ui/core/routing/History' ],
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
@@ -26,7 +24,12 @@ sap.ui
 						loArgs = ioEvent.getParameter("arguments");
 						var lvId = loArgs.id;
 						loView = this.getView();
-
+						
+						if (lvId == 0){
+							this.clearScreenFields();
+							return;
+						}
+						
 						loView.bindElement({
 							path : "/Playlists(" + lvId + ")",
 							events : {
@@ -127,6 +130,16 @@ sap.ui
 						}
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 						oRouter.navTo("ListPlaylistRelatedMediaContents", {id:lvId});
+					},
+					clearScreenFields : function(){
+						this.getView().byId("id").setValue("");
+						this.getView().byId("name").setValue("");
+						this.getView().byId("description").setValue("");
+						
+						this.getView().byId("default").selected = false;
+						this.getView().byId("active").selected = false;
+						
+						this.getView().byId("priority").setValue("");
 					}
 			});
 
