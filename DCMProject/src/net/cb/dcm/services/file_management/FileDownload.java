@@ -35,6 +35,7 @@ public class FileDownload extends HttpServlet {
         	lsFileType = "text/plain";
         	break;
         case "jpg":
+        case "jpeg":
         	lsFileType = "image/jpg";
         	break;
         case "png":
