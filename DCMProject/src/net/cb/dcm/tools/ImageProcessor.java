@@ -22,6 +22,9 @@ public class ImageProcessor {
 	public final static int DEFAULT_THUMB_SIZE = 200;
 	public final static int LARGE_THUMB_SIZE = 800;
 	public final static int MEDIUM_THUMB_SIZE = 400;
+	
+	public final static String THUMB_DIR = "thumb";
+	public final static String TEMP_DIR = "temp";
 
 	/**
 	 * 
@@ -68,14 +71,33 @@ public class ImageProcessor {
 		BufferedImage[] scaledImages = new BufferedImage[3];
 		scaledImages[0] = scaleImage(image, LARGE_THUMB_SIZE);
 		scaledImages[1] = scaleImage(scaledImages[0],MEDIUM_THUMB_SIZE);
-		scaledImages[2] = scaleImage(scaledImages[1], DEFAULT_THUMB_SIZE);
-		
-		// Sample usage to safe thumbnails
-//		ImageIO.write(scaledImages[0], "jpg", new File("1_l.jpg")); 
-//		ImageIO.write(scaledImages[1], "jpg", new File("1_m.jpg")); 
-//		ImageIO.write(scaledImages[2], "jpg", new File("1_s.jpg")); 
+		scaledImages[2] = scaleImage(scaledImages[1], DEFAULT_THUMB_SIZE);		
 		
 		return scaledImages;
+	}
+	
+	
+	public static boolean generateAndSaveThumbnails(BufferedImage image, String fileName, String destDirPath) {
+		BufferedImage[] thumbnails = generateThumbnails(image);
+//		String fileName = srcFile.getName();
+		int indexOf = fileName.lastIndexOf('.');
+		if(indexOf > 0) {
+			fileName = fileName.substring(0, indexOf);
+		}
+		try {
+			String[] fileNames = new String[] {
+					fileName + "_" + LARGE_THUMB_SIZE + ".jpg",
+					fileName + "_" + MEDIUM_THUMB_SIZE + ".jpg", 
+					fileName + "_" + DEFAULT_THUMB_SIZE + ".jpg"
+					};
+			ImageIO.write(thumbnails[0], "jpg", new File(destDirPath + fileNames[0]));
+			ImageIO.write(thumbnails[1], "jpg", new File(destDirPath + fileNames[1]));
+			ImageIO.write(thumbnails[2], "jpg", new File(destDirPath + fileNames[2]));
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	/**
@@ -108,38 +130,41 @@ public class ImageProcessor {
 	    return new Dimension(newWidth, newHeight);
 	}
 	
-	public static String[] saveThumbsForVideo(String srcFilePath, String destDirPath)
+	public static boolean generateAndSaveThumbnails(String srcFilePath)
 	{
 		File srcFile = new File(srcFilePath);
 		if(!srcFile.exists()) {
-			return null;
+			return false;
 		}
-		BufferedImage image = ImageProcessor.genImageFromVideo(srcFilePath, 1);
-		if(image == null) {
-			return null;
+		int extIndex = srcFile.getName().lastIndexOf('.');
+		if(extIndex == -1 || extIndex == (srcFile.getName().length() -1)) {
+			return false;
 		}
-		BufferedImage[] thumbnails = ImageProcessor.generateThumbnails(image);
 		
-		String fileName = srcFile.getName();
-		int indexOf = fileName.lastIndexOf('.');
-		if(indexOf > 0) {
-			fileName = fileName.substring(0, indexOf);
-		}
+		String fileExt = srcFile.getName().substring(extIndex + 1).toLowerCase();
 		try {
-			String[] fileNames = new String[] {
-					fileName + "_" + LARGE_THUMB_SIZE + ".jpg",
-					fileName + "_" + MEDIUM_THUMB_SIZE + ".jpg", 
-					fileName + "_" + DEFAULT_THUMB_SIZE + ".jpg"
-					};
-			ImageIO.write(thumbnails[0], "jpg", new File(destDirPath + fileNames[0]));
-			ImageIO.write(thumbnails[1], "jpg", new File(destDirPath + fileNames[1]));
-			ImageIO.write(thumbnails[2], "jpg", new File(destDirPath + fileNames[2]));
-			return fileNames;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			BufferedImage image;
+			if (fileExt.equals("jpg") || fileExt.equals("jpeg") || fileExt.equals("png")) {
+				// Image
+				image = ImageIO.read(srcFile);
+			} else {
+				// Video
+				image = ImageProcessor.genImageFromVideo(srcFilePath, 1);
+				if (image == null) {
+					return false;
+				}
+			}
+			String thumbsDir = srcFile.getParent() + File.separatorChar + THUMB_DIR  + File.separatorChar;
+			File fileDir = new File(thumbsDir);
+			if(!fileDir.exists()) {
+				fileDir.mkdirs();
+			}
+			return ImageProcessor.generateAndSaveThumbnails(image, srcFile.getName(), thumbsDir);
+		} catch (Exception e) {
+			return false;
 		}
 	}
+	
 	
 	public static BufferedImage genImageFromVideo(String srcFilePath, int durationSeconds) {
 		FFmpegFrameGrabber frameGrabber = null;
