@@ -22,6 +22,7 @@ import net.cb.dcm.jpa.GenericDao;
 import net.cb.dcm.jpa.MediaContentDao;
 import net.cb.dcm.jpa.PlaylistDao;
 import net.cb.dcm.jpa.entities.Device;
+import net.cb.dcm.jpa.entities.DeviceGroup;
 import net.cb.dcm.jpa.entities.DevicePropertyType;
 import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Playlist;
@@ -65,7 +66,7 @@ public class DbTest {
 		assertTrue(properties.size() > 0);
 		assertTrue(properties.get(0).getId() > 0);
 
-		for (int i = 100; i <= 255; i++) {
+		for (int i = 100; i <= 110; i++) {
 			String ip = "127.0.0." + i;
 			String serialNumber = "SAMSUTV100" + i;
 			Device device = deviceDao.registerNewDevice(ip, serialNumber);
@@ -611,7 +612,20 @@ public class DbTest {
 		playlistDao.insertAll(playlists);
 		
 	}
-
+	
+	@Test
+	public void test6InsertDeviceGroups() {
+		DeviceDAO deviceDao = new DeviceDAO();
+		List<Device> devices = deviceDao.findAll();
+		DeviceGroup deviceGroup = new DeviceGroup();
+		deviceGroup.setName("Test group 1");
+		deviceGroup.setDescription("Test group 1 description");
+		deviceGroup.setDevices(devices);
+		GenericDao<DeviceGroup> groupDao = new GenericDao<DeviceGroup>(deviceDao) {
+		};
+		groupDao.insert(deviceGroup);
+	}
+	
 
 	public List<Property> createProperties() {
 		List<Property> properties = new ArrayList<>();

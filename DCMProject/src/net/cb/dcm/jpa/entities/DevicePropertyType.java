@@ -37,8 +37,8 @@ public class DevicePropertyType implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_prop_type_properties", 
-		joinColumns = @JoinColumn(name = "DEV_PROP_TYPE_ID", referencedColumnName = "ID"), 
-		inverseJoinColumns = @JoinColumn(name = "PROPERTY_ID", referencedColumnName = "ID"))
+		joinColumns = @JoinColumn(name = "DEV_PROP_TYPE_ID"), 
+		inverseJoinColumns = @JoinColumn(name = "PROPERTY_ID"))
 	private List<Property> properties;
 
 	public DevicePropertyType() {
