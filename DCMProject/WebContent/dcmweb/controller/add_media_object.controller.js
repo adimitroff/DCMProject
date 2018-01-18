@@ -93,8 +93,12 @@ sap.ui
 						    );
 							return;
 						}
+						
+//						var theNewMediaId = 0;
+//						var modelContext;
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
+							//modelContext = oModel.createEntry("/MediaContents", vProperties);
 							oModel.createEntry("/MediaContents", vProperties);
 
 						} else {
@@ -107,10 +111,19 @@ sap.ui
 							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
 							oModel.update("", vProperties, mParameters);
 						}
+						
 						oModel.submitChanges(this._fnSuccess, this._fnError);
 						oModel.refresh();
+						//theNewMediaId = modelContext.getObject();//getProperty("Id");
+						//alert( "TestId : "+ theNewMediaId );
 						var oFileUploader = this.getView().byId("fileUploader");
+						//oFileUploader.addHeaderParameter(new sap.ui.unified.FileUploaderParameter("MediaId", "TestId"));
+						//oFileUploader.setAdditionalData("TestMediaId");
+//						var uri = oFileUploader.getUploadUrl();
+//						oFileUploader.setUploadUrl(uri.concat( "?id=" + theNewMediaId ));
 						oFileUploader.upload();
+//						var uri = oFileUploader.getUploadUrl();
+//						oFileUploader.setUploadUrl( uri.substring(0, uri.indexOf('?')) );
 						this.navigateBack();
 
 					},

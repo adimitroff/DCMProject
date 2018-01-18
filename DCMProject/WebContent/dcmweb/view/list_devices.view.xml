@@ -3,8 +3,22 @@
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Device Content Management" showNavButton="true"
     	navButtonTap="onNavigateBack">
-		<Table id="idProductsTable" inset="false" items="{/Devices}"
-			itemPress="onRowSelected" templateShareable="true" >
+		<Table id="idProductsTable" inset="false"
+			   itemPress="onRowSelected" templateShareable="true" 
+			   growing="true" growingThreshold="20"
+			   growingScrollToLoad="true"
+			   width="auto"
+			   items="{
+			      path: '/Devices',
+			      sorter: {
+			         path: 'Name',
+			         descending: false
+			      },
+			      parameters: {
+			         'expand': 'DeviceStatusDetails/DeviceStatusValueDetails/PropertyDetails'
+			      }
+			
+			   }">
 			<headerToolbar>
 				<Toolbar>
 					<Label text="Devices"></Label>
@@ -29,7 +43,7 @@
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Model" />
 				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Left">
 					<Text text="Status" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
@@ -46,20 +60,22 @@
 						<Text text="{Ip}" />
 						<Text text="{Model}" />
 						<List id="idList"
-							  items="{DeviceStatusDetails/DeviceStatusValueDetails}" 
+							  items="{DeviceStatusDetails/DeviceStatusValueDetails}"  
 							  growing="true"
 							  growingThreshold="2"
 						 	  growingScrollToLoad="false">
 							<items>
-								<StandardListItem templateShareable="true"
-									title="{Id}"
-									description="{Value}"
-								/>
+								<DisplayListItem templateShareable="true"
+								label="{PropertyDetails/Name}"
+								value="{Value}" />
 							</items>
 							
 						</List>
+						<Panel>
+							<Button id="ShowStatusBtn" icon="sap-icon://settings" press="onButtonPress"/>
+							<Button id="ShowProcedureBtn" icon="sap-icon://settings" press="onProcedureButtonPress"/>
+						</Panel>
 						
-						<Button id="ShowStatusBtn" icon="sap-icon://add" press="onButtonPress"/>
 					</cells>
 				</ColumnListItem>
 			</items>

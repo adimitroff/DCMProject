@@ -36,6 +36,12 @@ sap.ui
 											
 											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											oRouter.navTo("ListDeviceStatus", {id:lvId});
+										},
+										onProcedureButtonPress : function(ioEvent) {
+											var lvId = ioEvent.getSource().getBindingContext().getProperty("Id");
+											
+											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+											oRouter.navTo("ListDeviceProcedures", {id:lvId});
 										}
 									});
 

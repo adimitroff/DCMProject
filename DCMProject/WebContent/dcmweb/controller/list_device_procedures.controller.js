@@ -8,7 +8,7 @@ sap.ui
 
 					var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.list_device_status",
+									"net.cb.dcm.frontend.controller.list_device_procedures",
 									{	
 										relPath:"",
 										onNavigateBack : function(event) {
@@ -25,7 +25,7 @@ sap.ui
 										onInit : function(evt) {
 											var loRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											
-											var loRoute = loRouter.getRoute("ListDeviceStatus");
+											var loRoute = loRouter.getRoute("ListDeviceProcedures");
 											if (loRoute !== undefined) {												
 												loRoute.attachMatched(this._onRouteMatched, this);
 											}
@@ -40,16 +40,24 @@ sap.ui
 											this.updateTableBinding();
 											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 										},
+										rowSelected : function(event) {
+											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
+											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+											var lvId = event.getSource().getBindingContext().getProperty("Id");
+											oRouter.navTo("EditDeviceProcedure", {id:lvId});
+										},
 										updateTableBinding: function(){
-											var oTable = this.getView().byId("idStatusTable"); 
+											var oTable = this.getView().byId("idProceduresTable"); 
 											var oTemplate = new sap.m.ColumnListItem({
 											    cells:[
 											        new sap.m.ObjectIdentifier({title:"{Id}"}),
-											        new sap.m.Text({text:"{PropertyDetails/Name}"}),
-											        new sap.m.Text({text:"{Value}"})
+											        new sap.m.Text({text:"{LastExecutedTime}"}),
+											        new sap.m.Text({text:"{ExecutionTime}"}),
+											        new sap.m.Text({text:"{ProcedureType}"}),
+											        new sap.m.Button({ id:"ShowDetailsBtn", icon:"sap-icon://settings", press:"rowSelected"})
 											        ]
-											});
-											var path = this.relPath + "/DeviceStatusDetails/DeviceStatusValueDetails";
+											});//mode="SingleSelectMaster" selectionChange="rowSelected"
+											var path = this.relPath + "/DeviceProcedureDetails";
 											oTable.bindItems(path,oTemplate);
 										}
 									});
