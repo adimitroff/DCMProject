@@ -1,0 +1,42 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_device_procedures"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Device Procedures" showNavButton="true" navButtonTap="onNavigateBack">
+		<Table id="idProceduresTable" items="{/Devices(1L)/DeviceProcedureDetails}" 
+		inset="false" itemPress="rowSelected" >
+			<headerToolbar>
+				<Toolbar>
+					<Label text="Procedures"></Label>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="Id" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Last Executed At" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Execution Time" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Procedure" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Op" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier title="{Id}" />
+						<Text text="{LastExecutedTime}" />
+						<Text text="{ExecutionTime}" />
+						<Text text="{ProcedureType}" />
+						<Button id="ShowDetailsBtn" icon="sap-icon://settings" press="rowSelected"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Page>
+</core:View>

@@ -3,7 +3,19 @@
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Device Status" showNavButton="true"
     	navButtonTap="onNavigateBack">
-		<Table id="idStatusTable" inset="false" items="{/Devices(1L)/DeviceStatusDetails/DeviceStatusValueDetails}" templateShareable="true">
+		<Table id="idStatusTable" inset="false" 
+			   items="{
+			      path: '/Devices(1L)/DeviceStatusDetails/DeviceStatusValueDetails',
+			      sorter: {
+			         path: 'Id',
+			         descending: true
+			      },
+			      parameters: {
+			         'expand': 'PropertyDetails'
+			      }
+			
+			   }"
+			   templateShareable="true">
 			<headerToolbar>
 				<Toolbar>
 					<Label text="Device Status"></Label>
