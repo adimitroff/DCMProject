@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
+
+import net.cb.dcm.jpa.TagDao;
 
 @Entity
 @Table(name = "tags")
@@ -57,6 +60,11 @@ public class Tag {
 
 	public void setSystem(boolean system) {
 		this.system = system;
+	}
+	
+	@PreRemove
+	private void beforeRemove() {
+		new TagDao().removeRelations(this);
 	}
 
 	@Override
