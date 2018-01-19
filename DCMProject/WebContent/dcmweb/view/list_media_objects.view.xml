@@ -14,11 +14,9 @@
 				</Toolbar>
 			</headerToolbar>
 			<columns>
-				<!--
 				<Column>
 					<Text text="image"/>
 				</Column>
-				-->
 				<Column>
 					<Text text="Id" />
 				</Column>
@@ -38,7 +36,7 @@
 			<items>
 				<ColumnListItem type="Detail" detailPress="onDetailPress">
 					<cells>
-						<!--<Image src="http://localhost:8080/DCMProject/get?filename={Thumbnail}"/>-->
+						<Image src="http://localhost:8080/DCMProject/get?media={Id}"/>
 						<ObjectIdentifier title="{Id}" />
 						<Text text="{Name}" />
 						<Text text="{Description}" />
