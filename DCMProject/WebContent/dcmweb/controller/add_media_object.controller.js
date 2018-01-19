@@ -66,10 +66,13 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
-						vProperties.MediaType = this.getView().byId(
-								"media_type").getValue();
-						vProperties.Duration = this.getView().byId(
-								"duration").getValue();
+						vProperties.MediaType = "OTHER";
+						
+						vProperties.Duration = this.getView().byId("duration").getValue();
+						if( !vProperties.Duration || parseInt(vProperties.Duration) < 1 || isNaN( parseInt(vProperties.Duration) ) ){
+							vProperties.Duration = "10";
+						}
+						
 						vProperties.FilePath = this.getView().byId(
 							"file").getValue();
 						if (vProperties.FilePath == undefined ||
@@ -197,7 +200,6 @@ sap.ui
 						this.getView().byId("id").setValue("");
 						this.getView().byId("name").setValue("");
 						this.getView().byId("description").setValue("");
-						this.getView().byId("media_type").setValue("");
 						this.getView().byId("duration").setValue("");
 						this.getView().byId("file").setValue("");
 					}

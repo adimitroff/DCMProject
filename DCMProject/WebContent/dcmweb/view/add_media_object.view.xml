@@ -19,16 +19,14 @@
 						<Input id="name" value="{Name}" />
 						<Label text="Description" />
 						<Input id="description" value="{Description}" />
-						<Label text="Media Type" />
-						<Input id="media_type" value="{MediaType}" />
-						<Label text="Duration" />
-						<Input id="duration" value="{Duration}" />
+						<Label text="Image Duration" />
+						<Input id="duration" value="{Duration}" placeholder="Default value is 10 seconds."/>
 						<Label text="File" />
 						<Input id="file" value="{FilePath}" editable="false" />
 						<u:FileUploader id="fileUploader" name="fileUploader"
 							uploadUrl="http://localhost:8080/DCMProject/upload" tooltip="Upload your file to the server"
 							uploadComplete="handleUploadComplete" change="handleValueChange"
-							typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="jpg,mpeg,avi"
+							typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="jpg,mp4,mpeg,avi"
 							placeholder="Choose a file for Upload...">
 						</u:FileUploader>
 					</f:content>

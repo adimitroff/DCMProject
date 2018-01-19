@@ -1,0 +1,61 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_device_schedule"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Device Schedule" showNavButton="true"
+    	navButtonTap="onNavigateBack">
+		<Table id="idScheduleTable" inset="false" 
+			   items="{
+			      path: '/Devices(1L)/DeviceScheduleDetails/LoopDetails',
+			      sorter: {
+			         path: 'Id',
+			         descending: true
+			      },
+			      parameters: {
+			         'expand': 'MediaContentDetails'
+			      }
+			
+			   }"
+			   templateShareable="true">
+			<headerToolbar>
+				<Toolbar>
+					<Label text="Device Schedule"></Label>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="Id" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Valid from" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Valid to" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Media list" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier id="idScheduleId" title="{Id}" />
+						<Text id="idScheduleVFrom" text="{ValidFrom}" />
+						<Text id="idScheduleVTo" text="{ValidTo}" />
+						<List id="idLoopList"
+							  items="{MediaContentDetails}"  
+							  growing="true"
+							  growingThreshold="2"
+						 	  growingScrollToLoad="false">
+							<items>
+								<DisplayListItem templateShareable="true"
+								label="{Name}"
+								value="{Duration}" />
+							</items>
+							
+						</List>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Page>
+</core:View>

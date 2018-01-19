@@ -160,6 +160,11 @@
 					"pattern": "EditDeviceProcedure/{id}",
 					"name": "EditDeviceProcedure",
 					"target": "EditDeviceProcedure"
+				},
+				{
+					"pattern": "ListDeviceSchedule/{id}",
+					"name": "ListDeviceSchedule",
+					"target": "ListDeviceSchedule"
 				}
 				
 			],
@@ -220,6 +225,9 @@
 				},
 				"EditDeviceProcedure" : {
 					"viewName": "edit_device_procedures"
+				},
+				"ListDeviceSchedule": {
+					"viewName": "list_device_schedule"
 				}
 			}
 		},
