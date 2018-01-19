@@ -63,8 +63,8 @@ public class Device {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_tag_rel", 
-		joinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"), 
-		inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+		joinColumns = @JoinColumn(name = "DEVICE_ID"), 
+		inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
 	private List<Tag> tags;
 
 	

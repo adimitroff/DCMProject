@@ -54,7 +54,8 @@ public class Playlist {
 	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID"))
 	private List<MediaContent> mediaContents;
 	
-	@OneToMany(mappedBy="playlist", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	@OneToMany(mappedBy="playlist", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST},
+			orphanRemoval = true)
 	private List<PlaylistSchedule> schedules;
 
 	public long getId() {
@@ -136,4 +137,5 @@ public class Playlist {
 	public void setSchedules(List<PlaylistSchedule> schedules) {
 		this.schedules = schedules;
 	} 
+	
 }

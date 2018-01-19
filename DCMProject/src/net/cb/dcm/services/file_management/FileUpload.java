@@ -23,7 +23,10 @@ import javax.servlet.http.Part;
 import org.apache.commons.net.ftp.FTPClient;
 import org.junit.Assert;
 
+import net.cb.dcm.enums.MediaObjectType;
+import net.cb.dcm.jpa.MediaContentDao;
 import net.cb.dcm.jpa.SettingDao;
+import net.cb.dcm.jpa.entities.MediaContent;
 import net.cb.dcm.jpa.entities.Setting;
 import net.cb.dcm.tools.ImageProcessor;
 
@@ -48,7 +51,7 @@ public class FileUpload extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
+		
 
 		// Create path components to save the file
 		final Part filePart = request.getPart("fileUploader");
@@ -58,7 +61,14 @@ public class FileUpload extends HttpServlet {
 		InputStream filecontent = null;
 		InputStream localFileInputStream = null;
 		final PrintWriter writer = response.getWriter();
-		SettingDao settingDao = new SettingDao();
+		MediaContentDao mediaContentDao = new MediaContentDao();
+		MediaContent mediaContent = mediaContentDao.findLastAdded();
+		if(mediaContent == null || mediaContent.getFilePath() == null || !mediaContent.getFilePath().equals(fileName)) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+		SettingDao settingDao = new SettingDao(mediaContentDao);
+		response.setContentType("text/html;charset=UTF-8");
 		try {
 
 			Map<String, Setting> settings = settingDao.findAllAsMap();
@@ -66,7 +76,9 @@ public class FileUpload extends HttpServlet {
 			if (setingMediaPath == null) {
 				throw new FileNotFoundException("Media path setting not specified.");
 			}
-			String filePath = setingMediaPath.getValue() + File.separator + fileName;
+			// Change file name
+			String saveFileName = generateFileName(fileName);
+			String filePath = setingMediaPath.getValue() + File.separator + saveFileName;
 			out = new FileOutputStream(new File(filePath));
 			filecontent = filePart.getInputStream();
 
@@ -76,10 +88,29 @@ public class FileUpload extends HttpServlet {
 			while ((read = filecontent.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
 			}
+			mediaContent.setFilePath(saveFileName);
+			
+			
 			moLogger.log(Level.INFO, "File{0}being uploaded to {1}",
-					new Object[] { fileName, setingMediaPath.getValue() });
+					new Object[] { saveFileName, setingMediaPath.getValue() });
 
-			ImageProcessor.generateAndSaveThumbnails(filePath);
+			// Generate thumbnails
+			int mediaType = (int) ImageProcessor.generateAndSaveThumbnails(filePath);
+			// Set media type
+			switch (mediaType) {
+			case ImageProcessor.MEDIA_TYPE_IMAGE:
+				mediaContent.setMediaType(MediaObjectType.JPEG);
+				break;
+			case ImageProcessor.MEDIA_TYPE_UNKNOWN:
+				break;
+			default:
+				mediaContent.setMediaType(MediaObjectType.MPEG);
+				mediaContent.setDuration(mediaType);
+				break;
+			}
+			// Persist media content
+			mediaContentDao.update(mediaContent);
+			
 			// Upload file to the ftp server
 			Setting settingFtpUrl = settings.get(SettingDao.SETTING_FTP_SERVER);
 			if (settingFtpUrl != null && settingFtpUrl.getValue() != null
@@ -128,5 +159,17 @@ public class FileUpload extends HttpServlet {
 			}
 		}
 		return null;
+	}
+	
+	private String generateFileName(String srcFileName) {
+		String fileName = srcFileName;
+		int indexOf = srcFileName.lastIndexOf('.');
+		String ext = "";
+		if(indexOf > 0) {
+			fileName = srcFileName.substring(0, indexOf);
+			ext = srcFileName.substring(indexOf);
+		}
+		
+		return fileName + "_" + System.currentTimeMillis() + ext;
 	}
 }

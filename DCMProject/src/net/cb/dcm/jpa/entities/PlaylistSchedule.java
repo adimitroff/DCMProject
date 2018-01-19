@@ -36,7 +36,7 @@ public class PlaylistSchedule implements Serializable {
 	private long id;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "PLAYLIST_ID", referencedColumnName = "ID", nullable = false)
+	@JoinColumn(name = "PLAYLIST_ID", nullable = false)
 	private Playlist playlist;
 	
 	@Column

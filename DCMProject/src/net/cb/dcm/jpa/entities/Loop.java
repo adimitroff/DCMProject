@@ -31,8 +31,8 @@ public class Loop implements Serializable {
 	
 	@OneToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_loop_media_contents", 
-	joinColumns = @JoinColumn(name = "LOOP_ID", referencedColumnName = "ID"), 
-	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"))
+	joinColumns = @JoinColumn(name = "LOOP_ID"), 
+	inverseJoinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID"))
 	private List<MediaContent> mediaContents;
 	
 	@ManyToOne

@@ -12,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 import net.cb.dcm.enums.MediaObjectType;
+import net.cb.dcm.jpa.MediaContentDao;
 
 
 @Entity
@@ -51,8 +53,8 @@ public class MediaContent {
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
-	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID", referencedColumnName = "ID"), 
-	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+	joinColumns = @JoinColumn(name = "MEDIA_CONTENT_ID"), 
+	inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
 	private List<Tag> tags;
 
 	public long getId() {
@@ -117,6 +119,11 @@ public class MediaContent {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+	
+	@PreRemove
+	private void beforeRemove() {
+		new MediaContentDao().removeRelations(this);
 	}
 	
 	@Override
