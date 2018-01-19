@@ -14,14 +14,14 @@ public class ImageProcessorTest {
 	public void test1GenerateAndSaveThumbnails()
 	{
 		String srcFilePath = SRC_PATH + "girl_1.jpg";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 	@Test
 	public void test2GenerateAndSaveThumbnails()
 	{
 		String srcFilePath = SRC_PATH + "girl_2.jpg";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 	
@@ -29,28 +29,28 @@ public class ImageProcessorTest {
 	public void test3GenerateAndSaveThumbnails()
 	{
 		String srcFilePath = SRC_PATH + "girl_3.jpg";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 	@Test
 	public void tes6GenerateImageFromVideo()
 	{
 		String srcFilePath = SRC_PATH + "MTELHomePhoneTVC.mp4";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 	@Test
 	public void test7GenerateImageFromVideo()
 	{
 		String srcFilePath = SRC_PATH + "MtelDTH.mp4";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 	@Test
 	public void test8GenerateImageFromVideo()
 	{
 		String srcFilePath = SRC_PATH + "MtelUniveralPrima2.m4v";
-		Assert.assertTrue(ImageProcessor.generateAndSaveThumbnails(srcFilePath));
+		Assert.assertTrue(ImageProcessor.MEDIA_TYPE_UNKNOWN != ImageProcessor.generateAndSaveThumbnails(srcFilePath));
 	}
 	
 }
