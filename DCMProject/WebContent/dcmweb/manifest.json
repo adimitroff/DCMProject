@@ -224,7 +224,7 @@
 					"viewName": "list_device_procedures"
 				},
 				"EditDeviceProcedure" : {
-					"viewName": "edit_device_procedures"
+					"viewName": "edit_device_procedure"
 				},
 				"ListDeviceSchedule": {
 					"viewName": "list_device_schedule"

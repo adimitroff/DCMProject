@@ -6,7 +6,7 @@ sap.ui.define(
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.add_device_schema", {
+									"net.cb.dcm.frontend.controller.edit_device_procedure", {
 		            onNavigateBack : function(evt) {
 						this.navigateBack();
 					},
@@ -52,7 +52,7 @@ sap.ui.define(
 
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
-						vProperties.execTime = this.getView().byId("executionTime").getValue();
+						vProperties.ExecutionTime = this.getView().byId("executionTime").getDateValue();
 						
 						var oEntry = {};
 						var mParameters = {};
