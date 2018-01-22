@@ -37,7 +37,7 @@ public class DeviceSchedule implements Serializable {
 	@JoinColumn(name="DEVICE_ID")
 	private Device device;
 	
-	@OneToMany(mappedBy = "deviceSchedule", cascade = {CascadeType.PERSIST})
+	@OneToMany(mappedBy = "deviceSchedule", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
 	private List<Loop> loops;
 	
 	@Column

@@ -22,6 +22,12 @@ public class ImageProcessor {
 	public final static int DEFAULT_THUMB_SIZE = 200;
 	public final static int LARGE_THUMB_SIZE = 800;
 	public final static int MEDIUM_THUMB_SIZE = 400;
+	
+	public final static String THUMB_DIR = "thumb";
+	public final static String TEMP_DIR = "temp";
+	
+	public final static int MEDIA_TYPE_UNKNOWN = -2;
+	public final static int MEDIA_TYPE_IMAGE = -1;
 
 	/**
 	 * 
@@ -68,14 +74,33 @@ public class ImageProcessor {
 		BufferedImage[] scaledImages = new BufferedImage[3];
 		scaledImages[0] = scaleImage(image, LARGE_THUMB_SIZE);
 		scaledImages[1] = scaleImage(scaledImages[0],MEDIUM_THUMB_SIZE);
-		scaledImages[2] = scaleImage(scaledImages[1], DEFAULT_THUMB_SIZE);
-		
-		// Sample usage to safe thumbnails
-//		ImageIO.write(scaledImages[0], "jpg", new File("1_l.jpg")); 
-//		ImageIO.write(scaledImages[1], "jpg", new File("1_m.jpg")); 
-//		ImageIO.write(scaledImages[2], "jpg", new File("1_s.jpg")); 
+		scaledImages[2] = scaleImage(scaledImages[1], DEFAULT_THUMB_SIZE);		
 		
 		return scaledImages;
+	}
+	
+	
+	public static boolean generateAndSaveThumbnails(BufferedImage image, String fileName, String destDirPath) {
+		BufferedImage[] thumbnails = generateThumbnails(image);
+//		String fileName = srcFile.getName();
+		int indexOf = fileName.lastIndexOf('.');
+		if(indexOf > 0) {
+			fileName = fileName.substring(0, indexOf);
+		}
+		try {
+			String[] fileNames = new String[] {
+					fileName + "_" + LARGE_THUMB_SIZE + ".jpg",
+					fileName + "_" + MEDIUM_THUMB_SIZE + ".jpg", 
+					fileName + "_" + DEFAULT_THUMB_SIZE + ".jpg"
+					};
+			ImageIO.write(thumbnails[0], "jpg", new File(destDirPath + fileNames[0]));
+			ImageIO.write(thumbnails[1], "jpg", new File(destDirPath + fileNames[1]));
+			ImageIO.write(thumbnails[2], "jpg", new File(destDirPath + fileNames[2]));
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	/**
@@ -108,45 +133,64 @@ public class ImageProcessor {
 	    return new Dimension(newWidth, newHeight);
 	}
 	
-	public static String[] saveThumbsForVideo(String srcFilePath, String destDirPath)
+	/**
+	 * 
+	 * @param srcFilePath
+	 * @return media type - {@link #MEDIA_TYPE_IMAGE}, {@link #MEDIA_TYPE_VIDEO} or {@link #MEDIA_TYPE_UNKNOWN}
+	 */
+	public static long generateAndSaveThumbnails(String srcFilePath)
 	{
 		File srcFile = new File(srcFilePath);
+		long result = MEDIA_TYPE_UNKNOWN;
 		if(!srcFile.exists()) {
-			return null;
+			return result;
 		}
-		BufferedImage image = ImageProcessor.genImageFromVideo(srcFilePath, 1);
-		if(image == null) {
-			return null;
+		int extIndex = srcFile.getName().lastIndexOf('.');
+		if(extIndex == -1 || extIndex == (srcFile.getName().length() -1)) {
+			return result;
 		}
-		BufferedImage[] thumbnails = ImageProcessor.generateThumbnails(image);
 		
-		String fileName = srcFile.getName();
-		int indexOf = fileName.lastIndexOf('.');
-		if(indexOf > 0) {
-			fileName = fileName.substring(0, indexOf);
-		}
+		String fileExt = srcFile.getName().substring(extIndex + 1).toLowerCase();
 		try {
-			String[] fileNames = new String[] {
-					fileName + "_" + LARGE_THUMB_SIZE + ".jpg",
-					fileName + "_" + MEDIUM_THUMB_SIZE + ".jpg", 
-					fileName + "_" + DEFAULT_THUMB_SIZE + ".jpg"
-					};
-			ImageIO.write(thumbnails[0], "jpg", new File(destDirPath + fileNames[0]));
-			ImageIO.write(thumbnails[1], "jpg", new File(destDirPath + fileNames[1]));
-			ImageIO.write(thumbnails[2], "jpg", new File(destDirPath + fileNames[2]));
-			return fileNames;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			BufferedImage image;
+			
+			if (fileExt.equals("jpg") || fileExt.equals("jpeg") || fileExt.equals("png")) {
+				// Image
+				image = ImageIO.read(srcFile);
+				result = MEDIA_TYPE_IMAGE;
+			} else {
+				// Video
+				Object[] videData = ImageProcessor.genImageFromVideo(srcFilePath, 1);
+				image = (BufferedImage) videData[0];
+				if (image == null) {
+					result = MEDIA_TYPE_UNKNOWN;
+				} else {
+					result = (Long) videData[1];
+				}
+			}
+			String thumbsDir = srcFile.getParent() + File.separatorChar + THUMB_DIR  + File.separatorChar;
+			File fileDir = new File(thumbsDir);
+			if(!fileDir.exists()) {
+				fileDir.mkdirs();
+			}
+			if(!ImageProcessor.generateAndSaveThumbnails(image, srcFile.getName(), thumbsDir)) {
+				result = MEDIA_TYPE_UNKNOWN;
+			} 
+			return result;
+			
+		} catch (Exception e) {
+			return MEDIA_TYPE_UNKNOWN;
 		}
 	}
 	
-	public static BufferedImage genImageFromVideo(String srcFilePath, int durationSeconds) {
+	
+	public static Object[] genImageFromVideo(String srcFilePath, int durationSeconds) {
 		FFmpegFrameGrabber frameGrabber = null;
 		try {
+			Object[] result = new Object[2];
 			frameGrabber = new FFmpegFrameGrabber(srcFilePath);
 			frameGrabber.start();
-
+			long length = frameGrabber.getLengthInTime();
 			// Not sure start frame 0 or 1, so going to use first as 1
 			int frameNumber = Math.max(1, (int) frameGrabber.getFrameRate() * durationSeconds);
 			frameNumber = Math.min(frameNumber, frameGrabber.getLengthInFrames());
@@ -154,7 +198,9 @@ public class ImageProcessor {
 			Java2DFrameConverter converter = new Java2DFrameConverter();
 			BufferedImage image = converter.convert(frameGrabber.grab());
 			frameGrabber.stop();
-			return image;
+			result[0] = image;
+			result[1] = length;
+			return result;
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -167,6 +213,17 @@ public class ImageProcessor {
 			}
 		}
 		
+	}
+	
+	public static String getThumbnailPath(File srcFile, int thumbSize) {
+		String thumbDir = srcFile.getParent() + File.separatorChar + THUMB_DIR  + File.separatorChar;
+		String fileName = srcFile.getName();
+		int indexOf = fileName.lastIndexOf('.');
+		if(indexOf > 0) {
+			fileName = fileName.substring(0, indexOf);
+		}
+		
+		return 	thumbDir + fileName + "_" + thumbSize + ".jpg";
 	}
 	
 	

@@ -150,6 +150,26 @@
 					"pattern": "EditSetting/{id}",
 					"name": "EditSetting",
 					"target": "EditSetting"
+				},
+				{
+					"pattern": "ListDeviceStatus/{id}",
+					"name": "ListDeviceStatus",
+					"target": "ListDeviceStatus"
+				},
+				{
+					"pattern": "ListDeviceProcedures/{id}",
+					"name": "ListDeviceProcedures",
+					"target": "ListDeviceProcedures"
+				},
+				{
+					"pattern": "EditDeviceProcedure/{id}",
+					"name": "EditDeviceProcedure",
+					"target": "EditDeviceProcedure"
+				},
+				{
+					"pattern": "ListDeviceSchedule/{id}",
+					"name": "ListDeviceSchedule",
+					"target": "ListDeviceSchedule"
 				}
 				
 			],
@@ -204,6 +224,18 @@
 				},
 				"EditSetting": {
 					"viewName": "edit_setting"
+				},
+				"ListDeviceStatus": {
+					"viewName": "list_device_status"
+				},
+				"ListDeviceProcedures": {
+					"viewName": "list_device_procedures"
+				},
+				"EditDeviceProcedure" : {
+					"viewName": "edit_device_procedures"
+				},
+				"ListDeviceSchedule": {
+					"viewName": "list_device_schedule"
 				}
 			}
 		},

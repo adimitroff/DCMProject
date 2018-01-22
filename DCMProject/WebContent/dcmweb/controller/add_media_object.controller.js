@@ -66,10 +66,13 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
-						vProperties.MediaType = this.getView().byId(
-								"media_type").getValue();
-						vProperties.Duration = this.getView().byId(
-								"duration").getValue();
+						vProperties.MediaType = "OTHER";
+						
+						vProperties.Duration = this.getView().byId("duration").getValue();
+						if( !vProperties.Duration || parseInt(vProperties.Duration) < 1 || isNaN( parseInt(vProperties.Duration) ) ){
+							vProperties.Duration = "10";
+						}
+						
 						vProperties.FilePath = this.getView().byId(
 							"file").getValue();
 						if (vProperties.FilePath == undefined ||
@@ -93,8 +96,12 @@ sap.ui
 						    );
 							return;
 						}
+						
+//						var theNewMediaId = 0;
+//						var modelContext;
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
+							//modelContext = oModel.createEntry("/MediaContents", vProperties);
 							oModel.createEntry("/MediaContents", vProperties);
 
 						} else {
@@ -107,10 +114,19 @@ sap.ui
 							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
 							oModel.update("", vProperties, mParameters);
 						}
+						
 						oModel.submitChanges(this._fnSuccess, this._fnError);
 						oModel.refresh();
+						//theNewMediaId = modelContext.getObject();//getProperty("Id");
+						//alert( "TestId : "+ theNewMediaId );
 						var oFileUploader = this.getView().byId("fileUploader");
+						//oFileUploader.addHeaderParameter(new sap.ui.unified.FileUploaderParameter("MediaId", "TestId"));
+						//oFileUploader.setAdditionalData("TestMediaId");
+//						var uri = oFileUploader.getUploadUrl();
+//						oFileUploader.setUploadUrl(uri.concat( "?id=" + theNewMediaId ));
 						oFileUploader.upload();
+//						var uri = oFileUploader.getUploadUrl();
+//						oFileUploader.setUploadUrl( uri.substring(0, uri.indexOf('?')) );
 						this.navigateBack();
 
 					},
@@ -184,7 +200,6 @@ sap.ui
 						this.getView().byId("id").setValue("");
 						this.getView().byId("name").setValue("");
 						this.getView().byId("description").setValue("");
-						this.getView().byId("media_type").setValue("");
 						this.getView().byId("duration").setValue("");
 						this.getView().byId("file").setValue("");
 					}

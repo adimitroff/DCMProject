@@ -3,6 +3,7 @@ package net.cb.dcm.jpa.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,16 +39,16 @@ public class DeviceGroup implements Serializable {
 	@Column
 	private String description;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_group_devices", 
-	joinColumns = @JoinColumn(name = "DEVICE_GROUP_ID", referencedColumnName = "ID"), 
-	inverseJoinColumns = @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID"))
+	joinColumns = @JoinColumn(name = "DEVICE_GROUP_ID"), 
+	inverseJoinColumns = @JoinColumn(name = "DEVICE_ID"))
 	private List<Device> devices;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "dev_group_tags", 
-	joinColumns = @JoinColumn(name = "DEVICE_GROUP_ID", referencedColumnName = "ID"), 
-	inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+	joinColumns = @JoinColumn(name = "DEVICE_GROUP_ID"), 
+	inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
 	private List<Tag>  tags;
 
 	public long getId() {
