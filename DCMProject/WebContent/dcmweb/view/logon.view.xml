@@ -1,0 +1,23 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.logon"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Page id="page">
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="Logon" minWidth="1024"
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					title="Logon" labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+						<Label text="Email" />
+						<Input id="email" type="Email" value="{Email}" />
+						<Label text="Password" />
+						<Input id="password" value="{Password}" type="Password"/>
+					</f:content>
+					<Button id="logon" text="Logon" type="Emphasized" press="OnLogon" />
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+	</Page>
+</core:View>
