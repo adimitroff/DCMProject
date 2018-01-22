@@ -27,6 +27,7 @@
 		<class>net.cb.dcm.jpa.entities.DeviceGroupDeviceRelation</class>
 		<class>net.cb.dcm.jpa.entities.PlaylistSchedule</class>
 		<class>net.cb.dcm.jpa.entities.Setting</class>
+		<class>net.cb.dcm.jpa.entities.User</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>

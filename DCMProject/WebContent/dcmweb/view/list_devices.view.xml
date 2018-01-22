@@ -52,6 +52,9 @@
 			</columns>
 			<items>
 				<ColumnListItem type="Detail" detailPress="onDetailPress">
+			       <customData>
+                   		<core:CustomData key="background" value="{=${Ip} === null?'Red':'Blue'}" writeToDom="true" />
+                   </customData>
 					<cells>
 						<ObjectIdentifier title="{Id}" />
 						<Text text="{Name}" />

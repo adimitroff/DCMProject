@@ -42,14 +42,14 @@ public class MediaContent {
 	@Column(length=260)
 	private String filePath;
 	
-	@Column(length=260)
-	private String thumbnail;
-	
-	@Column(length=260, nullable = true)
-	private String thumbnaiLarge;
-	
-	@Column(length=260, nullable = true)
-	private String thumbnailMedium;
+//	@Column(length=260)
+//	private String thumbnail;
+//	
+//	@Column(length=260, nullable = true)
+//	private String thumbnaiLarge;
+//	
+//	@Column(length=260, nullable = true)
+//	private String thumbnailMedium;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "media_cont_tag_rel", 
@@ -113,13 +113,13 @@ public class MediaContent {
 		this.filePath = filePath;
 	}
 
-	public String getThumbnail() {
-		return thumbnail;
-	}
-
-	public void setThumbnail(String thumbnail) {
-		this.thumbnail = thumbnail;
-	}
+//	public String getThumbnail() {
+//		return thumbnail;
+//	}
+//
+//	public void setThumbnail(String thumbnail) {
+//		this.thumbnail = thumbnail;
+//	}
 	
 	@PreRemove
 	private void beforeRemove() {
@@ -148,20 +148,20 @@ public class MediaContent {
 		return true;
 	}
 
-	public String getThumbnaiLarge() {
-		return thumbnaiLarge;
-	}
-
-	public void setThumbnaiLarge(String thumbnaiLarge) {
-		this.thumbnaiLarge = thumbnaiLarge;
-	}
-
-	public String getThumbnailMedium() {
-		return thumbnailMedium;
-	}
-
-	public void setThumbnailMedium(String thumbnailMedium) {
-		this.thumbnailMedium = thumbnailMedium;
-	}
+//	public String getThumbnaiLarge() {
+//		return thumbnaiLarge;
+//	}
+//
+//	public void setThumbnaiLarge(String thumbnaiLarge) {
+//		this.thumbnaiLarge = thumbnaiLarge;
+//	}
+//
+//	public String getThumbnailMedium() {
+//		return thumbnailMedium;
+//	}
+//
+//	public void setThumbnailMedium(String thumbnailMedium) {
+//		this.thumbnailMedium = thumbnailMedium;
+//	}
 	
 }

@@ -23,6 +23,7 @@ sap.ui
 											}
 										},
 										onInit : function(evt) {
+											
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
