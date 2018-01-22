@@ -1,3 +1,6 @@
 .tileLayout {
 	float: left;
 }
+tr[data-background="Red"] {
+ background-color: #eaa6a6 !Important;
+}
