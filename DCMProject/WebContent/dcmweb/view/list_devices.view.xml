@@ -75,9 +75,9 @@
 							
 						</List>
 						<Panel>
-							<Button id="ShowStatusBtn" icon="sap-icon://settings" press="onButtonPress" placeholder="Device status"/>
-							<Button id="ShowProcedureBtn" icon="sap-icon://settings" press="onProcedureButtonPress" placeholder="Device procedure"/>
-							<Button id="ShowScheduleBtn" icon="sap-icon://settings" press="onScheduleButtonPress" placeholder="Device schedule"/>
+							<Button id="ShowStatusBtn" icon="sap-icon://settings" press="onButtonPress" tooltip="Device status"/>
+							<Button id="ShowProcedureBtn" icon="sap-icon://settings" press="onProcedureButtonPress" tooltip="Device procedure"/>
+							<Button id="ShowScheduleBtn" icon="sap-icon://settings" press="onScheduleButtonPress" tooltip="Device schedule"/>
 						</Panel>
 						
 					</cells>
