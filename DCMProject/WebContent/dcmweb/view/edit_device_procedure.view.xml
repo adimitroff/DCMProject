@@ -17,7 +17,10 @@
 						<Label text="Last Executed At" />
 						<Input id="lastExecutedTime" value="{LastExecutedTime}" editable = "false"/>
 						<Label text="Execution Time" />
-						<Input id="executionTime" value="{ExecutionTime}" />
+						<DateTimePicker
+							id="executionTime"
+							value="{ExecutionTime}" valueFormat="yyyy-MM-dd-HH-mm-ss" displayFormat="long"
+							change="handleChange"/>
 					</f:content>
 				</f:SimpleForm>
 			</l:content>
