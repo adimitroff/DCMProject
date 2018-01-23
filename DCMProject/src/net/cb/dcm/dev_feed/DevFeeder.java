@@ -23,7 +23,6 @@ import net.cb.dcm.enums.DevProcedureScheduleType;
 import net.cb.dcm.enums.DevResponseDataType;
 import net.cb.dcm.enums.DeviceCommand;
 import net.cb.dcm.jpa.DeviceDAO;
-import net.cb.dcm.jpa.GenericDao;
 import net.cb.dcm.jpa.entities.Device;
 import net.cb.dcm.jpa.entities.DeviceProcedure;
 import net.cb.dcm.jpa.entities.DeviceSchedule;
@@ -181,7 +180,8 @@ public class DevFeeder extends HttpServlet {
 		
 		if (device != null) {	
 			// Generate new schedule or use current
-			schedule = ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+			new ScheduleGenerator(deviceDao).updateDeviceSchedule(device);
+			schedule = device.getCurrentDeviceSchedule();
 			schedule.setDeviceCheckTime(new Date());
 			if (schedule.getDeviceDataId() == 0 || schedule.getDeviceDataId() > devResponse.getDataId()) {
 				// Find loop for current time
@@ -203,9 +203,7 @@ public class DevFeeder extends HttpServlet {
 					}
 				}
 			}
-			GenericDao<DeviceSchedule> scheduleDao = new GenericDao<DeviceSchedule>(deviceDao) {
-			};
-			scheduleDao.update(schedule);
+			deviceDao.update(device);
 		}
 
 //		if (mediaContents.isEmpty()) {

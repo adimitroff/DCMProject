@@ -9,7 +9,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import net.cb.dcm.dev_feed.ScheduleGeneratorSingleton;
+import net.cb.dcm.dev_feed.ScheduleGenerator;
 import net.cb.dcm.jpa.DeviceDAO;
 import net.cb.dcm.jpa.entities.Device;
 
@@ -27,7 +27,7 @@ public class ScheduleGenerationTest {
 		
 		// Generate for all devices
 		for (Device device : devices) {
-			ScheduleGeneratorSingleton.getInstance().generateDeviceLoops(device, Calendar.getInstance());
+			new ScheduleGenerator(deviceDao).generateDeviceLoops(device, Calendar.getInstance());
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class ScheduleGenerationTest {
 		
 		// Generate second time for all devices
 		for (Device device : devices) {
-			ScheduleGeneratorSingleton.getInstance().generateDeviceLoops(device, Calendar.getInstance());
+			new ScheduleGenerator(deviceDao).generateDeviceLoops(device, Calendar.getInstance());
 		}
 	}
 	
@@ -53,7 +53,8 @@ public class ScheduleGenerationTest {
 		
 		// Generate second time for all devices
 		for (Device device : devices) {
-			ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(device);
+			new ScheduleGenerator(deviceDao).updateDeviceSchedule(device);
+			deviceDao.update(device);
 		}
 	}
 	
@@ -69,7 +70,7 @@ public class ScheduleGenerationTest {
 		for(int i = 0; i < 10; i++) {
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			for (Device device : devices) {
-				ScheduleGeneratorSingleton.getInstance().generateDeviceLoops(device, cal);
+				new ScheduleGenerator(deviceDao).generateDeviceLoops(device, cal);
 			}
 		}
 	}
@@ -81,7 +82,7 @@ public class ScheduleGenerationTest {
 		
 		Assert.assertTrue(devices.size() > 0);
 		// Generate for first device
-		ScheduleGeneratorSingleton.getInstance().generateDeviceLoops(devices.get(0), Calendar.getInstance());
+		new ScheduleGenerator(deviceDao).generateDeviceLoops(devices.get(0), Calendar.getInstance());
 	}
 	
 	@Test
@@ -102,7 +103,8 @@ public class ScheduleGenerationTest {
 		Device dev = deviceDao.findById(deviceId);
 		Assert.assertNotNull(dev);
 		// Generate for first device
-		ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(dev);
+		new ScheduleGenerator(deviceDao).updateDeviceSchedule(dev);
+		deviceDao.update(dev);
 	}
 	
 	@Test
@@ -112,6 +114,7 @@ public class ScheduleGenerationTest {
 		Device dev = deviceDao.findById(deviceId);
 		Assert.assertNotNull(dev);
 		// Generate for first device
-		ScheduleGeneratorSingleton.getInstance().getDeviceSchedule(dev);
+		new ScheduleGenerator(deviceDao).updateDeviceSchedule(dev);
+		deviceDao.update(dev);
 	}
 }
