@@ -57,7 +57,7 @@ public class PlaylistDao extends GenericDao<Playlist> {
 				+ " AND ( p.validTo IS NULL OR p.validTo >= :date) " + " AND ((ps.type = :typeDaily) "
 				+ "  OR (ps.type = :typeDay AND ps.date = :date) "
 				+ "  OR (ps.type = :typeWeekly AND ps.dayOfWeek = :dayOfWeek ) "
-				+ "  OR (ps.type = :typeMonthly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) "
+				+ "  OR (ps.type = :typeMonthly AND ps.dayOfMoth = :dayOfMoth) "
 				+ "  OR (ps.type = :typeLastDayOfMonth AND :isLastDayOfMonth = TRUE) "
 				+ "  OR (ps.type = :typeYearly AND ps.dayOfMoth = :dayOfMoth AND ps.month = :month) ) "
 				+ " ORDER BY p.priority", Playlist.class);

@@ -66,7 +66,7 @@ public class DbTest {
 		assertTrue(properties.size() > 0);
 		assertTrue(properties.get(0).getId() > 0);
 
-		for (int i = 100; i <= 110; i++) {
+		for (int i = 100; i <= 120; i++) {
 			String ip = "127.0.0." + i;
 			String serialNumber = "SAMSUTV100" + i;
 			Device device = deviceDao.registerNewDevice(ip, serialNumber);
@@ -272,8 +272,8 @@ public class DbTest {
 			
 			boolean isImageType = i % 2 == 0;
 			MediaContent mediaContent = new MediaContent();
-			mediaContent.setName("Test media 1");
-			mediaContent.setFilePath("/test/test_media_" + i + "." + (isImageType ? "jpg" : ".mp4"));
+			mediaContent.setName("Test media " + i);
+			mediaContent.setFilePath("test_media_" + i + "." + (isImageType ? "jpg" : "mp4"));
 			mediaContent.setMediaType(isImageType ? MediaObjectType.JPEG : MediaObjectType.MPEG);
 			mediaContent.setTags(mediaTags);
 			mediaContents.add(mediaContent);
