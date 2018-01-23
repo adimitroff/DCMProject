@@ -30,6 +30,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 			}
 		},
 		onInit : function(oEvent) {
+//			var lvLoggedIn = sap.ui.controller("net.cb.dcm.frontend.controller.logon").getLoggedIn();
+//			if (lvLoggedIn == ''){
+//				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+//				oRouter.navTo("");
+//			}
 			var lvAllDevicesCount = 0;
 			var lvNewDevicesCount = 0;
 			var aData = jQuery.ajax({

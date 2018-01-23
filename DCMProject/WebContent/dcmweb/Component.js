@@ -1,14 +1,8 @@
 sap.ui.define([ 'sap/ui/core/UIComponent' ], function(UIComponent) {
 	"use strict";
 
+	
 	var Component = UIComponent.extend("net.cb.dcm.frontend.component",{
-//		metadata : {
-//			rootView : "net.cb.dcm.frontend.view.main",
-//			dependencies : {
-//				libs : [ "sap.m" ]
-//			},
-//			includes : [ "css/style.css" ],
-//		}
 		metadata : {
 			manifest: "json"
 		},
@@ -37,7 +31,6 @@ sap.ui.define([ 'sap/ui/core/UIComponent' ], function(UIComponent) {
 //	            oResourceBundle = oModel.getResourceBundle();
 //	        }
 		}
-
 	});
 	return Component;
 });
