@@ -39,8 +39,8 @@
 				<ColumnListItem>
 					<cells>
 						<ObjectIdentifier id="idScheduleId" title="{Id}" />
-						<Text id="idScheduleVFrom" text="{ValidFrom}" />
-						<Text id="idScheduleVTo" text="{ValidTo}" />
+						<Text id="idScheduleVFrom" text="{path: 'ValidFrom', formatter: '.formatTime'}" />
+						<Text id="idScheduleVTo" text="{path: 'ValidTo', formatter: '.formatTime'}" />
 						<List id="idLoopList"
 							  items="{MediaContentDetails}"  
 							  growing="true"

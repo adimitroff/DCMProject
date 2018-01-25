@@ -77,7 +77,7 @@ sap.ui
 										},
 										handlePopupSearch: function(oEvent) {
 											var sValue = oEvent.getParameter("value");
-											var oFilter = new Filter("Name", sap.ui.model.FilterOperator.Contains, sValue);
+											var oFilter = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, sValue);
 											var oBinding = oEvent.getSource().getBinding("items");
 											oBinding.filter([oFilter]);
 										},

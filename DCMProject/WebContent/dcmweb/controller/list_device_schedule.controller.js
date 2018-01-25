@@ -38,7 +38,7 @@ sap.ui
 											this.relPath = "/Devices(&1L)";
 											this.relPath = this.relPath.replace("&1",lvId);
 											this.updateTableBinding();
-											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
+//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 										},
 										updateTableBinding: function(){
 											var oTable = this.getView().byId("idScheduleTable"); 
@@ -52,6 +52,21 @@ sap.ui
 											});
 											var path = this.relPath + "/DeviceScheduleDetails/LoopDetails";
 											oTable.bindItems(path,oTemplate);
+										},
+										formatTime : function(v) {
+											var tmpStr = v;
+											tmpStr = tmpStr.replace("PT", "");
+											var tmpArr = tmpStr.split("H");
+											var time = (tmpArr[0].length==1?("0"+tmpArr[0]):tmpArr[0]) + ":";
+											tmpArr = tmpArr[1].split("M");
+											time = time + (tmpArr[0].length==1?("0"+tmpArr[0]):tmpArr[0]) + ":";
+											if (tmpArr.length > 1){
+												tmpArr[1] = tmpArr[1].replace("S", "");
+												time = time + (tmpArr[1].length==1?("0"+tmpArr[1]):tmpArr[1]);
+											} else {
+												time = time + "00";
+											}
+										    return time;
 										}
 									});
 

@@ -38,10 +38,10 @@ sap.ui
 											this.relPath = "/Devices(&1L)";
 											this.relPath = this.relPath.replace("&1",lvId);
 											this.updateTableBinding();
-											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
+//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 										},
 										rowSelected : function(event) {
-											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
+//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											var lvId = event.getSource().getBindingContext().getProperty("Id");
 											oRouter.navTo("EditDeviceProcedure", {id:lvId});
