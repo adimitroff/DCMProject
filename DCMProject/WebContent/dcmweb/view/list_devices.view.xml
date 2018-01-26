@@ -80,9 +80,9 @@
 							
 						</List>
 						<Panel>
-							<Button id="ShowStatusBtn" icon="sap-icon://settings" press="onButtonPress" tooltip="Device status"/>
-							<Button id="ShowProcedureBtn" icon="sap-icon://settings" press="onProcedureButtonPress" tooltip="Device procedure"/>
-							<Button id="ShowScheduleBtn" icon="sap-icon://settings" press="onScheduleButtonPress" tooltip="Device schedule"/>
+							<Button id="ShowStatusBtn" icon="sap-icon://sys-monitor" text="Status"  press="onButtonPress"/>
+							<Button id="ShowProcedureBtn" icon="sap-icon://settings" text="Procedures" press="onProcedureButtonPress"/>
+							<Button id="ShowScheduleBtn" icon="sap-icon://gantt-bars" text="Schedule" press="onScheduleButtonPress"/>
 						</Panel>
 						
 					</cells>
