@@ -30,10 +30,10 @@
 				<ColumnListItem>
 					<cells>
 						<ObjectIdentifier title="{Id}" />
-						<Text text="{LastExecutedTime}" />
-						<Text text="{ExecutionTime}" />
+						<DateTimeInput id="idLastExTime" value="{LastExecutedTime}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="yyyy-MM-dd, HH:mm:ss" editable="false" change="handleChange"/>
+						<DateTimeInput id="idExTime" value="{ExecutionTime}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="yyyy-MM-dd, HH:mm:ss" editable="false" change="handleChange"/>	
 						<Text text="{ProcedureType}" />
-						<Button id="ShowDetailsBtn" icon="sap-icon://settings" press="rowSelected"/>
+						<Button id="ShowProcedureDetailsBtn" icon="sap-icon://settings" press="rowSelected"/>
 					</cells>
 				</ColumnListItem>
 			</items>

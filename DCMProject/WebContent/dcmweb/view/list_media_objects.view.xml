@@ -7,7 +7,8 @@
 			<Button icon="sap-icon://add" press="onAdd" />
 		</headerContent>
 		<Table id="idProductsTable" inset="false" items="{/MediaContents}"
-			itemPress="rowSelected">
+			itemPress="rowSelected" growing="true" growingThreshold="20"
+			growingScrollToLoad="true" width="auto">
 			<headerToolbar>
 				<Toolbar>
 					<Label text="Media Objects"></Label>

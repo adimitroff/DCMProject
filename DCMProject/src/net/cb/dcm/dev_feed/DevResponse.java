@@ -91,12 +91,6 @@ public class DevResponse {
 	private static final String PROP_XML_CONTENT = "xmlContent";
 
 	/**
-	 * Media files path - WebContent/media. TODO change after decision where to
-	 * store media files
-	 */
-	private static final String MEDIA_PATH = "/media/";
-
-	/**
 	 * Type of response data
 	 */
 	private DevResponseDataType responseDataType = DevResponseDataType.NONE;
@@ -278,8 +272,8 @@ public class DevResponse {
 		JsonArray loPlayListFiles = new JsonArray();
 		for (MediaContent mediaContent : mediaContents) {
 			JsonObject loFile = new JsonObject();
-			loFile.addProperty(PROP_SRC, lsMediaUrl + mediaContent.getName());
-			loFile.addProperty(PROP_NAME, mediaContent.getName());
+			loFile.addProperty(PROP_SRC, lsMediaUrl + mediaContent.getFilePath());
+			loFile.addProperty(PROP_NAME, mediaContent.getFilePath());
 			loFile.addProperty(PROP_TYPE, mediaContent.getMediaType() == MediaObjectType.JPEG ? "image" : "video");
 			loFile.addProperty(PROP_LOCATION, "local");
 			loPlayListFiles.add(loFile);

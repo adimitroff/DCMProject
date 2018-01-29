@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import net.cb.dcm.jpa.DeviceDAO;
@@ -20,31 +19,62 @@ import net.cb.dcm.jpa.entities.Playlist;
 import net.cb.dcm.jpa.entities.PlaylistSchedule;
 import net.cb.dcm.jpa.entities.Tag;
 
-public class ScheduleGeneratorSingleton {
+public class ScheduleGenerator {
 
-	private static ScheduleGeneratorSingleton instance = null;
 	
 	private DeviceDAO deviceDao;
 
-	protected ScheduleGeneratorSingleton() {
-		deviceDao = new DeviceDAO();
+	public ScheduleGenerator(DeviceDAO deviceDao) {
+		this.deviceDao = deviceDao;
 	}
 
-	public synchronized static ScheduleGeneratorSingleton getInstance() {
-		if (instance == null) {
-			instance = new ScheduleGeneratorSingleton();
-		}
-		return instance;
-	}
 	
 	public List<Loop> getDailySchedule(Calendar calDay) {
 		PlaylistDao playlistDao = new PlaylistDao(deviceDao);
 		List<Playlist> dailyPlaists = playlistDao.findDailyPlaylists(calDay);
 		List<Loop> loops = new ArrayList<Loop>();
+		Calendar cal = Calendar.getInstance();
 		// Start from playlist with lowest priority(max priority value) and increment to highest priority
 		for(int pIdx = dailyPlaists.size() - 1; pIdx >= 0; pIdx--) {
 			List<PlaylistSchedule> shcedules = dailyPlaists.get(pIdx).getSchedules();
 			for (PlaylistSchedule schedule : shcedules) {
+				// Filter only schedules available for given calDay
+				switch (schedule.getType()) {
+				case SINGLE_DAY:
+					cal.setTime(schedule.getDate());
+					if(cal.get(Calendar.YEAR) != calDay.get(Calendar.YEAR) 
+							|| cal.get(Calendar.DAY_OF_YEAR) != calDay.get(Calendar.DAY_OF_YEAR)) {
+						continue;
+					}
+					break;
+				case LAST_DAY_OF_MONTH:
+					int currentMonth = calDay.get(Calendar.MONTH);
+					cal.setTime(calDay.getTime());
+					// Check for last day of month
+					cal.add(Calendar.DAY_OF_MONTH, 1);
+					if(currentMonth == cal.get(Calendar.MONTH)) {
+						continue;
+					}
+					break;
+				case MONTHLY:
+					if (schedule.getDayOfMoth() != calDay.get(Calendar.DAY_OF_MONTH)) {
+						continue;
+					}
+					break;
+				case WEEKLY:
+					if (schedule.getDayOfWeek() != calDay.get(Calendar.DAY_OF_WEEK)) {
+						continue;
+					}
+					break;
+				case YEARLY:
+					if (schedule.getMonth() != calDay.get(Calendar.MONTH)
+						|| schedule.getDayOfMoth() != calDay.get(Calendar.DAY_OF_MONTH) ) {
+						continue;
+					}
+					break;
+				default:
+					break;
+				}
 				// First remove previous loops added from playlists with lower priority
 				// Or change loops start and end time
 				List<Loop> loopsForRemove = new ArrayList<>();
@@ -91,7 +121,7 @@ public class ScheduleGeneratorSingleton {
 		return loops;
 	}
 	
-	public DeviceSchedule getDeviceSchedule(Device device) {
+	public void updateDeviceSchedule(Device device) {
 		List<Loop> deviceLoops = generateDeviceLoops(device, Calendar.getInstance());
 		DeviceSchedule currentDeviceSchedule = device.getCurrentDeviceSchedule();
 		// Check equality of current schedule loops and generated device loops
@@ -134,7 +164,7 @@ public class ScheduleGeneratorSingleton {
 				}
 			}
 			if(isScheduleEqual) {
-				return currentDeviceSchedule;
+				return;
 			}
 		}
 		
@@ -145,9 +175,6 @@ public class ScheduleGeneratorSingleton {
 			loop.setDeviceSchedule(deviceSchedule);
 		}
 		device.setCurrentDeviceSchedule(deviceSchedule);
-		deviceDao.update(device);
-		
-		return deviceSchedule;
 	}
 	
 	public List<Loop> generateDeviceLoops(Device device, Calendar calDay) {

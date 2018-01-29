@@ -38,7 +38,6 @@ sap.ui
 											this.relPath = "/Devices(&1L)";
 											this.relPath = this.relPath.replace("&1",lvId);
 											this.updateTableBinding();
-//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 										},
 										updateTableBinding: function(){
 											var oTable = this.getView().byId("idScheduleTable"); 

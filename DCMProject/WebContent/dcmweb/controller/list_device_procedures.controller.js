@@ -38,10 +38,8 @@ sap.ui
 											this.relPath = "/Devices(&1L)";
 											this.relPath = this.relPath.replace("&1",lvId);
 											this.updateTableBinding();
-//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 										},
 										rowSelected : function(event) {
-//											sap.m.MessageToast.show("Test Success",{closeOnBrowserNavigation: false });
 											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											var lvId = event.getSource().getBindingContext().getProperty("Id");
 											oRouter.navTo("EditDeviceProcedure", {id:lvId});
@@ -51,10 +49,10 @@ sap.ui
 											var oTemplate = new sap.m.ColumnListItem({
 											    cells:[
 											        new sap.m.ObjectIdentifier({title:"{Id}"}),
-											        new sap.m.Text({text:"{LastExecutedTime}"}),
-											        new sap.m.Text({text:"{ExecutionTime}"}),
+											        this.getView().byId("idLastExTime"),
+											        this.getView().byId("idExTime"),
 											        new sap.m.Text({text:"{ProcedureType}"}),
-											        new sap.m.Button({ id:"ShowDetailsBtn", icon:"sap-icon://settings", press:"rowSelected"})
+											        this.getView().byId("ShowProcedureDetailsBtn")
 											        ]
 											});//mode="SingleSelectMaster" selectionChange="rowSelected"
 											var path = this.relPath + "/DeviceProcedureDetails";

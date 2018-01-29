@@ -30,7 +30,7 @@ sap.ui
 											} 
 											loRoute = loRouter.getRoute("ListDeviceRelatedTags");
 											if (loRoute !== undefined) {												
-												loRoute.attachMatched(this._onRouteMatched, this);
+												loRoute.attachMatched(this._onRouteMatched2, this);
 											}
 											
 										},
