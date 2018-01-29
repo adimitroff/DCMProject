@@ -1,0 +1,46 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.add_playlist_schedule"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:c="sap.ui.core">
+	<Page title="Add Playlist Schedule" id="page" showNavButton="true"
+		navButtonPress="onNavigateBack">
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="PlaylistAdd" minWidth="1024"
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+						<Label text="Type" />
+						<ComboBox id="type" selectedKey="{Type}" selectionChange="onSelectionChange">
+						<core:Item key="1" text="Single day" />
+						<core:Item key="2" text="Weekly"/>
+						<core:Item key="3" text="Monthly"/>
+						<core:Item key="4" text="Last day of month"/>
+						<core:Item key="5" text="Yearly"/>
+						<core:Item key="6" text="Daily"/>
+						</ComboBox>
+						<Label id="date_label" text="Date" visible="false"/>
+						<DatePicker id="date" value="{Date}" visible="false"/>
+						<Label id="dom_label" text="Day of month" visible="false"/>
+						<Input id="day_of_month" value="{DayOfMoth}" visible="false"/>
+						<Label id="dow_label" text="Day of week" visible="false"/>
+						<Input id="day_of_week" value="{DayOfWeek}" visible="false"/>
+						<Label text="Start time" />
+						<TimePicker id="start_time" value="{StartTime}" displayFormat="HH:mm:ss"/>
+						<Label text="End time" />
+						<TimePicker id="end_time" value="{EndTime}" displayFormat="HH:mm:ss"/>
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button id="save" text="Save" type="Emphasized" press="handleSavePress" />
+					<Button id="cancel" text="Cancel" press="handleCancelPress" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>
