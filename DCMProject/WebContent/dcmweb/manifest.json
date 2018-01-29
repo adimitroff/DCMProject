@@ -122,6 +122,16 @@
 					"target": "ListRelatedMediaContents"
 				},
 				{
+					"pattern": "ListPlaylistRelatedSchedules/{id}",
+					"name": "ListPlaylistRelatedSchedules",
+					"target": "ListPlaylistRelatedSchedules"
+				},
+				{
+					"pattern": "AddPlaylistSchedule/{id}",
+					"name": "AddPlaylistSchedule",
+					"target": "AddPlaylistSchedule"
+				},
+				{
 					"pattern": "Schemas",
 					"name": "ListSchemas",
 					"target": "ListSchemas"
@@ -209,6 +219,12 @@
 				},
 				"ListRelatedMediaContents": {
 					"viewName": "list_related_media_contents"
+				},
+				"ListPlaylistRelatedSchedules": {
+					"viewName": "list_related_schedules"
+				},
+				"AddPlaylistSchedule": {
+					"viewName": "add_playlist_schedule"
 				},
 				"ListSchemas": {
 					"viewName": "list_device_schemas"

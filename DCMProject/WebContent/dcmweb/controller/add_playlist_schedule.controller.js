@@ -5,16 +5,15 @@ sap.ui
 		function(Controller, History) {
 			var PageController = Controller
 							.extend(
-									"net.cb.dcm.frontend.controller.add_playlist", {
+									"net.cb.dcm.frontend.controller.add_playlist_schedule", {
 		            onNavigateBack : function(evt) {
 						this.navigateBack();
 					},
+					playlist_id: "",
 					onInit : function(oEvent) {
-//						var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
-//						this.getView().setModel(loModel);
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
-						var loRoute = loRouter.getRoute("EditPlaylist");
+						var loRoute = loRouter.getRoute("AddPlaylistSchedule");
 						if (loRoute !== undefined) {
 							loRoute.attachMatched(this._onRouteMatched, this);
 						}
@@ -23,6 +22,7 @@ sap.ui
 						var loArgs, loView;
 						loArgs = ioEvent.getParameter("arguments");
 						var lvId = loArgs.id;
+						this.playlist_id = lvId; 
 						loView = this.getView();
 						
 						if (lvId == 0){
@@ -31,7 +31,7 @@ sap.ui
 						}
 						
 						loView.bindElement({
-							path : "/Playlists(" + lvId + ")",
+							path : "/PlaylistSchedule(" + lvId + ")",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -52,34 +52,29 @@ sap.ui
 					handleCancelPress : function() {
 						this.navigateBack();
 					},
-
-					handleDeletePress : function() {
-						var oModel = this.getView().getModel();
-						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Playlists(" + lvId + "L)");
-						oModel.refresh();
-						this.navigateBack();
-					},
-
 					handleSavePress : function(evt) {
 						var oModel = this.getView().getModel();
 
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
-						vProperties.Name = this.getView()
-								.byId("name").getValue();
-						vProperties.Description = this.getView().byId(
-								"description").getValue();
-						vProperties.Def = this.getView().byId(
-							"default").getSelected();
-						vProperties.Active = this.getView().byId(
-							"active").getSelected();
-						vProperties.Priority = this.getView().byId(
-							"priority").getValue();
+						vProperties.PlaylistId = this.playlist_id;
+						vProperties.Type = this.getView().byId(
+								"type").getSelectedKey();
+						vProperties.Date = this.getView().byId(
+							"date").getValue();
+						vProperties.Month = this.getView().byId(
+							"month").getValue();
+						vProperties.DayOfMoth = this.getView().byId(
+							"day_of_month").getValue();
+						vProperties.DayOfWeek = this.getView().byId(
+							"day_of_week").getValue();
+						vProperties.StartTime = this.getView().byId(
+							"start_time").getValue();
+						vProperties.EndTime = this.getView().byId(
+							"end_time").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Playlists", vProperties);
-
+							oModel.createEntry("/PlaylistSchedule", vProperties);
 						} else {
 							var oEntry = {};
 							var mParameters = {};
@@ -115,47 +110,15 @@ sap.ui
 							oRouter.navTo("Main", true);
 						}
 					},
-					onAddMediaObjects: function(){
-						var lvId = this.getView().byId("id").getValue();
-						
-						if (!lvId){
-							sap.m.MessageBox.show(
-								      "Playlist must be saved, before adding the Tags", {
-								          icon: sap.m.MessageBox.Icon.ERROR,
-								          title: "Error",
-								          actions: [sap.m.MessageBox.Action.CANCEL]
-								      }
-							);
-							return;
-						}
-						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-						oRouter.navTo("ListPlaylistRelatedMediaContents", {id:lvId});
-					},
-					onAddSchedule: function(){
-						var lvId = this.getView().byId("id").getValue();
-						
-						if (!lvId){
-							sap.m.MessageBox.show(
-								      "Playlist must be saved, before adding the Tags", {
-								          icon: sap.m.MessageBox.Icon.ERROR,
-								          title: "Error",
-								          actions: [sap.m.MessageBox.Action.CANCEL]
-								      }
-							);
-							return;
-						}
-						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-						oRouter.navTo("ListPlaylistRelatedSchedules", {id:lvId});
-					},
 					clearScreenFields : function(){
-						this.getView().byId("id").setValue("");
-						this.getView().byId("name").setValue("");
-						this.getView().byId("description").setValue("");
-						
-						this.getView().byId("default").selected = false;
-						this.getView().byId("active").selected = false;
-						
-						this.getView().byId("priority").setValue("");
+//						this.getView().byId("id").setValue("");
+//						this.getView().byId("name").setValue("");
+//						this.getView().byId("description").setValue("");
+//						
+//						this.getView().byId("default").selected = false;
+//						this.getView().byId("active").selected = false;
+//						
+//						this.getView().byId("priority").setValue("");
 					}
 			});
 
