@@ -63,14 +63,22 @@ sap.ui
 											var oTable = this.getView().byId("idMediaContentsTable"); 
 											var oTemplate = new sap.m.ColumnListItem({
 											    cells:[
-											        new sap.m.ObjectIdentifier({title:"{Id}"}),
-											        new sap.m.Text({text:"{Type}"}),
-											        new sap.m.Text({text:"{StartTime}"}),
-											        new sap.m.Text({text:"{EndTime}"}),
-											        new sap.m.Text({text:"{Date}"}),
-											        new sap.m.Text({text:"{Month}"}),
-											        new sap.m.Text({text:"{DateOfMoth}"}),
-											        new sap.m.Text({text:"{DayOfWeek}"})
+											    	this.getView().byId("id"),
+											    	this.getView().byId("type"),
+											    	this.getView().byId("start_time"),
+											        this.getView().byId("end_time"),
+											        this.getView().byId("date"),
+											        this.getView().byId("month"),
+											        this.getView().byId("day_of_month"),
+											        this.getView().byId("day_of_week")
+//											        new sap.m.ObjectIdentifier({title:"{Id}"}),
+//											        new sap.m.Text({text:"{Type}"}),
+//											        new sap.m.Text({text:"{path: 'StartTime', formatter: '.formatTime'}"}),
+//											        new sap.m.Text({text:"{path: 'EndTime', formatter: '.formatTime'}"}),
+//											        new sap.m.Text({text:"{Date}"}),
+//											        new sap.m.Text({text:"{Month}"}),
+//											        new sap.m.Text({text:"{DateOfMoth}"}),
+//											        new sap.m.Text({text:"{DayOfWeek}"})
 											        ]
 											});
 											var path = this.relPath + "/PlaylistScheduleDetails";
