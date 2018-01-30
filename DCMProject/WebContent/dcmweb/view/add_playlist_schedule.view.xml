@@ -13,12 +13,12 @@
 					<f:content>
 						<Label text="Type" />
 						<ComboBox id="type" selectedKey="{Type}" selectionChange="onSelectionChange">
-						<core:Item key="1" text="Single day" />
-						<core:Item key="2" text="Weekly"/>
-						<core:Item key="3" text="Monthly"/>
-						<core:Item key="4" text="Last day of month"/>
-						<core:Item key="5" text="Yearly"/>
-						<core:Item key="6" text="Daily"/>
+						<core:Item key="SINGLE_DAY" text="Single day" />
+						<core:Item key="WEEKLY" text="Weekly"/>
+						<core:Item key="MONTHLY" text="Monthly"/>
+						<core:Item key="LAST_DAY_OF_MONTH" text="Last day of month"/>
+						<core:Item key="YEARLY" text="Yearly"/>
+						<core:Item key="DAILY" text="Daily"/>
 						</ComboBox>
 						<Label id="date_label" text="Date" visible="false"/>
 						<DatePicker id="date" value="{Date}" visible="false"/>

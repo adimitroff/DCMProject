@@ -86,6 +86,9 @@ sap.ui
 										},
 										formatTime : function(v) {
 											var tmpStr = v;
+											if (tmpStr == undefined || tmpStr == ""){
+												return;
+											}
 											tmpStr = tmpStr.replace("PT", "");
 											var tmpArr = tmpStr.split("H");
 											var time = (tmpArr[0].length==1?("0"+tmpArr[0]):tmpArr[0]) + ":";
