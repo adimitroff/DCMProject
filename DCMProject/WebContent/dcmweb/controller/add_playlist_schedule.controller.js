@@ -100,9 +100,9 @@ sap.ui
 												pattern : "KK:mm:ss a"
 											});
 											
-											var TZOffsetMS = new Date(0).getTimezoneOffset()*60*1000;
-											var timeStr = loTimeFormatter2.format(new Date(39600000 + TZOffsetMS));
-											var parsedTime = new Date(loTimeFormatter2.parse(timeStr).getTime() - TZOffsetMS); //39600000
+//											var TZOffsetMS = new Date(0).getTimezoneOffset()*60*1000;
+//											var timeStr = loTimeFormatter2.format(new Date(39600000 + TZOffsetMS));
+//											var parsedTime = new Date(loTimeFormatter2.parse(timeStr).getTime() - TZOffsetMS); //39600000
 											
 											
 											
@@ -112,6 +112,10 @@ sap.ui
 											// loTimeFormatter.format(this.getView().byId(
 											// "end_time").getDateValue());
 											// }
+											if (this.getView().byId("end_time")
+													.getValue() != "") {
+												vProperties.EndTime = this.getView().byId("end_time").getDateValue();
+											}
 											vProperties.Id = 0;
 											vProperties.Month = 0;
 
@@ -131,6 +135,10 @@ sap.ui
 											// loTimeFormatter.format(this.getView().byId(
 											// "start_time").getDateValue());
 											// }
+											if (this.getView().byId("start_time")
+													.getValue() != "") {
+												vProperties.StartTime = this.getView().byId("start_time").getDateValue();
+											}
 											vProperties.Type = this.getView()
 													.byId("type")
 													.getSelectedKey();

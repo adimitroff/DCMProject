@@ -45,11 +45,9 @@ public class PlaylistSchedule implements Serializable {
 	private PlaylistScheduleType type;
 	
 	@Column(name = "START_TIME")
-	@Temporal(TemporalType.TIME)
 	private Date startTime;
 	
 	@Column(name= "END_TIME")
-	@Temporal(TemporalType.TIME)
 	private Date endTime;
 	
 	@Column
