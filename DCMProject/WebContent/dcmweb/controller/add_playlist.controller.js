@@ -131,6 +131,22 @@ sap.ui
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 						oRouter.navTo("ListPlaylistRelatedMediaContents", {id:lvId});
 					},
+					onAddSchedule: function(){
+						var lvId = this.getView().byId("id").getValue();
+						
+						if (!lvId){
+							sap.m.MessageBox.show(
+								      "Playlist must be saved, before adding the Tags", {
+								          icon: sap.m.MessageBox.Icon.ERROR,
+								          title: "Error",
+								          actions: [sap.m.MessageBox.Action.CANCEL]
+								      }
+							);
+							return;
+						}
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+						oRouter.navTo("ListPlaylistRelatedSchedules", {id:lvId});
+					},
 					clearScreenFields : function(){
 						this.getView().byId("id").setValue("");
 						this.getView().byId("name").setValue("");

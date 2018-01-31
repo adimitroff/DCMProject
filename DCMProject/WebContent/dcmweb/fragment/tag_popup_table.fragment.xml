@@ -6,7 +6,7 @@
 		title="Select Tag"
 		search="handlePopupSearch"
 		confirm="handlePopupClose"
-		cancel="handlePopupClose"
+		cancel="аhandlePopupClose"
 		items="{
 			path : '/Tags'
 		}">

@@ -25,7 +25,7 @@
 				</Toolbar>
 			</headerToolbar>
 			<columns>
-				<Column>
+				<Column visible = "false">
 					<Text text="Id" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true">
@@ -34,7 +34,7 @@
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Description" />
 				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+				<Column visible = "false" minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Device Type" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
@@ -63,21 +63,26 @@
 						<Text text="{Ip}" />
 						<Text text="{Model}" />
 						<List id="idList"
-							  items="{DeviceStatusDetails/DeviceStatusValueDetails}"  
+							  items="{
+								path: 'DeviceStatusDetails/DeviceStatusValueDetails',
+								sorter: {
+									path: 'Id',
+									descending: true
+								}
+							}"  
 							  growing="true"
 							  growingThreshold="2"
 						 	  growingScrollToLoad="false">
-							<items>
+						 	  
 								<DisplayListItem templateShareable="true"
 								label="{PropertyDetails/Name}"
 								value="{Value}" />
-							</items>
 							
 						</List>
 						<Panel>
-							<Button id="ShowStatusBtn" icon="sap-icon://settings" press="onButtonPress"/>
-							<Button id="ShowProcedureBtn" icon="sap-icon://settings" press="onProcedureButtonPress"/>
-							<Button id="ShowScheduleBtn" icon="sap-icon://settings" press="onScheduleButtonPress"/>
+							<Button id="ShowStatusBtn" icon="sap-icon://sys-monitor" text="Status"  press="onButtonPress"/>
+							<Button id="ShowProcedureBtn" icon="sap-icon://settings" text="Procedures" press="onProcedureButtonPress"/>
+							<Button id="ShowScheduleBtn" icon="sap-icon://gantt-bars" text="Schedule" press="onScheduleButtonPress"/>
 						</Panel>
 						
 					</cells>

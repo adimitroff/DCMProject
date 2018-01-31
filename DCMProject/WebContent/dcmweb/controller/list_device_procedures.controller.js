@@ -49,8 +49,8 @@ sap.ui
 											var oTemplate = new sap.m.ColumnListItem({
 											    cells:[
 											        new sap.m.ObjectIdentifier({title:"{Id}"}),
-											        new sap.m.Text({text:"{LastExecutedTime}"}),
-											        new sap.m.Text({text:"{ExecutionTime}"}),
+											        this.getView().byId("idLastExTime"),
+											        this.getView().byId("idExTime"),
 											        new sap.m.Text({text:"{ProcedureType}"}),
 											        this.getView().byId("ShowProcedureDetailsBtn")
 											        ]

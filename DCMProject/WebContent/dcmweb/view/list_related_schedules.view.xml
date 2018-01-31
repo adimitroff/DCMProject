@@ -1,0 +1,54 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="net.cb.dcm.frontend.controller.list_related_schedules"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Playlist Schedules" showNavButton="true"
+    	navButtonTap="onNavigateBack">
+		<headerContent>
+			<Button icon="sap-icon://add" text="Add Relation" press="onAdd" />
+		</headerContent>
+		<Table id="idMediaContentsTable" inset="false" items="{/Playlists(2L)/PlaylistScheduleDetails}"
+			itemPress="rowSelected" mode="Delete" delete="onDelete">
+			<headerToolbar>
+				<Toolbar>
+					<Label text="Related Tags"></Label>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="Id" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Type" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Start Time" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="End Time" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Date" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Day of month" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Day of week" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier id="id" title="{Id}" />
+						<Text id="type" text="{Type}" />
+						<Text id="start_time" text="{path: 'StartTime', formatter: '.formatTime'}" />
+						<Text id="end_time" text="{path: 'EndTime', formatter: '.formatTime'}" />
+						<Text id="date" text="{Date}" />
+						<Text id="day_of_month" text="{DayOfMoth}" />
+						<Text id="typday_of_week" text="{DayOfWeek}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Page>
+</core:View>
