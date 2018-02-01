@@ -170,6 +170,7 @@ sap.ui
 						var aFileTypes = oEvent.getSource().getFileType();
 						jQuery.each(aFileTypes, function(key, value) {aFileTypes[key] = "*." +  value;});
 						var sSupportedFileTypes = aFileTypes.join(", ");
+						jQuery.sap.require("sap.m.MessageToast");
 						MessageToast.show("The file type *." + oEvent.getParameter("fileType") +
 												" is not supported. Choose one of the following types: " +
 												sSupportedFileTypes);

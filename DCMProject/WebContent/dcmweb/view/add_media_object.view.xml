@@ -26,7 +26,7 @@
 						<u:FileUploader id="fileUploader" name="fileUploader"
 							uploadUrl="http://localhost:8080/DCMProject/upload" tooltip="Upload your file to the server"
 							uploadComplete="handleUploadComplete" change="handleValueChange"
-							typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="jpg,mp4,mpeg,avi"
+							typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="jpg,mpg,mp4,mpeg,avi"
 							placeholder="Choose a file for Upload...">
 						</u:FileUploader>
 					</f:content>
