@@ -29,6 +29,7 @@ import net.cb.dcm.jpa.entities.Playlist;
 import net.cb.dcm.jpa.entities.PlaylistSchedule;
 import net.cb.dcm.jpa.entities.Property;
 import net.cb.dcm.jpa.entities.Tag;
+import net.cb.dcm.jpa.entities.User;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DbTest {
@@ -40,6 +41,17 @@ public class DbTest {
 	private static long tagIdSo;
 	private static long tagIdTv;
 
+	@Test
+	public void test1InsertUserData() {
+		GenericDao<User> userDao = new GenericDao<User>() {
+		};
+		assertEquals(0, userDao.findAll().size());
+		User user = new User();
+		user.setEmail("test@bgbs.com");
+		user.setPassword("pass");
+		userDao.insert(user);
+	}
+	
 	@Test
 	public void test1InsertDeviceData() {
 		logger.debug("insertBasicData test");
