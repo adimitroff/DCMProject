@@ -35,19 +35,19 @@ public class PlaylistSchedule implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "PLAYLIST_ID", nullable = false)
+//	@ManyToOne(optional = true)
+//	@JoinColumn(name = "PLAYLIST_ID", nullable = true)
+	@ManyToOne()
+	@JoinColumn(name = "PLAYLIST_ID")
 	private Playlist playlist;
 	
 	@Column
 	private PlaylistScheduleType type;
 	
 	@Column(name = "START_TIME")
-	@Temporal(TemporalType.TIME)
 	private Date startTime;
 	
 	@Column(name= "END_TIME")
-	@Temporal(TemporalType.TIME)
 	private Date endTime;
 	
 	@Column
