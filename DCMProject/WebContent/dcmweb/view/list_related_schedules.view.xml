@@ -30,9 +30,6 @@
 					<Text text="Date" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
-					<Text text="Month" />
-				</Column>
-				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Day of month" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
@@ -42,14 +39,13 @@
 			<items>
 				<ColumnListItem>
 					<cells>
-						<ObjectIdentifier title="{Id}" />
-						<Text text="{Type}" />
-						<Text id="StartTime" text="{path: 'StartTime', formatter: '.formatTime'}" />
-						<Text id="EndTime" text="{path: 'EndTime', formatter: '.formatTime'}" />
-						<Text text="{Date}" />
-						<Text text="{Month}" />
-						<Text text="{DayOfMoth}" />
-						<Text text="{DayOfWeek}" />
+						<ObjectIdentifier id="id" title="{Id}" />
+						<Text id="type" text="{Type}" />
+						<Text id="start_time" text="{path: 'StartTime', formatter: '.formatTime'}" />
+						<Text id="end_time" text="{path: 'EndTime', formatter: '.formatTime'}" />
+						<Text id="date" text="{Date}" />
+						<Text id="day_of_month" text="{DayOfMoth}" />
+						<Text id="day_of_week" text="{DayOfWeek}" />
 					</cells>
 				</ColumnListItem>
 			</items>
