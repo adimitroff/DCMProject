@@ -37,11 +37,12 @@ public class FileDownload extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest ioRequest, HttpServletResponse ioResponse) throws ServletException, IOException {
         String lsFileName = ioRequest.getParameter("filename");//.toLowerCase();
-        boolean isThumb = ioRequest.getParameter("thumb") != null;
+        boolean isThumb = false;//ioRequest.getParameter("thumb") != null;
         int mediaTimeSec = 0;
         DeviceDAO deviceDao = new DeviceDAO();
 		
         if(lsFileName == null) {
+        	isThumb = true;
         	if(ioRequest.getParameter("media") != null) {
 	        	long mediaId = Integer.parseInt(ioRequest.getParameter("media"));
 	        	MediaContentDao mediaContentDao = new MediaContentDao(deviceDao);
