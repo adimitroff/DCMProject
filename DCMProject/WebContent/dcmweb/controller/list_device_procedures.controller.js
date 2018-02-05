@@ -52,6 +52,7 @@ sap.ui
 											        this.getView().byId("idLastExTime"),
 											        this.getView().byId("idExTime"),
 											        new sap.m.Text({text:"{ProcedureType}"}),
+											        new sap.m.Text({text:"{ScheduleType}"}),
 											        this.getView().byId("ShowProcedureDetailsBtn")
 											        ]
 											});//mode="SingleSelectMaster" selectionChange="rowSelected"

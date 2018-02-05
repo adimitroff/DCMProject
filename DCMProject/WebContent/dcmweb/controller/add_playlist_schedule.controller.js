@@ -33,25 +33,24 @@ sap.ui
 												return;
 											}
 
-											loView
-													.bindElement({
-														path : "/PlaylistSchedule("
-																+ lvId + ")",
-														events : {
-															change : this._onBindingChange
-																	.bind(this),
-															dataRequested : function(
-																	oEvent) {
-																loView
-																		.setBusy(true);
-															},
-															dataReceived : function(
-																	oEvent) {
-																loView
-																		.setBusy(false);
-															}
-														}
-													});
+//											loView.bindElement({
+//														path : "/PlaylistSchedules("
+//																+ lvId + ")",
+//														events : {
+//															change : this._onBindingChange
+//																	.bind(this),
+//															dataRequested : function(
+//																	oEvent) {
+//																loView
+//																		.setBusy(true);
+//															},
+//															dataReceived : function(
+//																	oEvent) {
+//																loView
+//																		.setBusy(false);
+//															}
+//														}
+//													});
 										},
 										_onBindingChange : function(oEvent) {
 											// No data for the binding

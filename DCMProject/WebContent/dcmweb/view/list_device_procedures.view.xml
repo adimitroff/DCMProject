@@ -23,6 +23,9 @@
 					<Text text="Procedure" />
 				</Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Text text="Procedure Schedule Type" />
+				</Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
 					<Text text="Op" />
 				</Column>
 			</columns>
@@ -33,6 +36,7 @@
 						<DateTimeInput id="idLastExTime" value="{LastExecutedTime}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="yyyy-MM-dd, HH:mm:ss" editable="false" change="handleChange"/>
 						<DateTimeInput id="idExTime" value="{ExecutionTime}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="yyyy-MM-dd, HH:mm:ss" editable="false" change="handleChange"/>	
 						<Text text="{ProcedureType}" />
+						<Text text="{ScheduleType}" />
 						<Button id="ShowProcedureDetailsBtn" icon="sap-icon://settings" press="rowSelected"/>
 					</cells>
 				</ColumnListItem>

@@ -53,6 +53,7 @@ sap.ui.define(
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
 						vProperties.ExecutionTime = this.getView().byId("executionTime").getDateValue();
+						vProperties.ScheduleType = this.getView().byId("idProcedureType").getSelectedKey();
 						
 						var oEntry = {};
 						var mParameters = {};

@@ -19,8 +19,6 @@
 						<Input id="name" value="{Name}" />
 						<Label text="Description" />
 						<Input id="description" value="{Description}" />
-						<Label text="Device Type" />
-						<Input id="dev_type" value="{Dev_type}" />
 						<Label text="IP Address" />
 						<Input id="ip" value="{Ip}" editable="false" />
 						<Label text="Model" />

@@ -74,8 +74,10 @@ sap.ui
 							"default").getSelected();
 						vProperties.Active = this.getView().byId(
 							"active").getSelected();
-						vProperties.Priority = this.getView().byId(
-							"priority").getValue();
+						vProperties.Priority = this.getView().byId("priority").getSelectedKey();
+						vProperties.ValidFrom = this.getView().byId("idValidFrom").getDateValue();
+						vProperties.ValidTo = this.getView().byId("idValidTo").getDateValue();
+						
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
 							oModel.createEntry("/Playlists", vProperties);
@@ -156,6 +158,8 @@ sap.ui
 						this.getView().byId("active").selected = false;
 						
 						this.getView().byId("priority").setValue("");
+						this.getView().byId("idValidFrom").setValue("");
+						this.getView().byId("idValidTo").setValue("");
 					}
 			});
 
