@@ -43,9 +43,9 @@
 						<Text id="type" text="{Type}" />
 						<Text id="start_time" text="{path: 'StartTime', formatter: '.formatTime'}" />
 						<Text id="end_time" text="{path: 'EndTime', formatter: '.formatTime'}" />
-						<Text id="date" text="{Date}" />
+						<Text id="date" text="{path: 'Date', formatter: '.formatDate'}" />
 						<Text id="day_of_month" text="{DayOfMoth}" />
-						<Text id="typday_of_week" text="{DayOfWeek}" />
+						<Text id="day_of_week" text="{DayOfWeek}" />
 					</cells>
 				</ColumnListItem>
 			</items>

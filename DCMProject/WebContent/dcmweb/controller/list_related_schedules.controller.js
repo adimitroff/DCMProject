@@ -84,27 +84,22 @@ sap.ui
 											var path = this.relPath + "/PlaylistScheduleDetails";
 											oTable.bindItems(path,oTemplate);
 										},
-										formatTime : function(v) {
-//											var tmpStr = v;
-//											if (tmpStr == undefined || tmpStr == ""){
-//												return;
-//											}
-//											tmpStr = tmpStr.replace("PT", "");
-//											var tmpArr = tmpStr.split("H");
-//											var time = (tmpArr[0].length==1?("0"+tmpArr[0]):tmpArr[0]) + ":";
-//											tmpArr = tmpArr[1].split("M");
-//											time = time + (tmpArr[0].length==1?("0"+tmpArr[0]):tmpArr[0]) + ":";
-//											if (tmpArr.length > 1){
-//												tmpArr[1] = tmpArr[1].replace("S", "");
-//												time = time + (tmpArr[1].length==1?("0"+tmpArr[1]):tmpArr[1]);
-//											} else {
-//												time = time + "00";
-//											}
-//										    return time;
-											
+										formatTime : function(v) {											
 											var tmpDate = new Date(v);
-											var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "HH:mm:ss z"});
+											tmpDate.setTime( tmpDate.getTime() + tmpDate.getTimezoneOffset()*60*1000 );
+											var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "HH:mm:ss"});
 											return oDateFormat.format(tmpDate);
+										},
+										formatDate : function(v) {											
+											var tmpDate = new Date(v);
+											if (tmpDate.getTime() > 0) {
+												tmpDate.setTime( tmpDate.getTime() + tmpDate.getTimezoneOffset()*60*1000 );
+												var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd.MM.YYYY"});
+												return oDateFormat.format(tmpDate);
+											}
+											else {
+												return "";
+											}
 										}
 									});
 

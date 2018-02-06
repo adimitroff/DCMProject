@@ -21,9 +21,9 @@
 						<Label text="Description" />
 						<Input id="description" value="{Description}"/>
 						<Label text="Default" />
-						<CheckBox id="default" text="Default" name="default" selected="{Def}"/>
+						<CheckBox id="default" name="default" selected="{Def}"/>
 						<Label text="Active" />
-						<CheckBox id="active" text="Active" name="active" selected="{Active}"/>
+						<CheckBox id="active" name="active" selected="{Active}"/>
 						<Label text="Priority" />
 						<Input id="priority" value="{Priority}"/>
 					</f:content>

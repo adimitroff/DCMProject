@@ -23,7 +23,11 @@ sap.ui
 											}
 										},
 										onInit : function(evt) {
-											
+											var oModel = this.getView().getModel();
+											window.list_dem_model = oModel; 
+											setInterval(function(oModel){
+												window.list_dem_model.refresh(true);
+											},1000);
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent
@@ -49,7 +53,7 @@ sap.ui
 											
 											var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 											oRouter.navTo("ListDeviceSchedule", {id:lvId});
-										}
+										}										
 									});
 
 					return PageController;
