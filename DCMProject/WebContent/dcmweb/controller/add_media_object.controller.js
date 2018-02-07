@@ -9,7 +9,6 @@ sap.ui
 							.extend(
 									"net.cb.dcm.frontend.controller.add_media_object", {
 		            onNavigateBack : function(evt) {
-		            	this.clearScreenFields();
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
@@ -141,9 +140,10 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
+						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
-
+						
 						if (sPreviousHash !== undefined) {
 							window.history.go(-1);
 						} else {
@@ -194,6 +194,7 @@ sap.ui
 							);
 							return;
 						}
+						this.clearScreenFields();
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 						oRouter.navTo("ListMediaContentRelatedTags", {id:lvId});
 					},

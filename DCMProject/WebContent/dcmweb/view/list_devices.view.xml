@@ -4,7 +4,7 @@
 	<Page title="Device Content Management" showNavButton="true"
     	navButtonTap="onNavigateBack">
 		<Table id="idProductsTable" inset="false"
-			   itemPress="onRowSelected" templateShareable="true" 
+			   itemPress="onRowSelected" templateShareable="true"
 			   growing="true" growingThreshold="20"
 			   growingScrollToLoad="true"
 			   width="auto"
@@ -65,11 +65,10 @@
 						<List id="idList"
 							  items="{
 								path: 'DeviceStatusDetails/DeviceStatusValueDetails',
-								sorter: {
-									path: 'Id',
-									descending: true
+								sorter : {
+									path : 'Property'
 								}
-							}"  
+							}" 
 							  growing="true"
 							  growingThreshold="2"
 						 	  growingScrollToLoad="false">

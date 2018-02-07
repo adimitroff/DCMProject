@@ -15,7 +15,7 @@ sap.ui.define([ 'sap/ui/core/UIComponent' ], function(UIComponent) {
 			
 			var loI18nModel = this.getModel("i18n");
 			sap.ui.getCore().setModel(loI18nModel, 'i18n');
-			var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
+			var loModel = new sap.ui.model.odata.v2.ODataModel("DCMService.svc/");
 			sap.ui.getCore().setModel(loModel);
 //			this.getRouter().attachRoutePatternMatched(this.handle, this)
 //			

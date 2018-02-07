@@ -9,7 +9,6 @@ sap.ui
 							.extend(
 									"net.cb.dcm.frontend.controller.add_tag", {
 		            onNavigateBack : function(evt) {
-		            	//this.clearScreenFields();
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
@@ -113,6 +112,7 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
+						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 
