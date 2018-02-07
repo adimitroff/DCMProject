@@ -10,8 +10,6 @@ sap.ui
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
-//						var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
-//						this.getView().setModel(loModel);
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
 						var loRoute = loRouter.getRoute("EditPlaylist");
@@ -74,8 +72,10 @@ sap.ui
 							"default").getSelected();
 						vProperties.Active = this.getView().byId(
 							"active").getSelected();
-						vProperties.Priority = this.getView().byId(
-							"priority").getValue();
+						vProperties.Priority = this.getView().byId("priority").getSelectedKey();
+						vProperties.ValidFrom = this.getView().byId("idValidFrom").getDateValue();
+						vProperties.ValidTo = this.getView().byId("idValidTo").getDateValue();
+						
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
 							oModel.createEntry("/Playlists", vProperties);
@@ -105,6 +105,7 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
+						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 
@@ -156,6 +157,16 @@ sap.ui
 						this.getView().byId("active").selected = false;
 						
 						this.getView().byId("priority").setValue("");
+						this.getView().byId("idValidFrom").setValue("");
+						this.getView().byId("idValidTo").setValue("");
+						
+					},
+					formatSelected: function(ivValue){
+						return true;
+						if (ivValue == 'true')
+							return true;
+						else
+							return false;
 					}
 			});
 

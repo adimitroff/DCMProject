@@ -23,7 +23,10 @@ sap.ui
 											}
 										},
 										onInit : function(evt) {
-											
+											setInterval(function(oModel){
+												var loModel = sap.ui.getCore().getModel();
+												loModel.refresh(true);
+											},10000);
 										},
 										onDetailPress : function(event) {
 											var oRouter = sap.ui.core.UIComponent

@@ -50,14 +50,11 @@ sap.ui
 
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
-						vProperties.Name = this.getView()
-								.byId("name").getValue();
-						vProperties.Description = this.getView().byId(
-								"description").getValue();
-						vProperties.Dev_type = this.getView().byId(
-							"dev_type").getValue();
-						vProperties.Model = this.getView().byId(
-							"model").getValue();
+						vProperties.Name = this.getView().byId("name").getValue();
+						vProperties.Description = this.getView().byId("description").getValue();
+//						vProperties.Dev_type = this.getView().byId("dev_type").getValue();
+						vProperties.Model = this.getView().byId("model").getValue();
+						
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
 							oModel.createEntry("/Devices", vProperties);
@@ -65,13 +62,15 @@ sap.ui
 						} else {
 							var oEntry = {};
 							var mParameters = {};
-							mParameters.context = this.getView()
-									.getBindingContext();
+							mParameters.context = this.getView().getBindingContext();
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
+							
 							oEntry.Id = vProperties.Id;
 							oEntry.Name = vProperties.Name;
 							oEntry.Description = vProperties.Description;
+							oEntry.Model = vProperties.Model;
+							
 							oModel.update("", oEntry, mParameters);
 						}
 						oModel.submitChanges(this._fnSuccess, this._fnError);
