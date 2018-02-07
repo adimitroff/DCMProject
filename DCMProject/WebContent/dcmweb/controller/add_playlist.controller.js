@@ -155,6 +155,13 @@ sap.ui
 						this.getView().byId("active").selected = false;
 						
 						this.getView().byId("priority").setValue("");
+					},
+					formatSelected: function(ivValue){
+						return true;
+						if (ivValue == 'true')
+							return true;
+						else
+							return false;
 					}
 			});
 
