@@ -10,8 +10,6 @@ sap.ui
 						this.navigateBack();
 					},
 					onInit : function(oEvent) {
-//						var loModel = new sap.ui.model.odata.ODataModel("DCMService.svc/");
-//						this.getView().setModel(loModel);
 						var loRouter = sap.ui.core.UIComponent
 						.getRouterFor(this);
 						var loRoute = loRouter.getRoute("EditPlaylist");
@@ -107,6 +105,7 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
+						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 
@@ -160,6 +159,13 @@ sap.ui
 						this.getView().byId("priority").setValue("");
 						this.getView().byId("idValidFrom").setValue("");
 						this.getView().byId("idValidTo").setValue("");
+					},
+					formatSelected: function(ivValue){
+						return true;
+						if (ivValue == 'true')
+							return true;
+						else
+							return false;
 					}
 			});
 

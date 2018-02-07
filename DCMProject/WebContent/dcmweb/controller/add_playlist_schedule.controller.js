@@ -26,15 +26,16 @@ sap.ui
 													.getParameter("arguments");
 											var lvId = loArgs.id;
 											window.playlist_id = lvId;
-											loView = this.getView();
-
-											if (lvId == 0) {
-												this.clearScreenFields();
-												return;
-											}
-
-//											loView.bindElement({
-//														path : "/PlaylistSchedules("
+//											loView = this.getView();
+//
+//											if (lvId == 0) {
+//												this.clearScreenFields();
+//												return;
+//											}
+//
+//											loView
+//													.bindElement({
+//														path : "/PlaylistSchedule("
 //																+ lvId + ")",
 //														events : {
 //															change : this._onBindingChange
@@ -213,7 +214,9 @@ sap.ui
 													this._fnSuccess,
 													this._fnError);
 											oModel.refresh();
-											this.navigateBack();
+											window.currentController = this;
+											window.model = oModel; 
+//											this.navigateBack();
 
 										},
 										_fnSuccess : function(ioEvent) {
@@ -259,6 +262,8 @@ sap.ui
 																			{
 																				closeOnBrowserNavigation : false
 																			});
+															window.model.refresh();
+															window.currentController.navigateBack();
 														},
 														error : function(
 																response) {
