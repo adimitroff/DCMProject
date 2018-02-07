@@ -159,6 +159,7 @@ sap.ui
 						this.getView().byId("priority").setValue("");
 						this.getView().byId("idValidFrom").setValue("");
 						this.getView().byId("idValidTo").setValue("");
+						
 					},
 					formatSelected: function(ivValue){
 						return true;
