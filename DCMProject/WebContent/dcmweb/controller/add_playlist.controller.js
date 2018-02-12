@@ -68,16 +68,30 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
+//						vProperties.Def = 0;
+//						vProperties.Def = this.getView().byId("default").getSelected() == true?1:0;
+						
 						vProperties.Def = this.getView().byId(
 							"default").getSelected();
 						vProperties.Active = this.getView().byId(
 							"active").getSelected();
 						vProperties.Priority = this.getView().byId(
 							"priority").getValue();
+						if (vProperties.Priority == ""){
+							vProperties.Priority = 0;
+						} else {
+							vProperties.Priority = Number(vProperties.Priority);
+						}
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Playlists", vProperties);
-
+//							oModel.createEntry("/Playlists", vProperties);
+							oModel.createEntry("/Playlists", 
+									{ properties: { Name: vProperties.Name, Description: vProperties.Description,
+										Def:vProperties.Def, Active:vProperties.Active,
+										Priority:vProperties.Priority
+										}
+									});
+							oModel.submitChanges(this._fnSuccess, this._fnError);
 						} else {
 							var oEntry = {};
 							var mParameters = {};
@@ -87,7 +101,6 @@ sap.ui
 							mParameters.error = this._fnError;
 							oModel.update("", vProperties, mParameters);
 						}
-						oModel.submitChanges(this._fnSuccess, this._fnError);
 						oModel.refresh();
 						this.navigateBack();
 
@@ -97,7 +110,7 @@ sap.ui
 						sap.m.MessageToast.show("Success",{
 							    closeOnBrowserNavigation: false });
 					},
-					_fnError : function() {
+					_fnError : function(error) {
 						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });

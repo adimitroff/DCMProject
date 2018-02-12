@@ -57,13 +57,13 @@ sap.ui
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
 						oModel.remove("/Tags(" + lvId + "L)");
-						oModel.refresh();
+						oModel.refresh(true);
 						this.navigateBack();
 					},
 
 					handleSavePress : function(evt) {
-						var oModel = this.getView().getModel();
-
+//						var oModel = this.getView().getModel();
+						var oModel = sap.ui.getCore().getModel();
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
 						vProperties.Name = this.getView()
@@ -82,7 +82,10 @@ sap.ui
 								"description").getValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-							oModel.createEntry("/Tags", vProperties);
+//							vProperties.System = true;
+//							oModel.createEntry("/Tags", vProperties);
+							oModel.createEntry("/Tags", 
+									{ properties: { Name: vProperties.Name, Description: vProperties.Description} });
 
 						} else {
 							var oEntry = {};
@@ -106,13 +109,13 @@ sap.ui
 						sap.m.MessageToast.show("Success",{
 						    closeOnBrowserNavigation: false });
 					},
-					_fnError : function() {
+					_fnError : function(error) {
 						//jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
-						this.clearScreenFields();
+//						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 
