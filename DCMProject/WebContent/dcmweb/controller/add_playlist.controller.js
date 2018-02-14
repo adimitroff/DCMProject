@@ -55,12 +55,12 @@ sap.ui
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
 						oModel.remove("/Playlists(" + lvId + "L)");
-						oModel.refresh();
+						oModel.refresh(true);
 						this.navigateBack();
 					},
 
 					handleSavePress : function(evt) {
-						var oModel = this.getView().getModel();
+						var oModel = sap.ui.getCore().getModel();
 
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
@@ -82,15 +82,12 @@ sap.ui
 						} else {
 							vProperties.Priority = Number(vProperties.Priority);
 						}
+						vProperties.ValidFrom = this.getView().byId("idValidFrom").getDateValue();
+						vProperties.ValidTo = this.getView().byId("idValidTo").getDateValue();
 						if (vProperties.Id == "") {
 							vProperties.Id = 0;
-//							oModel.createEntry("/Playlists", vProperties);
-							oModel.createEntry("/Playlists", 
-									{ properties: { Name: vProperties.Name, Description: vProperties.Description,
-										Def:vProperties.Def, Active:vProperties.Active,
-										Priority:vProperties.Priority
-										}
-									});
+							delete vProperties.Id;
+							oModel.createEntry("/Playlists",  vProperties);
 							oModel.submitChanges(this._fnSuccess, this._fnError);
 						} else {
 							var oEntry = {};
@@ -116,7 +113,7 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
-						this.clearScreenFields();
+//						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 
@@ -164,10 +161,12 @@ sap.ui
 						this.getView().byId("name").setValue("");
 						this.getView().byId("description").setValue("");
 						
-						this.getView().byId("default").selected = false;
-						this.getView().byId("active").selected = false;
+						this.getView().byId("default").setSelected(false);
+						this.getView().byId("active").setSelected(false);
 						
 						this.getView().byId("priority").setValue("");
+						this.getView().byId("idValidFrom").setValue("");
+						this.getView().byId("idValidTo").setValue("");
 					},
 					formatSelected: function(ivValue){
 						return true;
