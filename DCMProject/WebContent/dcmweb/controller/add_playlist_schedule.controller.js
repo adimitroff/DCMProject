@@ -82,6 +82,8 @@ sap.ui
 													.getValue();
 											if (vProperties.DayOfMoth == "") {
 												vProperties.DayOfMoth = 0;
+											} else {
+												vProperties.DayOfMoth = Number(vProperties.DayOfMoth);
 											}
 											vProperties.DayOfWeek = this
 													.getView().byId(
@@ -89,29 +91,10 @@ sap.ui
 													.getValue();
 											if (vProperties.DayOfWeek == "") {
 												vProperties.DayOfWeek = 0;
+											} else {
+												vProperties.DayOfWeek = Number(vProperties.DayOfWeek);
 											}
 
-											var loTimeFormatter = sap.ui.core.format.DateFormat
-													.getDateInstance({
-														pattern : "PTh'H'm'M's'S'"
-													});
-											var loTimeFormatter2 = sap.ui.core.format.DateFormat
-											.getTimeInstance({
-												pattern : "KK:mm:ss a"
-											});
-											
-//											var TZOffsetMS = new Date(0).getTimezoneOffset()*60*1000;
-//											var timeStr = loTimeFormatter2.format(new Date(39600000 + TZOffsetMS));
-//											var parsedTime = new Date(loTimeFormatter2.parse(timeStr).getTime() - TZOffsetMS); //39600000
-											
-											
-											
-											// if (this.getView().byId(
-											// "end_time").getValue() != ""){
-											// vProperties.EndTime =
-											// loTimeFormatter.format(this.getView().byId(
-											// "end_time").getDateValue());
-											// }
 											if (this.getView().byId("end_time")
 													.getValue() != "") {
 												vProperties.EndTime = this.getView().byId("end_time").getDateValue();
@@ -119,22 +102,8 @@ sap.ui
 											vProperties.Id = 0;
 											vProperties.Month = 0;
 
-											// / / var lvUrl =
-											// / /
-											// "/DCMProject/DCMService.svc/Playlists("
-											// / / +
-											// / / this.playlist_id + "L)";
-											// / / vProperties.Playlist = lvUrl;
-											// / / vProperties.Playlist =
-											// / / this.playlist_id + "L";
-											vProperties.Playlist = window.playlist_id;
+											vProperties.Playlist = Number(window.playlist_id);
 
-											// if (this.getView().byId(
-											// "start_time").getValue() != "") {
-											// vProperties.StartTime =
-											// loTimeFormatter.format(this.getView().byId(
-											// "start_time").getDateValue());
-											// }
 											if (this.getView().byId("start_time")
 													.getValue() != "") {
 												vProperties.StartTime = this.getView().byId("start_time").getDateValue();
@@ -171,13 +140,6 @@ sap.ui
 												break;
 											}
 											
-//											if (vProperties.StartTime == null
-//													|| vProperties.StartTime == ""
-//													|| vProperties.EndTime == null
-//													|| vProperties.EndTime == "") {
-//												lvError = true;
-//											}
-
 											if (lvError) {
 												jQuery.sap
 														.require("sap.m.MessageToast");
@@ -190,15 +152,19 @@ sap.ui
 												return;
 											}
 											if (vProperties.Id == "") {
-												vProperties.Id = 0;
-												// / /
-												// oModel.createEntry("/PlaylistSchedules",
-												oModel
-														.createEntry(
-																"/Playlists("
-																		+ window.playlist_id
-																		+ "L)/PlaylistScheduleDetails",
-																vProperties);
+												var oEntry = {};
+												oEntry.StartTime = vProperties.StartTime;
+												oEntry.EndTime = vProperties.EndTime;
+												oEntry.Type = vProperties.Type;
+												oEntry.Date = vProperties.Date;
+												oEntry.Date = vProperties.Date;
+												oEntry.DayOfWeek = vProperties.DayOfWeek;
+												oEntry.DayOfMonth = vProperties.DayOfMonth;
+												oEntry.PlaylistDetails = { uri: "/DCMProject/DCMService.svc/Playlists(" 
+													+ vProperties.Playlist +")"};
+												
+												var oContext = oModel.createEntry("/PlaylistSchedules",
+														{ properties: oEntry });
 											} else {
 												var oEntry = {};
 												var mParameters = {};
@@ -210,9 +176,7 @@ sap.ui
 												oModel.update("", vProperties,
 														mParameters);
 											}
-											oModel.submitChanges(
-													this._fnSuccess,
-													this._fnError);
+											var oObject = oModel.submitChanges({success: this._fnSuccess, error: this._fnError});
 											oModel.refresh();
 											window.currentController = this;
 											window.model = oModel; 
@@ -220,27 +184,53 @@ sap.ui
 
 										},
 										_fnSuccess : function(ioEvent) {
-											jQuery.sap
-													.require("sap.m.MessageToast");
-											sap.m.MessageToast
-													.show(
-															"Success",
-															{
-																closeOnBrowserNavigation : false
-															});
-//											var lvUrl = "/DCMProject/DCMService.svc/Playlists("
-//													+ window.playlist_id
-//													+ "L)/$links/PlaylistScheduleDetails";
-////													+ "L)/PlaylistScheduleDetails/$ref";
-//											var lvNewTagUri = "/PlaylistSchedules("
-//													+ ioEvent.Id + "L)";
+											var lvSuccess = false;
+											if (typeof ioEvent.__batchResponses[0] != 'undefined' &&
+													ioEvent.__batchResponses[0] != null &&
+													typeof ioEvent.__batchResponses[0].__changeResponses[0] != 'undefined' &&
+													ioEvent.__batchResponses[0].__changeResponses[0] != null
+													){
+												if (ioEvent.__batchResponses[0].__changeResponses[0].statusCode = "201"){
+													lvSuccess = true;
+												}
+											}
+											
+											jQuery.sap.require("sap.m.MessageToast");
+											if (!lvSuccess) {
+												sap.m.MessageToast.show("Error",
+												{
+													closeOnBrowserNavigation : false
+												});
+												return;
+											}
+											
+											var aData = jQuery.ajax({
+												type : "GET",
+												contentType : "application/json",
+												url : "/DCMProject/DCMService.svc/PlaylistSchedules?$orderby=Id%20desc&$top=1",
+												dataType : "json",
+												async : false});
+											
+											var lvPSId = 0;
+											if (aData != null && 
+													aData.responseJSON.d != null &&
+													aData.responseJSON.d.results[0] != null){
+												lvPSId = aData.responseJSON.d.results[0].Id;
+											}
+											
+											if(lvPSId == 0){
+												sap.m.MessageToast.show("Error",
+												{
+													closeOnBrowserNavigation : false
+												});
+												return;
+											}
+											
 											var lvUrl = "/DCMProject/DCMService.svc/PlaylistSchedules("
-												+ ioEvent.Id
-												+ "L)/$links/PlaylistDetails";
-//												+ "L)/PlaylistDetails/$ref";
-//												+ "L)/PlaylistScheduleDetails/$ref";
+												+ lvPSId
+												+ ")/$links/PlaylistDetails";
 											var lvNewTagUri = "/Playlists("
-												+ window.playlist_id + "L)";
+												+ window.playlist_id + ")";
 											var aData = jQuery
 													.ajax({
 														type : "PUT",
@@ -276,6 +266,13 @@ sap.ui
 																			});
 														},
 													});
+										},
+										_fnSuccessMsg: function(){
+											jQuery.sap.require("sap.m.MessageToast");
+											sap.m.MessageToast.show("Success",
+											{
+												closeOnBrowserNavigation : false
+											});
 										},
 										_fnError : function(ioEvent) {
 											jQuery.sap
@@ -343,21 +340,13 @@ sap.ui
 																	: false);
 										},
 										clearScreenFields : function() {
-											// / /
 											// this.getView().byId("id").setValue("");
-											// / /
 											// this.getView().byId("name").setValue("");
-											// / /
 											// this.getView().byId("description").setValue("");
-											// / /
-											// / /
 											// this.getView().byId("default").selected
 											// / / = false;
-											// / /
 											// this.getView().byId("active").selected
 											// / / = false;
-											// / /
-											// / /
 											// this.getView().byId("priority").setValue("");
 										}
 									});

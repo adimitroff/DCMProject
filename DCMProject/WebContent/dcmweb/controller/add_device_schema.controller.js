@@ -54,7 +54,7 @@ sap.ui.define(
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/DevicePropertyTypes(" + lvId + "L)");
+						oModel.remove("/DevicePropertyTypes(" + lvId + "L)", {success: this._fnSuccess, error: this._fnError});
 						oModel.refresh();
 						this.navigateBack();
 					},
@@ -68,9 +68,11 @@ sap.ui.define(
 						vProperties.Description = this.getView().byId("description").getValue();
 
 						if (vProperties.Id == "") {
-							vProperties.Id = 0;
-							oModel.createEntry("/DevicePropertyTypes", vProperties);
-
+							var oEntry = {};
+							oEntry.Name = vProperties.Name;
+							oEntry.Description = vProperties.Description;
+//							oModel.createEntry("/DevicePropertyTypes", vProperties);							
+							oModel.createEntry("/DevicePropertyTypes", { properties: oEntry });
 						} else {
 							var oEntry = {};
 							var mParameters = {};
@@ -79,7 +81,7 @@ sap.ui.define(
 							mParameters.error = this._fnError;
 							oModel.update("", vProperties, mParameters);
 						}
-						oModel.submitChanges(this._fnSuccess, this._fnError);
+						oModel.submitChanges({success: this._fnSuccess, error: this._fnError});
 						oModel.refresh();
 						this.navigateBack();
 

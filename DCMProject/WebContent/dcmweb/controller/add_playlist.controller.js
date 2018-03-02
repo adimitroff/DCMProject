@@ -54,7 +54,7 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Playlists(" + lvId + "L)");
+						oModel.remove("/Playlists(" + lvId + "L)", {success: this._fnSuccess, error: this._fnError});
 						oModel.refresh();
 						this.navigateBack();
 					},
@@ -83,15 +83,20 @@ sap.ui
 							vProperties.Priority = Number(vProperties.Priority);
 						}
 						if (vProperties.Id == "") {
-							vProperties.Id = 0;
-//							oModel.createEntry("/Playlists", vProperties);
-							oModel.createEntry("/Playlists", 
-									{ properties: { Name: vProperties.Name, Description: vProperties.Description,
-										Def:vProperties.Def, Active:vProperties.Active,
-										Priority:vProperties.Priority
-										}
-									});
-							oModel.submitChanges(this._fnSuccess, this._fnError);
+							var oEntry = {};
+							oEntry.Name = vProperties.Name;
+							oEntry.Description = vProperties.Description;
+							oEntry.Def = vProperties.Def;
+							oEntry.Active = vProperties.Active;
+							oEntry.Priority = vProperties.Priority;
+							oModel.createEntry("/Playlists", { properties: oEntry });
+//							oModel.createEntry("/Playlists", 
+//									{ properties: { Name: vProperties.Name, Description: vProperties.Description,
+//										Def:vProperties.Def, Active:vProperties.Active,
+//										Priority:vProperties.Priority
+//										}
+//									});
+							oModel.submitChanges({success: this._fnSuccess, error: this._fnError});
 						} else {
 							var oEntry = {};
 							var mParameters = {};

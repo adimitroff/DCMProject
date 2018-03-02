@@ -46,17 +46,15 @@ sap.ui
 											oRouter.navTo("AddPlaylistSchedule", {id:this.playlist_id});
 										},
 										onDelete : function(event){
-											//var loBindingContext = event.getSource().getBindingContext();
-											//var lvId = loBindingContext.getProperty("Id");
-											
 											var oItem = event.getParameter("listItem");
 											var aCells = oItem.getCells();
 											var lvId = aCells[0].getTitle();
 											
 											
 											var oModel = this.getView().getModel();
-											var lvDeletePath = this.relPath + "/$links/PlaylistScheduleDetails" + "(" + lvId + "L)"
-											oModel.remove(lvDeletePath);
+//											var lvDeletePath = "/PlaylistSchedules(" + lvId + ")/$links/PlaylistDetails";
+											var lvDeletePath = "/PlaylistSchedules(" + lvId + ")";
+											oModel.remove(lvDeletePath, {success: this._fnSuccess, error: this._fnError});
 											oModel.refresh();
 										},
 										updateTableBinding: function(){
@@ -71,14 +69,6 @@ sap.ui
 											        this.getView().byId("month"),
 											        this.getView().byId("day_of_month"),
 											        this.getView().byId("day_of_week")
-//											        new sap.m.ObjectIdentifier({title:"{Id}"}),
-//											        new sap.m.Text({text:"{Type}"}),
-//											        new sap.m.Text({text:"{path: 'StartTime', formatter: '.formatTime'}"}),
-//											        new sap.m.Text({text:"{path: 'EndTime', formatter: '.formatTime'}"}),
-//											        new sap.m.Text({text:"{Date}"}),
-//											        new sap.m.Text({text:"{Month}"}),
-//											        new sap.m.Text({text:"{DateOfMoth}"}),
-//											        new sap.m.Text({text:"{DayOfWeek}"})
 											        ]
 											});
 											var path = this.relPath + "/PlaylistScheduleDetails";
@@ -100,6 +90,14 @@ sap.ui
 											else {
 												return "";
 											}
+										},
+										_fnSuccess : function(ioEvent) {
+											sap.m.MessageToast.show("Success",{
+											    closeOnBrowserNavigation: false });
+										},
+										_fnError : function(ioError) {
+											sap.m.MessageToast.show("Error",{
+											    closeOnBrowserNavigation: false });
 										}
 									});
 
