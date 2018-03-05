@@ -51,7 +51,7 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/MediaContents(" + lvId + "L)");
+						oModel.remove("/MediaContents(" + lvId + "L)", {success: this._fnSuccess, error: this._fnError});
 						oModel.refresh();
 						this.navigateBack();
 					},
@@ -65,7 +65,7 @@ sap.ui
 								.byId("name").getValue();
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
-						vProperties.MediaType = "OTHER";
+//						vProperties.MediaType = "OTHER";
 						
 						vProperties.Duration = this.getView().byId("duration").getValue();
 						if( !vProperties.Duration || parseInt(vProperties.Duration) < 1 || isNaN( parseInt(vProperties.Duration) ) ){
@@ -99,9 +99,32 @@ sap.ui
 //						var theNewMediaId = 0;
 //						var modelContext;
 						if (vProperties.Id == "") {
-							vProperties.Id = 0;
+							var oEntry = {};
+							oEntry.Name = vProperties.Name;
+							oEntry.Description = vProperties.Description;
+							oEntry.Duration = vProperties.Duration;
+							oEntry.FilePath = vProperties.FilePath;
+							if (vProperties.FilePath.lastIndexOf('.') > 0) {
+							var lvFileExtension = vProperties.FilePath.substring(
+									vProperties.FilePath.lastIndexOf('.')+1, vProperties.FilePath.length).toLowerCase();
+							switch (lvFileExtension){
+							case 'jpg':
+								oEntry.MediaType = 'JPEG';
+								break;
+							case 'mpg':
+								oEntry.MediaType = 'MPEG';
+								break;
+							case 'mpeg':
+								oEntry.MediaType = 'MPEG';
+								break;
+								default:
+									oEntry.MediaType = 'OTHER';
+							}
+							} else {
+								oEntry.MediaType = 'OTHER';
+							}
 							//modelContext = oModel.createEntry("/MediaContents", vProperties);
-							oModel.createEntry("/MediaContents", vProperties);
+							oModel.createEntry("/MediaContents", { properties: oEntry });
 
 						} else {
 							var mParameters = {};
@@ -110,11 +133,11 @@ sap.ui
 							mParameters.success = this._fnSuccess;
 							mParameters.error = this._fnError;
 							
-							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
+//							vProperties.TagDetails = "{ __metadata: { [{uri: "//Tags(51L)"} ] }}"
 							oModel.update("", vProperties, mParameters);
 						}
 						
-						oModel.submitChanges(this._fnSuccess, this._fnError);
+						oModel.submitChanges({success: this._fnSuccess, error: this._fnError});
 						oModel.refresh();
 						//theNewMediaId = modelContext.getObject();//getProperty("Id");
 						//alert( "TestId : "+ theNewMediaId );
@@ -134,7 +157,7 @@ sap.ui
 						sap.m.MessageToast.show("Success",{
 							    closeOnBrowserNavigation: false });
 					},
-					_fnError : function() {
+					_fnError : function(ioError) {
 						jQuery.sap.require("sap.m.MessageToast");
 						sap.m.MessageToast.show("Error",{
 						    closeOnBrowserNavigation: false });
@@ -194,7 +217,6 @@ sap.ui
 							);
 							return;
 						}
-						this.clearScreenFields();
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 						oRouter.navTo("ListMediaContentRelatedTags", {id:lvId});
 					},

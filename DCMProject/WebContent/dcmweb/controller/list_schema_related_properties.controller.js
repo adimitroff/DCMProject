@@ -59,7 +59,7 @@ sap.ui.define(
 											
 											var oModel = this.getView().getModel();
 											var lvDeletePath = this.relPath + "/$links/PropertyDetails" + "(" + lvId + "L)"
-											oModel.remove(lvDeletePath);
+											oModel.remove(lvDeletePath, {success: this._fnSuccess, error: this._fnError});
 											oModel.refresh();
 										},
 										handlePopupSearch: function(oEvent) {

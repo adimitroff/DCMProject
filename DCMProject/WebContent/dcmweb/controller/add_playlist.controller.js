@@ -54,13 +54,13 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Playlists(" + lvId + "L)");
-						oModel.refresh(true);
+						oModel.remove("/Playlists(" + lvId + "L)", {success: this._fnSuccess, error: this._fnError});
+						oModel.refresh();
 						this.navigateBack();
 					},
 
 					handleSavePress : function(evt) {
-						var oModel = sap.ui.getCore().getModel();
+						var oModel = this.getView().getModel();
 
 						var vProperties = {};
 						vProperties.Id = this.getView().byId("id").getValue();
@@ -77,18 +77,31 @@ sap.ui
 							"active").getSelected();
 						vProperties.Priority = this.getView().byId(
 							"priority").getValue();
+						vProperties.ValidFrom = this.getView().byId("idValidFrom").getDateValue();
+						vProperties.ValidTo = this.getView().byId("idValidTo").getDateValue();
+						
 						if (vProperties.Priority == ""){
 							vProperties.Priority = 0;
 						} else {
 							vProperties.Priority = Number(vProperties.Priority);
 						}
-						vProperties.ValidFrom = this.getView().byId("idValidFrom").getDateValue();
-						vProperties.ValidTo = this.getView().byId("idValidTo").getDateValue();
 						if (vProperties.Id == "") {
-							vProperties.Id = 0;
-							delete vProperties.Id;
-							oModel.createEntry("/Playlists",  vProperties);
-							oModel.submitChanges(this._fnSuccess, this._fnError);
+							var oEntry = {};
+							oEntry.Name = vProperties.Name;
+							oEntry.Description = vProperties.Description;
+							oEntry.Def = vProperties.Def;
+							oEntry.Active = vProperties.Active;
+							oEntry.Priority = vProperties.Priority;
+							oEntry.ValidFrom = vProperties.ValidFrom;
+							oEntry.ValidTo = vProperties.ValidTo;
+							oModel.createEntry("/Playlists", { properties: oEntry });
+//							oModel.createEntry("/Playlists", 
+//									{ properties: { Name: vProperties.Name, Description: vProperties.Description,
+//										Def:vProperties.Def, Active:vProperties.Active,
+//										Priority:vProperties.Priority
+//										}
+//									});
+							oModel.submitChanges({success: this._fnSuccess, error: this._fnError});
 						} else {
 							var oEntry = {};
 							var mParameters = {};
@@ -113,7 +126,7 @@ sap.ui
 						    closeOnBrowserNavigation: false });
 					},
 					navigateBack : function(){
-//						this.clearScreenFields();
+						this.clearScreenFields();
 						var oHistory = History.getInstance();
 						var sPreviousHash = oHistory.getPreviousHash();
 

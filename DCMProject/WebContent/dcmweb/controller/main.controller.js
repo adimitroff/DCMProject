@@ -74,7 +74,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/mvc/Controller', 'sap/m/Message
 			    DevCount: lvAllDevicesCount
 			});
 			this.getView().setModel(loModel);
-			//setInterval( function(){ table.getModel().refresh(true); }, 1000 );
 		}
 	});
 

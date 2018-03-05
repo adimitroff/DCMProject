@@ -56,7 +56,7 @@ sap.ui
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
 						var lvId = this.getView().byId("id").getValue();
-						oModel.remove("/Tags(" + lvId + "L)");
+						oModel.remove("/Tags(" + lvId + "L)", {success: this._fnSuccess, error: this._fnError});
 						oModel.refresh(true);
 						this.navigateBack();
 					},
@@ -81,12 +81,11 @@ sap.ui
 						vProperties.Description = this.getView().byId(
 								"description").getValue();
 						if (vProperties.Id == "") {
-							vProperties.Id = 0;
+							var oEntry = {};
+							oEntry.Name = vProperties.Name;
+							oEntry.Description = vProperties.Description;
 //							vProperties.System = true;
-//							oModel.createEntry("/Tags", vProperties);
-							oModel.createEntry("/Tags", 
-									{ properties: { Name: vProperties.Name, Description: vProperties.Description} });
-
+							oModel.createEntry("/Tags", { properties: oEntry });
 						} else {
 							var oEntry = {};
 							var mParameters = {};
@@ -99,8 +98,8 @@ sap.ui
 							oEntry.Description = vProperties.Description;
 							oModel.update("", oEntry, mParameters);
 						}
-						oModel.submitChanges(this._fnSuccess, this._fnError);
-						oModel.refresh();
+						oModel.submitChanges({success:this._fnSuccess, error:this._fnError});
+						oModel.refresh(true);
 						this.navigateBack();
 
 					},
